@@ -15,7 +15,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
             ?>
             <div class="page-header">
                 <div class="pull-left">
-                <h1 class="cust_full_name"> </h1>
+                <h1 style="cursor: pointer;" class="cust_full_name">  </h1>
                 </div>
                 <div class="pull-right"><a class="btn btn-warning" onclick="LoadPage('UnAssignedList');" href="UnAssignedList">Back</a></div>
            <div class="clearfix"></div>
@@ -142,38 +142,11 @@ if($customer_id!=-1){
                             <th class="col-md-1">No of Services</th>
                             <th class="col-md-3">Remarks</th>
                             <th class="col-md-2">Validity</th>
-                            <th class="col-md-1">Created On</th>
+                            <th class="col-md-1">Service Date</th>
                             <th class="col-md-1">Status</th>
                         </tr>
                         </thead>
                         <tbody class="amc_assign">
-                        <!--<tr>
-                            <td>1</td>
-                            <td>
-                                Panasonic (Split)
-                            </td>
-                            <td>
-                                <b>Type </b>Comprehensive<br/>
-                                <b>No of services </b>16<br/>
-                                <b>Dry services </b>8<br/>
-                                <b>Wet services </b>8
-                            </td>
-                            <td>Need AMC ASAP</td>
-                            <td>
-                                <input class="form-control" type="text" /><br />
-                                <select class="form-control">
-                                    <option value="">Vijay</option>
-                                    <option value="">Vipul</option>
-                                    <option value="">Vikas</option>
-                                </select>
-                            </td>
-                            <td>21/06/2014</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">Assign</button>
-                            </td>
-                        </tr>-->
-
-
                         </tbody>
                     </table>
                 </div>
@@ -199,23 +172,6 @@ if($customer_id!=-1){
                         </tr>
                         </thead>
                         <tbody class="ots_assign">
-                        <!--<tr>
-                            <td>1</td>
-                            <td>Onida(Window)</td>
-                            <td>Wet Service</td>
-                            <td>
-                                <select>
-                                    <option>Vijay</option>
-                                    <option>Vipul</option>
-                                    <option>Vikas</option>
-                                </select>
-                            </td>
-                            <td>21/06/2014</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">Assign</button>
-                            </td>
-                        </tr>-->
-
 
                         </tbody>
                     </table>

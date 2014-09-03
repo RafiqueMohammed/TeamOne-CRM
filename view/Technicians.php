@@ -12,17 +12,23 @@
         <?php require_once(INC_DIR."breadcrumb.php"); ?>
         <!-- end: PAGE TITLE & BREADCRUMB -->
         <div class="page-header">
-            <h1>Technician <small>Registration</small></h1>
+            <div class="pull-left">
+            <h1>Manage Technician</h1>
+            </div>
+            <div class="pull-right">
+            <button id='add_technician' style="margin-bottom: 10px;" class="pull-right btn btn-primary"><i style="font-size: 1.4em;" class="clip-user-plus"></i></button>
+            </div>
+              <div class='clearfix'></div>
         </div>
     </div>
 </div>
 <!-- end: PAGE HEADER -->
 
 <!-- start: PAGE CONTENT -->
-<div class="row">
+<div class="row technician_list">
 <div class="col-md-12">
+<div id="tech_response_result"></div>
 
-<button id='add_technician' style="margin-bottom: 10px;" class="pull-right btn btn-primary"><i style="font-size: 1.4em;" class="clip-user-plus"></i></button>
 
     <table id="tech_details" class="table table-bordered table-striped">
         <thead>
@@ -36,9 +42,7 @@
             </tr>
         </thead>
         <tbody class="tech_row_c">
-        <?php
-            //echo $data;
-        ?>
+
         </tbody>
     </table>
 </div>

@@ -5,7 +5,7 @@
 
 $(function(){
 
-    blockThisUI();
+    blockThisUI($(".technician_list"));
     $.getJSON("api/Technicians",function(response){
         if(response.status=="ok"){
             tech_data = response.data;
@@ -39,8 +39,9 @@ $(function(){
             $("#tech_details tbody").html("<tr><td colspan='6' class='alert alert-info center'> <i class='clip-info'></i>  - No Technician Added Yet -</td></tr>");
             console.log("failure");
         }
+        unblockThisUI($(".technician_list"));
     });
-    unblockThisUI();
+
     
     $("#add_technician").on("click", function(){
         $.facebox({ div: "#modal_add_tech" })
@@ -66,14 +67,23 @@ $(function(){
             }
         }
 
+        if (mobile.val().length != 10) {
+            mobile.parent().removeClass("has-success").addClass("has-error");
+            mobile.parent().parent().find(".error_span").addClass("text-danger").html("Invalid Mobile Number");
+            c++;
+        } else {
+            mobile.parent().removeClass("has-error");
+            mobile.parent().parent().find(".error_span").empty();
+        }
+
         if(c > 0){
-            $("#facebox #error").html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+            $("#facebox #error").html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
         } else {
             $("#facebox #error").removeClass().empty();
 
             var mobile = $("#facebox input[name='tech_mobile']").val();
             var query = {firstname:firstname,lastname:lastname,email:email,mobile:mobile,branch:branch,address:address};
-            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").addClass("alert alert-info")
+            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").addClass("alert alert-info center")
             $.ajax({
                 type:'post',
                 url:'api/Technicians',
@@ -81,12 +91,12 @@ $(function(){
                 dataType:'json',
                 success: function(data){
                     if(data.status=="ok") {
-                        $("#facebox #result").show().html(data.result).addClass("alert alert-success").slideUp(3000);
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-success center").slideUp(3000);
                         //$("#technician_form")[0].reset();
                         //add_technician_row(data.last_id,query);
-                        //window.location.replace("Technicians");                        
+                        window.location.replace("Technicians");                        
                     } else {
-                        
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center").slideUp(3000);
                     }
                 }
             });
@@ -110,26 +120,30 @@ function add_technician_row(tech_id,qry) {
 }
 
 function remove_technician(tech_id,elem) {
-    var answer = confirm("Are you sure you want to delete these technician ?")
+    var answer = confirm("Are you sure you want to delete this technician ?");
     if(answer){
-    blockThisUI();
+    $("#tech_response_result").show().html("Please Wait...").removeClass().addClass("alert alert-info center");
     $.ajax({
         type:'delete',
         url:'api/Technicians/'+tech_id,
         dataType:'json',
         success: function(data) {
             if(data.status=="ok") {
-                $(".tech_row_"+elem).slideUp("slow");
+                $(".tech_row_"+elem).slideUp("slow").remove();
+                $("#tech_response_result").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                 if($(".tech_row_c tr").length==0){
-                    $(".tech_row_c").html("<tr><td class='alert alert-info center' colspan='6'><i class='clip-info'></i>  No Technician Found</td></tr>")
+                    $(".tech_row_c").html("<tr><td class='alert alert-info center' colspan='6'><i class='clip-info'></i>  No Technician Found</td></tr>");
                 }
             } else if(data.status=="no") {
-                
+                    $("#tech_response_result").show().html(data.result).removeClass().addClass("alert alert-danger center");
             }
+            setTimeout(function(){
+                $("#tech_response_result") .slideUp();
+            },1000);
         }
     });        
     }
-    unblockThisUI();
+
 }
 
 function edit_technician(tech_id) {
@@ -157,13 +171,40 @@ $.each(branch_list, function(key, val){
     $("#facebox .tech_update_btn").on("click",function() {
         var fname = $("#facebox #fname_edit").val();
         var lname = $("#facebox #lname_edit").val();
-        var mobile = $("#facebox #mobile_edit").val();
+        var mobile = $("#facebox #mobile_edit");
         var email = $("#facebox #email_edit").val();
         var address = $("#facebox #address_edit").val();
         var branch = $("#facebox #branch_edit").val();
         var id = $("#facebox #id_edit").val();
-        if(fname=="" || lname=="" || mobile=="" || email=="" || address=="" || branch=="" || id==""){
+        
+        var total_req = $("#facebox .req_t").length;
+        var c=0;
+
+        for(var i=0 ; i < total_req ; i++){
+            if($("#facebox .req_t").eq(i).val()=="" || $("#facebox .req_t").eq(i).val()=="-1"){
+                $("#facebox .req_t").eq(i).parent().removeClass("has-success").addClass("has-error");
+                c++;
+            } else {
+                $("#facebox .req_t").eq(i).parent().removeClass("has-error");
+            }
+        }
+        
+        if (mobile.val().length != 10) {
+            mobile.parent().removeClass("has-success").addClass("has-error");
+            mobile.parent().parent().find(".error_span").addClass("text-danger").html("Invalid Mobile Number");
+            c++;
+        } else {
+            mobile.parent().removeClass("has-error");
+            mobile.parent().parent().find(".error_span").empty();
+        }        
+                
+        if(c > 0){
+            $("#facebox #error").html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
+        }else{
+            $("#facebox #error").remove();
+        mobile = $("#facebox #mobile_edit").val();
         var query = "firstname="+fname+"&lastname="+lname+"&mobile="+mobile+"&email="+email+"&address="+address+"&branch="+branch;
+        $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").addClass("alert alert-info center")
             $.ajax({
                 type:"put",
                 data:query,
@@ -172,15 +213,15 @@ $.each(branch_list, function(key, val){
                 success: function(data) {
                     if(data.status=="ok"){
                         console.log("success");
+                        $("#facebox #result").show().html(data.result).addClass("alert alert-success center")
                         window.location.replace("Technicians"); 
                     } else if(data.status=="no"){
                         console.log("error");
+                        $("#facebox #result").show().html(data.result).addClass("alert alert-danger center")
                     }
                 }
             });
-        } else {
-            $("#facebox .display_result").html("Please fill the required fields").removeClass().addClass("alert alert-danger");
-        }
+        } 
 
     });
         
@@ -192,3 +233,12 @@ function reset_form(form_id) {
  
     $(form_id)[0].reset();
  }
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}

@@ -16,10 +16,13 @@
         <!-- end: PAGE TITLE & BREADCRUMB -->
 
         <div class="page-header">
-
-            <h1>Staff <small>Registration</small></h1>
-
+<div class="pull-left"><h1>Manage Staff</h1></div>
+            <div class="pull-right">
+                <button id="add_staff" style="margin-bottom: 10px;" class="pull-right btn btn-primary"><i class="clip-user-plus" style="font-size: 1.4em;"></i></button>
+            </div>
+            <div class="clearfix"></div>
         </div>
+
 
     </div>
 
@@ -27,11 +30,11 @@
 <!-- end: PAGE HEADER -->
 
 <!-- start: PAGE CONTENT -->
-<div class="row">
+<div class="row staff_list">
 
 <div class="col-md-12">
-<span id="staff_response_result"></span>
-<button id="add_staff" style="margin-bottom: 10px;" class="pull-right btn btn-primary">+ Add New</button>
+<div id="staff_response_result"></div>
+
     <table id="staff_details" class="table table-bordered table-striped">
         <thead>
             <tr>

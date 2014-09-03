@@ -20,7 +20,7 @@ $(document).ready(function () {
     } else {
 
 
-        blockThisUI();
+        blockThisUI($(".profile"));
 
         $.ajax({
             type: 'GET',
@@ -123,7 +123,7 @@ $(document).ready(function () {
                 } else if (data.status == "no") {
                     $(".container .row").eq(1).html("<div class='alert alert-danger center'>" + data.result + "</div>");
                 }
-                unblockThisUI();
+                unblockThisUI($(".profile"));
             }
         });
 
@@ -353,11 +353,13 @@ $(document).ready(function () {
 
 
         modal_box.modal("show");
+        $(".preffered_date").datepicker({autoclose: true});
     });
     $("#complaints_modal_box .create_btn").on('click', function () {
         var elem = $(this).parent().parent();
         var ac_id = elem.find(".select_ac_id").val();
         var problem_type = elem.find(".select_problem").val();
+        var p_date = elem.find(".preffered_date").val();
         var problem_desc = elem.find(".problem_desc").val();
         var output = elem.find(".display_output");
 
@@ -366,7 +368,7 @@ $(document).ready(function () {
             $.ajax({url: "api/Customer/" + customer_id + "/Complaints",
                 type: "POST",
                 dataType: "JSON",
-                data: {ac_id: ac_id, problem_type: problem_type, problem_desc: problem_desc},
+                data: {ac_id: ac_id, problem_type: problem_type, p_date: p_date, problem_desc: problem_desc},
                 success: function (response) {
                     if (response.status == "ok") {
                         output.html("<div class='alert alert-success'>Successfully Added</div>");
@@ -591,7 +593,9 @@ $(document).ready(function () {
 
 
         $.facebox({div: "#ots_modal_box"});
-
+        
+        $("#facebox .preffered_date").datepicker({autoclose: true});
+        
         $("#facebox .content .select_ac").on('change', function () {
 
             var val = $(this).val();
@@ -621,6 +625,7 @@ $(document).ready(function () {
             var elem = $(this).parent().siblings();
             var selected_ac = elem.find(".select_ac_id").val();
             var service_type = elem.find(".service_type").val();
+            var p_date = elem.find(".preffered_date").val();
             var desc = elem.find(".desc").val();
             var output = elem.find(".display_output div");
             if (selected_ac != -1) {
@@ -630,7 +635,7 @@ $(document).ready(function () {
                     $.ajax({url: "api/Customer/" + customer_id + "/OTS",
                         type: "POST",
                         dataType: "JSON",
-                        data: {ac_id: selected_ac, service_type: service_type, desc: desc},
+                        data: {ac_id: selected_ac, service_type: service_type,p_date: p_date, desc: desc},
                         success: function (response) {
                             if (response.status == "ok") {
                                 output.html("Successfully Added").removeClass().addClass("alert alert-success");
@@ -683,7 +688,7 @@ $(document).ready(function () {
                     var ac_remarks = "<div class='no-display ac_remark'><div class='modal-head' style='background:#fff;padding: 20px;border-radius:5px;'><h4 class='center'>Remarks</h4><div class='modal-body'><p>"+val.install_remarks+"</p></div></div></div>";
                     installed_ac += "<tr class='i_row i_row_" + total + "'><td>" + val.brand_name + "&nbsp;("+val.actype+")"+ac_div+"&nbsp;&nbsp;<i onclick='show_ac_popup(\"i_row_" + total + "\");' style='font-size:1.3em' class='fa fa-eye cursor'></i></td>" +
                         "<td>" + install_type + "</td>" +
-                        "<td>" + val.install_date + "</td>" +
+                        "<td>" + val.preferred_date + "</td>" +
                         "<td>" + val.no_of_service + "</td>" +
                         "<td>"+ac_remarks+"&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"i_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td>" +
                         "<td>" + val.created_on + "</td>" +
@@ -1185,10 +1190,7 @@ function display_remarks(val){
 
 function ViewAMC(id,wet,dry){
     
-     var technician_dropdown = "<option value='-1'>-SELECT TECH-</option>";
-         $.each(technicians, function (key, value) {
-            technician_dropdown += "<option value='" + value.tech_id + "'>" + value.first_name + " " + value.last_name + "</option>";
-     }); 
+
     
 
     var tmp_dry="";

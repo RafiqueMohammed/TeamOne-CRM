@@ -14,13 +14,15 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
         <div class="page-header">
         <?php
-        if(isset($_GET['ref']) && !empty($_GET['ref']))
-        if($_GET['ref']=="ViewCustomers"){
-        { ?>
-            <div class="pull-right"> <a onclick='return LoadPage("ViewCustomers");' href='ViewCustomers'><button class='btn btn-warning btn-sm'> &laquo; Go Back</button></a>
-            </div>
-        <div class="clearfix"></div>
-        <?php }} ?>
+
+        if(isset($_GET['ref']) && !empty($_GET['ref'])){
+            $ref=$_GET['ref'];
+            echo "<div class='pull-right'> <a onclick='return LoadPage(\"{$ref}\");' href='{$ref}'><button class='btn btn-warning btn-sm'> &laquo; Go Back</button></a>
+            </div>";
+        }
+?>
+            <div class='clearfix'></div>
+        
         </div>
 
     </div>
@@ -29,7 +31,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 <!-- end: PAGE HEADER -->
 
 <!-- start: PAGE CONTENT -->
-<div class="row">
+<div class="row profile" >
 
 
 <div class="col-sm-12">
@@ -68,6 +70,16 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
     <li>
         <a data-toggle="tab" id="tab_ots" href="#panel_ots">
             One time services
+        </a>
+    </li>
+    <li>
+        <a data-toggle="tab" id="tab_services" href="#panel_request">
+            UnAssigned Request
+        </a>
+    </li>
+    <li>
+        <a data-toggle="tab" id="tab_services" href="#panel_status">
+            Request Status
         </a>
     </li>    
 </ul>
@@ -461,7 +473,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                         <th class="col-md-1">Install on</th>
                         <th class="col-md-3">No of Services</th>
                         <th class="col-md-1">Remarks</th>
-                        <th class="col-md-2">Created on</th>
+                        <th class="col-md-2">Received on</th>
                         <th class="center"><i class='clip-wrench-2'></i></th>
                         </tr>
                         </thead>
@@ -488,7 +500,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                         <th class="col-md-6">AC Info</th>
                         <th class="col-md-2">Type</th>
                         <th class="col-md-2">Complaint Remarks</th>
-                        <th class="col-md-2">Created on</th>
+                        <th class="col-md-2">Received on</th>
                         <th class="center"><i class='clip-wrench-2'></i></th>
                         </tr>
                         </thead>
@@ -543,7 +555,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                         <th class="col-md-6">AC type</th>
                         <th class="col-md-2">OTS Type</th>
                         <th class="col-md-2">OTS Remarks</th>
-                        <th class="col-md-2">Created on</th>
+                        <th class="col-md-2">Received on</th>
                         <th class="center"><i class='clip-wrench-2'></i></th>
                         </tr>
                         </thead>
@@ -556,6 +568,165 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
             </div>
     </div>
 </div>
+<div id="panel_request" class="tab-pane">
+    <div class="row ">
+        <div class="panel ">
+<div class="tabbable">
+<ul id="myTab" class="nav nav-tabs tab-bricky">
+    <li class="active">
+        <a href="#panel_tab_assign_install" data-toggle="tab">
+            <i class="green fa fa-home"></i>
+            Installations
+            <span class="badge badge-danger" id="Ins_count">0</span>
+        </a>
+    </li>
+    <li>
+        <a href="#panel_tab_assign_complaint" data-toggle="tab">
+            <i class="green fa fa-home"></i>
+            Complaints
+            <span class="badge badge-danger" id="Com_count">0</span>
+        </a>
+    </li>
+    <li>
+        <a href="#panel_tab_assign_amc" data-toggle="tab">
+            <i class="green fa fa-home"></i>
+            AMC Contracts
+            <span class="badge badge-danger" id="AMC_count">0</span>
+        </a>
+    </li>
+    <li>
+        <a href="#panel_tab_assign_ots" data-toggle="tab">
+            <i class="green fa fa-home"></i>
+            One Time Services
+            <span class="badge badge-danger" id="OTS_count">0</span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane in active" id="panel_tab_assign_install">
+
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="at_install_table" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center"><i class="clip-menu-2"></i></th>
+                            <th class="col-md-3">AC Information</th>
+                            <th class="col-md-2">Installation Type</th>
+                            <th class="col-md-4">Remarks</th>
+                            <th class="col-md-2">Created On</th>
+                            <th class="center col-md-1"><i class="clip-wrench-2"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody class="install_assign">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="tab-pane" id="panel_tab_assign_complaint">
+
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="at_complaint_table" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center"><i class="clip-menu-2"></i></th>
+                            <th class="col-md-3">Ac Info</th>
+                            <th class="col-md-3">Problem</th>
+                            <th class="col-md-4">Remarks</th>
+                            <th class="col-md-2">Created_on</th>
+                            <th class="center col-md-1"><i class="clip-wrench-2"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody class="complaint_assign">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="tab-pane" id="panel_tab_assign_amc">
+
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="at_amc_table" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center"><i class="clip-menu-2"></i></th>
+                            <th class="col-md-2">AC Info</th>
+                            <th class="col-md-2">AMC Info</th>
+                            <th class="col-md-1">No of Services</th>
+                            <th class="col-md-3">Remarks</th>
+                            <th class="col-md-2">Validity</th>
+                            <th class="col-md-1">Service Date</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="amc_assign">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="tab-pane" id="panel_tab_assign_ots">
+
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="at_ots_table" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="center"><i class="clip-menu-2"></i></th>
+                            <th class="col-md-3">Ac Info</th>
+                            <th class="col-md-2">Service Type</th>
+                            <th class="col-md-4">Remarks</th>
+                            <th class="col-md-2">Created On</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="ots_assign">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+</div>
+            
+    </div>
+</div>
+<div id="panel_status" class="tab-pane">
+    <div class="row ">
+
+            <div id="viewCustomerAC" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <h1>Comming Soon....</h1>
+                    
+                </div>
+            </div>
+    </div>
+</div>
 </div>
 </div>
 </div>
@@ -564,3 +735,4 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 </div>
 <!-- end: PAGE CONTENT-->
 <script type="text/javascript" src="assets/js/CustomerDetails.js"></script>
+<script type="text/javascript" src="assets/js/AssignTechnician.js"></script>

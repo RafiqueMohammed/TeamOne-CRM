@@ -36,8 +36,8 @@ $app->get('/Technicians',function() use($app){
 
 $app->post('/Technicians',function() use($app){
     global $DB;
-    if(isset($_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['mobile'],$_POST['branch'],$_POST['address']
-    )&&!empty($_POST['firstname'])&&!empty($_POST['lastname'])&&!empty($_POST['email'])&&!empty($_POST['mobile'])){
+    if(isset($_POST['firstname'],$_POST['lastname'],$_POST['mobile'],$_POST['branch'],$_POST['address']
+    )&&!empty($_POST['firstname'])&&!empty($_POST['lastname'])&&!empty($_POST['mobile'])){
 
 
 

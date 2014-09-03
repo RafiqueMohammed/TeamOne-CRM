@@ -1,8 +1,8 @@
 <?php
 define("DB_HOST", "localhost");
-define("DB_USER", "teamone_user"); //teamone_user
-define("DB_PASS", "crm2014"); //crm2014
-define("DB_NAME", "teamone_crm"); //teamone_crm
+define("DB_USER", "root"); //teamone_user
+define("DB_PASS", ""); //crm2014
+define("DB_NAME", "team_crm"); //teamone_crm
 
 define("TAB_CUSTOMER", "customer");
 define("TAB_TECHNICIAN", "technician");
@@ -27,7 +27,7 @@ define("TAB_PROBLEM_TYPE", "problem_type");
 
 define("TAB_LOCALITY", "locality");
 
-define("SUB_FOLDER", "/"); // /
+define("SUB_FOLDER", "/team_one/"); // /
 
 define("ROOT_DIR", $_SERVER["DOCUMENT_ROOT"]);
 define("INC_DIR", ROOT_DIR . SUB_FOLDER . "include/");

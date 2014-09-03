@@ -4066,7 +4066,7 @@ body.header-default .daterangepicker {
 	background: none repeat scroll 0 0 #FFFFFF;
 	position: fixed;
 	right: 0;
-	top: 100px;
+	top: 350px;
 	/*width: 215px;*/
 	width: 250px;
 	z-index: 999;

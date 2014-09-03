@@ -37,8 +37,8 @@ $app->get('/Staff',function() use($app){
 
 $app->post('/Staff',function() use($app){
     global $DB;
-    if(isset($_POST['fname'],$_POST['lname'],$_POST['email'],$_POST['mobile'],$_POST['branch'],$_POST['address']
-    )&&!empty($_POST['fname'])&&!empty($_POST['lname'])&&!empty($_POST['email'])&&!empty($_POST['mobile'])){
+    if(isset($_POST['fname'],$_POST['lname'],$_POST['mobile'],$_POST['branch'],$_POST['address']
+    )&&!empty($_POST['fname'])&&!empty($_POST['lname'])&&!empty($_POST['mobile'])){
         $fname =$DB->real_escape_string($_POST['fname']);
         $lname =$DB->real_escape_string($_POST['lname']);
         $email =$DB->real_escape_string($_POST['email']);

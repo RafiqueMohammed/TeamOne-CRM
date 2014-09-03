@@ -4,7 +4,7 @@ var branch_list={};
 var staff_data_count = 0;
 
 $(function(){
-    
+    blockThisUI($('.staff_list'));
         $.getJSON("api/Staff",function(response){
             if(response.status=="ok") {
                 staff_data = response.data;
@@ -32,7 +32,9 @@ $(function(){
             } else if(response.status=="no"){
                 tech_list_tr = "<tr><td class='alert alert-info center' colspan='7'> <i class='clip-info'></i> " + response.result + "</td></tr>";
             $("#staff_details tbody").prepend(tech_list_tr);
-            } 
+            }
+            unblockThisUI($('.staff_list'));
+
         });
         
         $("#add_staff").on("click", function(){
@@ -72,14 +74,14 @@ $(function(){
         
         if(c > 0) {
             console.log(c);
-            $("#facebox #error").html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+            $("#facebox #error").html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
         } else {
             $("#facebox #error").remove();
             var mobile = $("#facebox input[name='mobile']").val();
             var query = {staff:"staff",fname:fname,lname:lname,mobile:mobile,email:email,address:address,branch:branch[1]};
             var qry = "fname="+fname+"&lname="+lname+"&mobile="+mobile+"&email="+email+"&address="+address+"&branch="+branch[0];
             
-            $("#facebox #result").show().html("Please wait... <i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+            $("#facebox #result").show().html("Please wait... <i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
             $.ajax({
                 type:'post',
                 url:'api/Staff',
@@ -88,12 +90,12 @@ $(function(){
                 success: function(data){
                     if(data.status=="ok"){
                         console.log("succes");
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-success").fadeOut(3000);
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-success center").fadeOut(3000);
                         window.location.replace("Staff");
                         //add_staff_row(data.last_id,query);
                     } else if(data.status=="no") {
                         console.log("failure");
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center").fadeOut(3000);
                     }
                 }
             });
@@ -116,24 +118,25 @@ function add_staff_row(staff_id,qry){
 function remove_staff(staff_id,row_id) {
     var answer=confirm("Are you sure..?");
     if(answer){
-    blockThisUI();
-    $("#staff_response_result").show().html("Please wait...").removeClass().addClass("alert alert-info");
+    $("#staff_response_result").show().html("Please wait...").removeClass().addClass("alert alert-info center");
     $.ajax({
         type:'DELETE',
         url:'api/Staff/'+staff_id,
         success: function(data){
             if(data.status=="ok"){
                 $(".staff_row_"+row_id).slideUp().remove();
-                $("#staff_response_result").show().html("Deleted Successfully").removeClass().addClass("alert alert-success").slideUp(3000);
+                $("#staff_response_result").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                 if($(".staff_row_c tr").length==0){
                     $(".staff_row_c").html("<tr><td class='alert alert-info center' colspan='6'><i class='clip-info'></i>  No Staff Found</td></tr>");
                 }
             } else if(data.status=="no") {
-                $("#staff_response_result").show().html(data.result).removeClass().addClass("alert alert-danger").slideUp(3000);
+                $("#staff_response_result").show().html(data.result).removeClass().addClass("alert alert-danger center");
             }
+            setTimeout(function(){
+            $("#staff_response_result") .slideUp();
+        },1000);
         }
     });
-    unblockThisUI();
     }  
 }
 
@@ -162,20 +165,40 @@ $.each(branch_list, function(key, val){
     $("#facebox #staff_update").on("click",function() {
         var fname = $("#facebox #up_staff_fname").val();
         var lname = $("#facebox #up_staff_lname").val();
-        var mobile = $("#facebox #up_staff_mobile").val();
+        var mobile = $("#facebox #up_staff_mobile");
         var email = $("#facebox #up_staff_email").val();
         var address = $("#facebox #up_staff_address").val();
         var branch = $("#facebox #up_staff_branch").val();
         var id = $("#facebox #up_staff_id").val();
-        /*console.log(fname+"<br />");
-        console.log(lname+"<br />");
-        console.log(mobile+"<br />");
-        console.log(email+"<br />");
-        console.log(address+"<br />");
-        console.log(branch+"<br />");
-        console.log(id+"<br />");*/
+
+        var total_req = $("#facebox .req_s").length;
+        var c=0;
+
+        for(var i=0 ; i < total_req ; i++){
+            if($("#facebox .req_s").eq(i).val()=="" || $("#facebox .req_s").eq(i).val()=="-1"){
+                $("#facebox .req_s").eq(i).parent().removeClass("has-success").addClass("has-error");
+                c++;
+            } else {
+                $("#facebox .req_s").eq(i).parent().removeClass("has-error");
+            }
+        }
+        
+        if (mobile.val().length != 10) {
+            mobile.parent().removeClass("has-success").addClass("has-error");
+            mobile.parent().parent().find(".error_span").addClass("text-danger").html("Invalid Mobile Number");
+            c++;
+        } else {
+            mobile.parent().removeClass("has-error");
+            mobile.parent().parent().find(".error_span").empty();
+        }
+        
+        if(c > 0){
+            $("#facebox #error").show().html("Please fill the required details").removeClass().addClass("alert alert-danger center");
+        }else{
+            $("#facebox #error").remove();
+            var mobile = $("#facebox #up_staff_mobile").val();
         var query = "firstname="+fname+"&lastname="+lname+"&mobile="+mobile+"&email="+email+"&address="+address+"&branch="+branch;
-        $("#facebox #result").show().html("Please Wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+        $("#facebox #result").show().html("Please Wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
             $.ajax({
                 type:"put",
                 data:query,
@@ -183,16 +206,25 @@ $.each(branch_list, function(key, val){
                 url:'api/Staff/'+id,
                 success: function(data) {
                     if(data.status=="ok"){
-                        $("#facebox #result").show().html("Updated Successfully").removeClass().addClass("alert alert-success").slideUp(3000);
+                        $("#facebox #result").show().html("Updated Successfully").removeClass().addClass("alert alert-success center").slideUp(3000);
                         window.location.replace("Staff");                        
                     } else if(data.status=="no"){
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-warning").slideUp(3000)
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center").slideUp(3000)
                     }
                 }
             });
-
+        }
     });
         
 
           
  }
+ 
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}

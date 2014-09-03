@@ -168,6 +168,10 @@
                                 </select></td>
                         </tr>
                         <tr>
+                            <th>Preferred Date</th>
+                            <td><input type="text" class="form-control preffered_date" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/></td>
+                        </tr>
+                        <tr>
                             <th>Problem Description</th>
                             <td><textarea  class="form-control problem_desc"></textarea></td>
                         </tr>
@@ -220,6 +224,10 @@
                                     <option value="chemical">Chemical Cleaning</option>
                                     <option value="pressure">Pressure Pump Cleaning</option>
                                 </select></td>
+                        </tr>
+                        <tr>
+                            <th>Preferred Date</th>
+                            <td><input type="text" class="form-control preffered_date" data-date-format="dd-mm-yyyy" data-date-viewmode="years"/></td>
                         </tr>
                         <tr>
                             <th>Description</th>
@@ -346,12 +354,12 @@
                     <tr>
                         <td>
                             <label>Mobile<span style="color: red;">&nbsp;*</span></label><span class="mob_error"></span>
-                            <input placeholder="Ex: 9820098200" maxlength="10" class="form-control tech_req" name="tech_mobile" />
+                            <input placeholder="Ex: 9820098200" maxlength="10" class="form-control tech_req" name="tech_mobile" onkeypress="return isNumber(event)" />
                             
                         </td>
                         <td>
-                            <label>Email<span style="color: red;">&nbsp;*</span></label>
-                            <input placeholder="Ex: abc@example.com" class="form-control tech_req" name="tech_email" />
+                            <label>Email</label>
+                            <input placeholder="Ex: abc@example.com" class="form-control" name="tech_email" />
                         </td>
                     </tr>
                     <tr>
@@ -416,12 +424,12 @@
                         <tr>
                             <td>
                                 <label>Mobile<span style="color: red;">&nbsp;*</span></label><span class="mob_error"></span>
-                                <input placeholder="Ex: 9820098200" maxlength="10" class="form-control req_t display_tech_mobile" id="mobile_edit" name="mob" />
+                                <input placeholder="Ex: 9820098200" maxlength="10" class="form-control req_t display_tech_mobile" id="mobile_edit" name="mob" onkeypress="return isNumber(event)" />
 
                             </td>
                             <td>
-                                <label>Email<span style="color: red;">&nbsp;*</span></label>
-                                <input placeholder="Ex: abc@example.com" class="form-control req_t display_tech_email" id="email_edit" name="mail" />
+                                <label>Email</label>
+                                <input placeholder="Ex: abc@example.com" class="form-control display_tech_email" id="email_edit" name="mail" />
                             </td>
                         </tr>
                         <tr>
@@ -481,12 +489,12 @@
                             <tr>
                                 <td>
                                     <label>Mobile<span style="color: red;">&nbsp;*</span></label>
-                                    <input placeholder="Ex: 9820098200" maxlength="10" class="form-control staff_req" name="mobile" />
+                                    <input placeholder="Ex: 9820098200" maxlength="10" class="form-control staff_req" name="mobile" onkeypress="return isNumber(event)" />
                                     <span class="error_span"></span>
                                 </td>
                                 <td>
-                                    <label>Email<span style="color: red;">&nbsp;*</span></label>
-                                    <input placeholder="Ex: abc@example.com" class="form-control staff_req" name="email" />
+                                    <label>Email</label>
+                                    <input placeholder="Ex: abc@example.com" class="form-control" name="email" />
                                 </td>
                             </tr>
                             <tr>
@@ -547,12 +555,12 @@
                             <tr>
                                 <td>
                                     <label>Mobile<span style="color: red;">&nbsp;*</span></label>
-                                    <input placeholder="Ex: 9820098200" maxlength="10" class="form-control req_s edit_s_mobile" id="up_staff_mobile" name="mob" />
+                                    <input placeholder="Ex: 9820098200" maxlength="10" class="form-control req_s edit_s_mobile" id="up_staff_mobile" name="mob" onkeypress="return isNumber(event)" />
                                     <span class="error_span"></span>
                                 </td>
                                 <td>
-                                    <label>Email<span style="color: red;">&nbsp;*</span></label>
-                                    <input placeholder="Ex: abc@example.com" class="form-control req_s edit_s_email" id="up_staff_email" name="mail" />
+                                    <label>Email</label>
+                                    <input placeholder="Ex: abc@example.com" class="form-control edit_s_email" id="up_staff_email" name="mail" />
                                 </td>
                             </tr>
                             <tr>
@@ -612,15 +620,23 @@
 				</button>
 				<h4 class="modal-title">Service Date</h4>
 		</div>
-        <div class="modal-body"><div id="error"></div>
-            <h4>Dry Service</h4>
-            <table id="assign_tech_table_dry" class="table table-striped table-bordered table-condensed">
+        <div class="col-md-12" style="background-color: white;"><div id="error"></div>
+            
+                <div class="col-md-6">
+                    <h4>Dry Service</h4>
+                    <table id="assign_tech_table_dry" class="table table-striped table-bordered table-condensed">
+                        
+                    </table>              
+                </div>
                 
-            </table>
-            <h4>Wet Service</h4>
-            <table id="assign_tech_table_wet" class="table table-striped table-bordered">
+                <div class="col-md-6">
+                    <h4>Wet Service</h4>
+                    <table id="assign_tech_table_wet" class="table table-striped table-bordered table-condensed">
+                        
+                    </table>
                 
-            </table>
+                </div>
+  
             <div id="result"></div>
         </div>
         <div class="modal-footer">

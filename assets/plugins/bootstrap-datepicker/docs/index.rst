@@ -4,7 +4,7 @@ bootstrap-datepicker
 Bootstrap-datepicker provides a flexible datepicker widget in the Twitter bootstrap style.
 
 .. figure:: _static/demo_head.png
-    :align: center
+:align: center
 
 This is a fork of Stefan Petre's `original code <http://www.eyecon.ro/bootstrap-datepicker/>`_; thanks go to him for getting this thing started!
 

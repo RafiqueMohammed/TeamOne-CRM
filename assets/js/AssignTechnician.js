@@ -40,7 +40,10 @@ $(function () {
                 customer_info.installations = response.data.installations;
                 customer_info.complaints = response.data.complaints;
 
-                $(".cust_full_name").html(customer_info.details.first_name + " " + customer_info.details.last_name);
+                $(".cust_full_name").html(customer_info.details.first_name + " " + customer_info.details.last_name + "\
+                 <a onclick='return LoadPage(\"CustomerDetails?id="+customer_id+"&ref=AssignTechnician?id="+customer_id+"\")'\
+                  href='CustomerDetails?id="+customer_id+"&ref=AssignTechnician?id="+customer_id+"'><i style='font-size: 20px; color: rgb(98, 98, 98);' \
+                  class='clip-info info'></i>");
 
 
                 var install_tab_row = "";
@@ -76,7 +79,7 @@ $(function () {
                         }
                         install_tab_row += "<tr class='i_num_rows i_row_num_c_"+sr_no+"'><td>" + sr_no + "</td><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+tmp_ac_div+
                             "</td><td>" + val.install_type + "</td>" +
-                        "<td>" + val.install_remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician("+sr_no+",\"installation\","+val.install_id+",\""+val.install_date+"\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
+                        "<td>" + val.install_remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician("+sr_no+",\"installation\","+val.install_id+",\""+val.preferred_date+"\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
                         notification++;
                         sr_no++;
                         //console.log(val.install_date);
@@ -150,7 +153,7 @@ $(function () {
                         
                         amc_tab_row += "<tr class='a_num_rows a_row_num_c_"+sr_no+"'><td>"+sr_no+"</td><td>"+val.make+"&nbsp;("+val.ac_type+") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+ac_div+"</td><td>"+val.amc_type+"</td><td><b>Dry : </b>"+val.dry+"<br /><b>Wet : </b>"+val.wet+"</td>\
                         <td>"+val.remarks+"</td><td><b>Activation : </b>"+val.activation+"<br /><b>Expiration : "+val.expiration+"</b></td><td>"+val.created_on+"</td>\
-                        <td><button onclick='createTextbox("+val.wet+","+val.dry+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                        <td><button onclick='assign_technician("+sr_no+",\"amc\","+val.amc_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                     });
@@ -190,7 +193,6 @@ $(function () {
                     if (notification != 0) {
                         $("#OTS_count").html(notification);
                     }
-
                     $("#at_ots_table tbody").prepend(ots_tab_row);
                 }
                 //console.log(customer_info);
@@ -218,7 +220,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         }); 
         
         var date_box = "<input type='text' value='"+date+"' class='datepicker_for_all compulsory form-control' data-date-format='dd-mm-yyyy' data-date-viewmode='years'>"; 
-        var remarks_box = "<textarea class='remarks_for_assign form-control compulsory'></textarea>";
+        var remarks_box = "<textarea class='remarks_for_assign form-control'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='form-control compulsory select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
                     <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
@@ -243,7 +245,7 @@ console.log(serial+" "+type+" "+id+" "+date)
                 }
             }
             if(c > 0){
-                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
             }else{
                 $("#facebox #error").hide();
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
@@ -251,7 +253,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_remarks = $("#facebox .remarks_for_assign").val();
             var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
 
-            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
             $.ajax({
                 type:'post',
@@ -266,11 +268,13 @@ console.log(serial+" "+type+" "+id+" "+date)
                         if($(".install_assign tr").length == 0){
                             $(".install_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No intsallation assigned</td></tr>")
                         }
-                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success").fadeOut(3000);
+                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                     } else if(data.status=="no"){
                         console.log("error")
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger");
-                    }
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                    }setTimeout(function(){
+                        $("#facebox #result").slideUp();
+                    },1000);
                 }
             });                
             }
@@ -286,7 +290,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         }); 
         
         var date_box = "<input type='text' value='"+date+"' class='datepicker_for_all form-control compulsory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'>"; 
-        var remarks_box = "<textarea class='compulsory form-control remarks_for_assign'></textarea>";
+        var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='compulsory form-control select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
                     <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
@@ -311,7 +315,7 @@ console.log(serial+" "+type+" "+id+" "+date)
                 }
             }
             if(c > 0){
-                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
             }else{
                 $("#facebox #error").hide();
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
@@ -319,7 +323,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_remarks = $("#facebox .remarks_for_assign").val();
             var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
 
-            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
             $.ajax({
                 type:'post',
@@ -333,10 +337,12 @@ console.log(serial+" "+type+" "+id+" "+date)
                         if($(".complaint_assign tr").length == 0){
                             $(".complaint_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
                         }                        
-                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success").fadeOut(3000);
+                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                     } else if(data.status=="no"){
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger");
-                    }
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                    }setTimeout(function(){
+                        $("#facebox #result").slideUp();
+                    },1000);
                 }
             });                
             }         
@@ -351,10 +357,10 @@ console.log(serial+" "+type+" "+id+" "+date)
             technician_dropdown += "<option value='" + value.tech_id + "'>" + value.first_name + " " + value.last_name + "</option>";
         }); 
         
-        var date_box = "<input type='text' value='"+date+"' class='datepicker_for_all form-control' data-date-format='dd-mm-yyyy' data-date-viewmode='years'>"; 
+        var date_box = "<input type='text' value='"+date+"' class='datepicker_for_all form-control compulsory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'>"; 
         var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
-        var row = "<tr><td><label><b>Technician</b></label></td><td><select class='form-control select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
+        var row = "<tr><td><label><b>Technician</b></label></td><td><select class='form-control select_tech_for_assign compulsory'>"+technician_dropdown+"</select></td></tr>\
                     <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
                     <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
                         
@@ -364,25 +370,51 @@ console.log(serial+" "+type+" "+id+" "+date)
         
         $("#facebox .assign_tech_submit").on("click", function(){
             console.log("click");
+            
+            var input_length = $("#facebox .compulsory").length;
+            
+            var c = 0;
+            for (var i = 0; i < input_length; i++) {
+                if ($("#facebox .compulsory").eq(i).val() == "" || $("#facebox .compulsory").eq(i).val()==-1) {
+                    $("#facebox .compulsory").eq(i).parent().removeClass("has-success").addClass("has-error");
+                    c++;
+                } else {
+                    $("#facebox .compulsory").eq(i).parent().removeClass("has-error");
+    
+                }
+            }
+            if(c > 0){
+                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
+            }else{
+                $("#facebox #error").hide();
+            
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
             var qry = "tech_id="+assign_t_id+"&assign_data="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
             console.log(qry);
-            /*$.ajax({
+            $.ajax({
                 type:'post',
-                url:'',
+                url:'api/Assign',
                 data:qry,
                 dataType:'json',
                 success: function(data){
                     if(data.status=="ok"){
-                        
+                        $(".a_row_num_c_"+serial).remove();
+                        console.log(".a_row_num_c_"+serial);
+                        if($(".amc_assign tr").length == 0){
+                            $(".amc_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
+                        }   
+                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                     } else if(data.status=="no"){
-                        
-                    }
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                    }setTimeout(function(){
+                        $("#facebox #result").slideUp();
+                    },1000);
                 }
-            });*/
-        })        
+            });
+            }
+        });        
         
         break;
         
@@ -394,7 +426,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         }); 
         
         var date_box = "<input type='text' value='"+date+"' class='datepicker_for_all form-control compulsory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'>"; 
-        var remarks_box = "<textarea class='compulsory form-control remarks_for_assign'></textarea>";
+        var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button value='submit' class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='compulsory form-control select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
                     <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
@@ -419,7 +451,7 @@ console.log(serial+" "+type+" "+id+" "+date)
                 }
             }
             if(c > 0){
-                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+                $("#facebox #error").show().html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
             }else{
                 $("#facebox #error").hide();
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
@@ -427,7 +459,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_remarks = $("#facebox .remarks_for_assign").val();
             var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
 
-            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
             $.ajax({
                 type:'post',
@@ -442,11 +474,13 @@ console.log(serial+" "+type+" "+id+" "+date)
                         if($(".ots_assign tr").length == 0){
                             $(".ots_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No OTS assigned</td></tr>")
                         }                        
-                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success").fadeOut(3000);
+                        $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                     } else if(data.status=="no"){
                         console.log("error")
-                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger");
-                    }
+                        $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                    }setTimeout(function(){
+                        $("#facebox #result").slideUp();
+                    },1000);
                 }
             });                
             }

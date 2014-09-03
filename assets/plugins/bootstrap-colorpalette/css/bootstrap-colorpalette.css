@@ -1,12 +1,12 @@
 .bootstrap-colorpalette {
-    padding-left:4px;
-    padding-right:4px;
+    padding-left: 4px;
+    padding-right: 4px;
     white-space: normal;
-    line-height:1;
+    line-height: 1;
 }
 
 .bootstrap-colorpalette div {
-    line-height:0;
+    line-height: 0;
 }
 
 .bootstrap-colorpalette .btn-color {
