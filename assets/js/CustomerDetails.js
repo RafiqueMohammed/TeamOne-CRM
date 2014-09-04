@@ -156,7 +156,7 @@ $(document).ready(function () {
 
         if (c > 0) {
             console.log(c);
-            $("#error").html("Please fill the required fields").removeClass().addClass("alert alert-danger");
+            $("#error").html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
         } else {
             $("#error").hide();
             /** UPDATE INFO **/
@@ -191,12 +191,15 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     if (data.status == "ok") {
-                        $("#update_customer_details_output").show().html("" + data.result).removeClass("alert alert-danger").addClass("alert alert-success").fadeOut(3000);
+                        $("#update_customer_details_output").show().html("" + data.result).removeClass().addClass("alert alert-success center");
+                        
                     } else if (data.status == "no") {
-                        $("#update_customer_details_output").show().html("" + data.result).removeClass().addClass("alert alert-info").fadeOut(3000);
+                        $("#update_customer_details_output").show().html("" + data.result).removeClass().addClass("alert alert-info center");
                     }
                     mThis.html(tmp_load_holder);
-                }
+                }setTimeout(function(){
+                    $("#update_customer_details_output").slideUp();
+                },1000);
             });
 
         }
@@ -291,26 +294,29 @@ $(document).ready(function () {
             var output = elem.find(".display_output");
             if (selected_ac != -1) {
                 if (ins_type != -1 && no_of_service != "" && no_of_service > 0 && ins_date != "") {
-                    output.html("Adding...").removeClass().addClass("alert alert-info");
+                    output.html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
                     $.ajax({url: "api/Customer/" + customer_id + "/Installations",
                         type: "POST",
                         dataType: "JSON",
                         data: {ac_id: selected_ac, ins_type: ins_type, no_of_service: no_of_service, ins_date: ins_date, remarks: remarks},
                         success: function (response) {
                             if (response.status == "ok") {
-                                output.html("Successfully Added").removeClass().addClass("alert alert-success");
+                                output.html("Successfully Added").removeClass().addClass("alert alert-success center");
+                                setTimeout(function(){
+                                    jQuery(document).trigger('close.facebox');
+                                },1000);
                             } else if (response.status == "no") {
-                                output.html(response.result + "").removeClass().addClass("alert alert-danger");
+                                output.html(response.result + "").removeClass().addClass("alert alert-danger center");
                             } else {
-                                output.html("No Response from the server").removeClass().addClass("alert alert-danger");
+                                output.html("No Response from the server").removeClass().addClass("alert alert-danger center");
                             }
                         }});
                 } else {
-                    output.html("Required field missing").removeClass().addClass("alert alert-danger");
+                    output.html("Required field missing").removeClass().addClass("alert alert-danger center");
                 }
 
             } else {
-                output.html("Select AC for the installation").removeClass().addClass("alert alert-danger");
+                output.html("Select AC for the installation").removeClass().addClass("alert alert-danger center");
                 console.log("Required");
             }
 
@@ -364,18 +370,18 @@ $(document).ready(function () {
         var output = elem.find(".display_output");
 
         if (ac_id != -1 && problem_type != -1) {
-            output.html("<div class='alert alert-info'>Adding.. Please Wait..</div>");
+            output.html("<div class='alert alert-info center'>Adding.. Please Wait..</div>");
             $.ajax({url: "api/Customer/" + customer_id + "/Complaints",
                 type: "POST",
                 dataType: "JSON",
                 data: {ac_id: ac_id, problem_type: problem_type, p_date: p_date, problem_desc: problem_desc},
                 success: function (response) {
                     if (response.status == "ok") {
-                        output.html("<div class='alert alert-success'>Successfully Added</div>");
+                        output.html("<div class='alert alert-success center'>Successfully Added</div>");
                     } else if (response.status == "no") {
-                        output.html("<div class='alert alert-danger'>" + response.result + "</div>");
+                        output.html("<div class='alert alert-danger center'>" + response.result + "</div>");
                     } else {
-                        output.html("<div class='alert alert-danger'>No Response from the server</div>");
+                        output.html("<div class='alert alert-danger center'>No Response from the server</div>");
                     }
                 }});
         } else {
@@ -527,7 +533,7 @@ $(document).ready(function () {
             }
 
             if (c > 0) {
-                $("#facebox #error").show().html(err_msg).removeClass().addClass("alert alert-danger")
+                $("#facebox #error").show().html(err_msg).removeClass().addClass("alert alert-danger center")
             } else {
                 $("#facebox #error").remove();
                 var rows = $("#facebox .aaa").length;
@@ -544,7 +550,7 @@ $(document).ready(function () {
                     data += "&row[" + i + "][amc_datepicker]=" + $("#facebox .table_body tr").eq(i).find(".amc_datepicker").val();
                 }
                 console.log(data);
-                $("#facebox #result").show().html("please wait...<i class='clip-buzy'></i>").removeClass().addClass("alert alert-info");
+                $("#facebox #result").show().html("Please wait...<i class='clip-buzy'></i>").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'post',
                     data: data,
@@ -553,10 +559,13 @@ $(document).ready(function () {
                     success: function (response) {
                         if (response.status == "ok") {
                             console.log("success");
-                            $("#facebox #result").show().html("Added Successfully").removeClass().addClass("alert alert-success").fadeOut(3000);
+                            $("#facebox #result").show().html("Added Successfully").removeClass().addClass("alert alert-success center");
+                            setTimeout(function(){
+                                    jQuery(document).trigger('close.facebox');
+                            },1000);
                         } else if (response.status == "no") {
                             console.log("error");
-                            $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
+                            $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                         }
                     }
                 });
@@ -630,7 +639,7 @@ $(document).ready(function () {
             var output = elem.find(".display_output div");
             if (selected_ac != -1) {
                 if (service_type != -1) {
-                    output.html("Adding...").removeClass().addClass("alert alert-info");
+                    output.html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
                     $.ajax({url: "api/Customer/" + customer_id + "/OTS",
                         type: "POST",
@@ -638,19 +647,22 @@ $(document).ready(function () {
                         data: {ac_id: selected_ac, service_type: service_type,p_date: p_date, desc: desc},
                         success: function (response) {
                             if (response.status == "ok") {
-                                output.html("Successfully Added").removeClass().addClass("alert alert-success");
+                                output.html("Successfully Added").removeClass().addClass("alert alert-success center");
+                                setTimeout(function(){
+                                    jQuery(document).trigger('close.facebox');
+                                },1000);
                             } else if (response.status == "no") {
-                                output.html(response.result + "").removeClass().addClass("alert alert-danger");
+                                output.html(response.result + "").removeClass().addClass("alert alert-danger center");
                             } else {
-                                output.html("No Response from the server").removeClass().addClass("alert alert-danger");
+                                output.html("No Response from the server").removeClass().addClass("alert alert-danger center");
                             }
                         }});
                 } else {
-                    output.html("Select Service Type").removeClass().addClass("alert alert-danger");
+                    output.html("Select Service Type").removeClass().addClass("alert alert-danger center");
                 }
 
             } else {
-                output.html("Select AC for the installation").removeClass().addClass("alert alert-danger");
+                output.html("Select AC for the installation").removeClass().addClass("alert alert-danger center");
             }
 
         });
@@ -968,11 +980,12 @@ function add_new_ac() {
                         }
                     }
                     if (c > 0) {
-                        output.html("Please fill the required fields").removeClass().addClass("result_msg alert alert-danger");
+                        output.html("Please fill the required fields").removeClass().addClass("result_msg alert alert-danger center");
                     } else {
                         output.hide();
                         var tmp_load_holder = mThis.html();
                         mThis.html("<i class='clip-busy'></i> Adding...");
+                        
                         $.ajax({
                             type: 'post',
                             url: 'api/Customer/' + customer_id + '/AC',
@@ -981,13 +994,16 @@ function add_new_ac() {
                             success: function (response) {
                                 if (response.status == "ok") {
                                     console.log("success");
-                                    $("#facebox #result").html("Product added successfully").removeClass().addClass("alert alert-success").show().fadeOut(5000);
+                                    $("#facebox #result").html("Added Successfully").removeClass().addClass("alert alert-success center").show();
                                     update_ac_variable();
                                     add_row_in_customer_details(dataval, response.last_id);
+                                    setTimeout(function(){
+                                    jQuery(document).trigger('close.facebox');
+                                },1000);
                                 
                                 } else if (response.status == "no") {
                                     console.log("error")
-                                    $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger").show().fadeOut(5000);
+                                    $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center").show();
                                 }
                                 output.hide();
                                 mThis.html(tmp_load_holder);
@@ -1016,13 +1032,17 @@ function delete_customer_ac(cust_ac_id, row_id) {
     var ans = confirm("Are you sure");
     if (ans) {
         blockThisUI(".panel-body");
+        $(".ac_info_res").show().html("Please wait... <i class='clip-busy'></i>").removeClass().addClass("alert alert-info center")
         $.ajax({
             type: 'DELETE',
             url: 'api/Customer/' + customer_id + '/AC/' + cust_ac_id,
             dataType: 'json',
             success: function (data) {
                 if (data.status == "ok") {
-                    $(".ac_info_res").show().html("Successfully Deleted").addClass("alert alert-success").slideUp(3000)
+                    $(".ac_info_res").show().html("Successfully Deleted").removeClass().addClass("alert alert-success center");
+                    setTimeout(function(){
+                        $(".ac_info_res").slideUp();
+                    },1000);
                     $(".num_ac_rows_" + row_id).slideUp("slow");
                     $.getJSON("api/Customer/" + customer_id + "/AC", function (response) {
                         if (response.status == "ok") {
@@ -1033,6 +1053,7 @@ function delete_customer_ac(cust_ac_id, row_id) {
                     });
                 } else if (data.status == "no") {
                     console.log("error");
+                    $(".ac_info_res").show().html(data.result).removeClass().addClass("alert alert-danger center")
                 }
             }
         });
@@ -1054,15 +1075,18 @@ function delete_service_type(type, id, row_id) {
                     success: function (data) {
                         if (data.status == "ok") {
                             $(".i_row_" + row_id).slideUp().remove();
-                            $("#result_install").show().html("deleted successfully").removeClass().addClass("alert alert-success").fadeOut(3000);
+                            $("#result_install").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                             if ($(".installed_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No Installation is added yet</td></tr>";
 
                                 $(".installed_product").html(row);
                             }
                         } else if (data.status == "no") {
-                            $("#result_install").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
+                            $("#result_install").show().html(data.result).removeClass().addClass("alert alert-danger center");
                         }
+                        setTimeout(function(){
+                            $("#result_install").slideUp();
+                        },1000);
                     }
                 });
             }
@@ -1080,14 +1104,16 @@ function delete_service_type(type, id, row_id) {
                     success: function (data) {
                         if (data.status == "ok") {
                             $(".c_row_" + row_id).slideUp().remove();
-                            $("#result_complaints").show().html("deleted successfully").removeClass().addClass("alert alert-success").slideUp(3000);
+                            $("#result_complaints").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                             if ($(".complaint_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No Complaints is added yet</td></tr>";
                                 $(".complaint_product").html(row);
                             }
                         } else if (data.status == "no") {
-                            $("#result_complaints").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
-                        }
+                            $("#result_complaints").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                        }setTimeout(function(){
+                            $("#result_complaints").slideUp();
+                        },1000);
                     }
                 });
             }
@@ -1105,14 +1131,16 @@ function delete_service_type(type, id, row_id) {
                     success: function (data) {
                         if (data.status == "ok") {
                             $(".a_row_" + row_id).slideUp();
-                            $("#result_amc").show().html("deleted successfully").removeClass().addClass("alert alert-success").slideUp(3000)
+                            $("#result_amc").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                             if ($(".amc_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='7'> <i class='clip-info'></i> No AMC is added yet</td></tr>";
                                 $(".amc_product").html(row);
                             }
                         } else if (data.status == "no") {
-                            $("#result_amc").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
-                        }
+                            $("#result_amc").show().html(data.result).removeClass().addClass("alert alert-danger center");
+                        }setTimeout(function(){
+                            $("#result_amc").slideUp();  
+                        },1000);
                     }
                 });
             }
@@ -1130,15 +1158,17 @@ function delete_service_type(type, id, row_id) {
                     success: function (data) {
                         if (data.status == "ok") {
                             $(".o_row_" + row_id).slideUp();
-                            $("#result_ots").show().html("deleted successfully").removeClass().addClass("alert alert-success").slideUp(3000)
+                            $("#result_ots").show().html("deleted successfully").removeClass().addClass("alert alert-success center");
                             if ($(".ots_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No OTS is added yet</td></tr>";
                                 $(".ots_product").html(row);
                             }
                         } else if (data.status == "no") {
-                            $("#result_ots").show().html(data.result).removeClass().addClass("alert alert-danger").fadeOut(3000);
+                            $("#result_ots").show().html(data.result).removeClass().addClass("alert alert-danger center");
                         }
-                    }
+                    }setTimeout(function(){
+                        $("#result_ots").slideUp();
+                    },1000);
                 });
             }
 
@@ -1242,7 +1272,7 @@ function ViewAMC(id,wet,dry){
             data += "&row[" + i + "][amc_id]=" + id;         
         }
         console.log(data);
-        $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info");
+        $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
         $.ajax({
             type:'post',
             url:'api/Customer/'+customer_id+'/AMC_SERVICE',
@@ -1251,9 +1281,12 @@ function ViewAMC(id,wet,dry){
             success: function(response){
                 if(response.status=="ok"){
                     console.log(response.result);
-                    $("#facebox #result").show().html(response.result).removeClass().addClass("alert alert-success").fadeOut(3000);
+                    $("#facebox #result").show().html(response.result).removeClass().addClass("alert alert-success center");
+                    setTimeout(function(){
+                        jQuery(document).trigger('close.facebox');  
+                    },1000)
                 }else if(response.status=="no"){
-                    $("#facebox #result").show().html(response.result).removeClass().addClass("alert alert-danger").fadeOut(3000); 
+                    $("#facebox #result").show().html(response.result).removeClass().addClass("alert alert-danger center"); 
                 }
             }
         });

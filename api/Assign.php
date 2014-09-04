@@ -60,21 +60,29 @@ $service_qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` WHERE `amc_id`='{$i
 AND `date` < '$till' AND `amc_service_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='amc') ");
 
 if($service_qry->num_rows>0){
-
+    $service_info["service_info"]=array();
     while($get=$service_qry->fetch_assoc()){
-        $ac_info["service_info"][]=$get;
-
+        $get["date"]=ConvertToIST($get["date"]);
+        $service_info["service_info"][]=$get;
+    }
     $ac_qry=$DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
         `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" . TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
         AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND cust_ac.`ac_id`='{$info['ac_id']}'");
     $info['created_on']=ConvertToIST($info['created_on']);
+    $info['activation']=ConvertToIST($info['activation']);
+    $info['expiration']=ConvertToIST($info['expiration']);
+    $info['amc_remarks']=$info["remarks"];
+    unset($info["remarks"]);
+    $ac_info_tmp=array();
     if($ac_qry->num_rows>0){
+
         $ac_info=$ac_qry->fetch_assoc();
 $d=$d+1;
-             $info=array_merge($info,$ac_info);
+        $ac_info_tmp=array_merge($info,$ac_info);
     }
+        $info=array_merge($ac_info_tmp,$service_info);
     $result['data']['amc'][]=$info;
-    }
+
 }else{
   $c=$c+1;
 
@@ -260,7 +268,7 @@ $app->post("/Assign",function() use($app){
 
     $type = $app->request->post("type");
     $assign_of = $app->request->post("assign_of");
-    $assign_for = $app->request->post("assign_for");
+    $assign_for = $app->request->post("tech_id");
     $assign_date = $app->request->post("assign_date");
     $remarks = $app->request->post("assign_remarks");
     $assign_date = ConvertFromIST($assign_date);

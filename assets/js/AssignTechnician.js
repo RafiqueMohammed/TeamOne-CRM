@@ -2,6 +2,10 @@ var customer_id;
 var customer_info = {};
 var technicians = {};
 var technician_dropdown;
+var inst_count=0;
+var comp_count=0;
+var amc_count=0;
+var ots_count=0;
 $(function () {
 
     var ac_info_div="<div class='no-display ac_popup'>\
@@ -39,7 +43,6 @@ $(function () {
                 customer_info.ots = response.data.ots;
                 customer_info.installations = response.data.installations;
                 customer_info.complaints = response.data.complaints;
-
                 $(".cust_full_name").html(customer_info.details.first_name + " " + customer_info.details.last_name + "\
                  <a onclick='return LoadPage(\"CustomerDetails?id="+customer_id+"&ref=AssignTechnician?id="+customer_id+"\")'\
                   href='CustomerDetails?id="+customer_id+"&ref=AssignTechnician?id="+customer_id+"'><i style='font-size: 20px; color: rgb(98, 98, 98);' \
@@ -82,6 +85,7 @@ $(function () {
                         "<td>" + val.install_remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician("+sr_no+",\"installation\","+val.install_id+",\""+val.preferred_date+"\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
                         notification++;
                         sr_no++;
+                        inst_count = notification;
                         //console.log(val.install_date);
                     });                 
                 }
@@ -118,6 +122,7 @@ $(function () {
                         "<td>" + val.remarks + "</td><td>"+val.created_on+"</td><td><button onclick='assign_technician("+sr_no+",\"complaint\","+val.com_id+",\""+val.preferred_date+"\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
+                        comp_count = notification;
                     });
                 }
                 if (notification != 0) {
@@ -138,6 +143,8 @@ $(function () {
                     delete customer_info.amc.empty;
                     $.each(customer_info.amc, function (key, val) {
                         
+                        $.each(customer_info.amc[key].service_info,function(k,v){
+                        //console.log(v.date)
                         if(val.amc_type=="s"){val.amc_type="Standard"}else if(val.amc_type=="n"){val.amc_type="Non-standard"}else if(val.amc_type=="c"){val.amc_type="Comprehensive";}
                         
                     var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
@@ -152,10 +159,12 @@ $(function () {
                             <tr><td colspan='2'>"+val.remarks+"</td></tr></table></div></div>";                        
                         
                         amc_tab_row += "<tr class='a_num_rows a_row_num_c_"+sr_no+"'><td>"+sr_no+"</td><td>"+val.make+"&nbsp;("+val.ac_type+") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+ac_div+"</td><td>"+val.amc_type+"</td><td><b>Dry : </b>"+val.dry+"<br /><b>Wet : </b>"+val.wet+"</td>\
-                        <td>"+val.remarks+"</td><td><b>Activation : </b>"+val.activation+"<br /><b>Expiration : "+val.expiration+"</b></td><td>"+val.created_on+"</td>\
-                        <td><button onclick='assign_technician("+sr_no+",\"amc\","+val.amc_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                        <td>"+val.amc_remarks+"</td><td><b>Activation : </b>"+val.activation+"<br /><b>Expiration : "+val.expiration+"</b></td><td>"+v.date+"</td>\
+                        <td><button onclick='assign_technician("+sr_no+",\"amc\","+v.amc_service_id+",\""+v.date+"\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
+                        amc_count = notification;
+                        });
                     });
                 }
                 if (notification != 0) {
@@ -189,6 +198,7 @@ $(function () {
                             "<td><button onclick='assign_technician("+sr_no+",\"ots\","+val.ots_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
                         notification++;
                         sr_no++;
+                        ots_count = notification;
                     });
                     if (notification != 0) {
                         $("#OTS_count").html(notification);
@@ -223,7 +233,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         var remarks_box = "<textarea class='remarks_for_assign form-control'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='form-control compulsory select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
-                    <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
+                    <tr><td><label><b>Preferred Date</b></label></td><td>"+date_box+"</td></tr>\
                     <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
                     
         $("#assign_tech_table").html(row);
@@ -293,7 +303,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='compulsory form-control select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
-                    <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
+                    <tr><td><label><b>Preferred Date</b></label></td><td>"+date_box+"</td></tr>\
                     <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
                     
         $("#assign_tech_table").html(row);
@@ -352,7 +362,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         
         case 'amc':
         
-         var technician_dropdown = "<option>-SELECT TECH-</option>";
+         var technician_dropdown = "<option value='-1'>-SELECT TECH-</option>";
          $.each(technicians, function (key, value) {
             technician_dropdown += "<option value='" + value.tech_id + "'>" + value.first_name + " " + value.last_name + "</option>";
         }); 
@@ -361,17 +371,15 @@ console.log(serial+" "+type+" "+id+" "+date)
         var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='form-control select_tech_for_assign compulsory'>"+technician_dropdown+"</select></td></tr>\
-                    <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
-                    <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
+                   <tr><td><label><b>Preferred Date</b></label></td><td>"+date_box+"</td></tr>\
+                   <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
                         
         $("#assign_tech_table").html(row);
         $.facebox({ div: "#assign_techncican_modal" });
         $("#facebox .datepicker_for_all").datepicker({autoclose: true});
         
         $("#facebox .assign_tech_submit").on("click", function(){
-            console.log("click");
-            
-            var input_length = $("#facebox .compulsory").length;
+                      var input_length = $("#facebox .compulsory").length;
             
             var c = 0;
             for (var i = 0; i < input_length; i++) {
@@ -391,8 +399,9 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
-            var qry = "tech_id="+assign_t_id+"&assign_data="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
+            var qry = "tech_id="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
             console.log(qry);
+            $("#facebox #result").show().html("Please Wait...<i class='clip-buzy'></i>").removeClass().addClass("alert alert-info center");
             $.ajax({
                 type:'post',
                 url:'api/Assign',
@@ -406,6 +415,8 @@ console.log(serial+" "+type+" "+id+" "+date)
                             $(".amc_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
                         }   
                         $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
+                       
+                        $("#AMC_count").html(parseInt($("#AMC_count").text())-1);
                     } else if(data.status=="no"){
                         $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                     }setTimeout(function(){
@@ -429,7 +440,7 @@ console.log(serial+" "+type+" "+id+" "+date)
         var remarks_box = "<textarea class='form-control remarks_for_assign'></textarea>";
         var button = "<button value='submit' class='btn btn-primary assign_tech_submit'>Submit</button>"  
         var row = "<tr><td><label><b>Technician</b></label></td><td><select class='compulsory form-control select_tech_for_assign'>"+technician_dropdown+"</select></td></tr>\
-                    <tr><td><label><b>Select Date</b></label></td><td>"+date_box+"</td></tr>\
+                    <tr><td><label><b>Preferred Date</b></label></td><td>"+date_box+"</td></tr>\
                     <tr><td><label><b>Add remarks</b></label></td><td>"+remarks_box+"</td></tr><tr><td></td><td>"+button+"</td></tr>";
                     
         $("#assign_tech_table").html(row);
