@@ -548,3 +548,60 @@ $app->get("/Manage/pincode/", function () use ($app) {
     $app->response->body(json_encode($result));
 
 });
+
+/** Pincode **/
+
+$app->get("/Manage/pin/:pincode", function ($pincode) use ($app) {
+    global $DB;
+    $qry = $DB->query("SELECT * FROM `" . TAB_LOCALITY . "` WHERE `pincode`='$pincode'");
+    $result = array();
+    if ($qry->num_rows > 0) {
+
+        $result['status'] = "ok";
+        while($info=$qry->fetch_assoc()){
+            $result['data'][]=$info;
+        }
+    } else {
+        $result['status'] = "no";
+        $result['result'] = "No Such Pincode found";
+    }
+    $app->response->body(json_encode($result));
+
+});
+
+$app->post("/Manage/pin/", function() use ($app){
+    global $DB;
+    if(isset($_POST['pincode']) && isset($_POST['landmark'])  && !empty($_POST['pincode'])  && !empty($_POST['pincode'])){  
+        $pincode = $_POST['pincode'];
+        $landmark = $_POST['landmark'];
+        $qry = $DB->query("SELECT * FROM `".TAB_LOCALITY."` WHERE `pincode`='$pincode' and `locality_name`='$landmark'");
+        if($qry->num_rows > 0){
+            $result['status'] = "no";
+            $result['result'] = "Landmark already added in masters";
+        }else{
+            $DB->query("INSERT INTO `".TAB_LOCALITY."`(`pincode`,`locality_name`) VALUES('$pincode','$landmark')");
+            if($DB->affected_rows >0){
+                $result['status'] = "ok";
+                $result['result'] = $DB->insert_id;
+            }else{
+                ThrowError("Unable to update into database");
+            }
+        }
+    }else{
+        $result['status'] = "no";
+        $result['result'] = "Please provide the required fields";
+    }
+    $app->response->body(json_encode($result));
+});
+
+$app->delete("/Manage/pin/:id", function ($id) use ($app) {
+    global $DB;
+    $DB->query("Delete FROM `" . TAB_LOCALITY . "` WHERE `locality_id`='$id' ");
+    if ($DB->affected_rows > 0) {
+        $result = array("status" => "ok", "result" => "Successfully Deleted");
+    } else {
+        $result = array("status" => "no", "result" => "Unable to delete");
+
+    }
+    $app->response->body(json_encode($result));
+});

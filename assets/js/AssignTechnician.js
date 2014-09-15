@@ -138,7 +138,7 @@ $(function () {
                 var notification = 0;
                 var sr_no = 1;
                 if (customer_info.amc.empty) {
-                    amc_tab_row = "<tr><td colspan='7' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No AMC Added Yet</td></tr>"
+                    amc_tab_row = "<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No AMC Added Yet</td></tr>"
                 } else {
                     delete customer_info.amc.empty;
                     $.each(customer_info.amc, function (key, val) {
@@ -172,10 +172,13 @@ $(function () {
                 }
 
                 $("#at_amc_table tbody").prepend(amc_tab_row);
-
-                var ots_tab_row = "";
+                
+                
+                var ots_tab_row;
+                var notification = 0;
+                var sr_no = 1;
                 if (customer_info.ots.empty) {
-                    ots_tab_row = "<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No OTS Added Yet</td></tr>"
+                    ots_tab_row = "<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No OTS Added Yet</td></tr>";
                 } else {
                     delete customer_info.ots.empty;
                     var notification = 0;
@@ -203,11 +206,14 @@ $(function () {
                     if (notification != 0) {
                         $("#OTS_count").html(notification);
                     }
-                    $("#at_ots_table tbody").prepend(ots_tab_row);
                 }
+                $("#at_ots_table tbody").html(ots_tab_row);
                 //console.log(customer_info);
             } else if (response.status == "no") {
-
+                $("#at_install_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No Instalation Assigned Yet</td></tr>");
+                $("#at_complaint_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No Complaint Assigned Yet</td></tr>");
+                $("#at_amc_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No AMC Assigned Yet</td></tr>");
+                $("#at_ots_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No OTS Assigned Yet</td></tr>");
             }
 
             unblockThisUI($(".tabbable"));
@@ -261,7 +267,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
-            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
+            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id+"&cust_id="+customer_id;
 
             $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -279,6 +285,10 @@ console.log(serial+" "+type+" "+id+" "+date)
                             $(".install_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No intsallation assigned</td></tr>")
                         }
                         $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
+                        $("#Ins_count").html(parseInt($("#Ins_count").text())-1);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');
+                        },1000);
                     } else if(data.status=="no"){
                         console.log("error")
                         $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
@@ -331,7 +341,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
-            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
+            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id+"&cust_id="+customer_id;
 
             $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -348,6 +358,10 @@ console.log(serial+" "+type+" "+id+" "+date)
                             $(".complaint_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
                         }                        
                         $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
+                        $("#Com_count").html(parseInt($("#Com_count").text())-1);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');
+                        },1000);
                     } else if(data.status=="no"){
                         $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                     }setTimeout(function(){
@@ -399,9 +413,9 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
-            var qry = "tech_id="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
+            var qry = "tech_id="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id+"&cust_id="+customer_id;
             console.log(qry);
-            $("#facebox #result").show().html("Please Wait...<i class='clip-buzy'></i>").removeClass().addClass("alert alert-info center");
+            $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
             $.ajax({
                 type:'post',
                 url:'api/Assign',
@@ -417,6 +431,9 @@ console.log(serial+" "+type+" "+id+" "+date)
                         $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                        
                         $("#AMC_count").html(parseInt($("#AMC_count").text())-1);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');
+                        },1000);
                     } else if(data.status=="no"){
                         $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                     }setTimeout(function(){
@@ -468,7 +485,7 @@ console.log(serial+" "+type+" "+id+" "+date)
             var assign_t_id = $("#facebox .select_tech_for_assign").val();
             var assign_date = $("#facebox .datepicker_for_all").val();
             var assign_remarks = $("#facebox .remarks_for_assign").val();
-            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id;
+            var qry = "assign_for="+assign_t_id+"&assign_date="+assign_date+"&assign_remarks="+assign_remarks+"&type="+type+"&assign_of="+id+"&cust_id="+customer_id;
 
             $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -486,6 +503,10 @@ console.log(serial+" "+type+" "+id+" "+date)
                             $(".ots_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No OTS assigned</td></tr>")
                         }                        
                         $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
+                        $("#OTS_count").html(parseInt($("#OTS_count").text())-1);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');
+                        },1000);
                     } else if(data.status=="no"){
                         console.log("error")
                         $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");

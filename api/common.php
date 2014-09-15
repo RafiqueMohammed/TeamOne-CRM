@@ -49,6 +49,8 @@ $app->hook("slim.before.router",function() use ($app){
         require_once('Staff.php');
     }else if (strpos($app->request()->getPathInfo(), "/Assign") === 0) {
         require_once('Assign.php');
+    }else if (strpos($app->request()->getPathInfo(), "/Status") === 0) {
+        require_once('Status.php');
     }else {
         require_once('index.php');  // default routes
     }

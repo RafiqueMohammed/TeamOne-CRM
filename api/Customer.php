@@ -134,7 +134,7 @@ $app->get("/Customer/:id", function ($id) use ($app) {
             $acQry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC .
                 "` as cust_ac INNER JOIN `" . TAB_AC_TYPE . "` as ac_type, `" . TAB_AC_MAKE .
                 "` as make,
-                    `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_LOCATION .
+                                `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_LOCATION .
                 "` as loc WHERE ac_type.`ac_type_id`=cust_ac.`ac_type` AND cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
         AND ton.tonnage_id=cust_ac.capacity AND cust_ac.`cust_id`='{$id}'");
             $result['ac_data'] =
@@ -228,7 +228,6 @@ $app->post("/Customer/:id/AC", function ($id) use ($app) {
         if ($id > 0) {
 
             $qry = $app->request->post("row");
-            $app->response['Content-Type'] = 'text/html';
             $insert = 0;
             $total = count($qry);
             for ($i = 0; $i < $total; $i++) {
@@ -416,22 +415,29 @@ $app->post("/Customer/:cid/Installations", function ($cid) use ($app) {
                 ) {
                     ThrowError("This customer has already requested this AC for installation");
                 } else {
+
                     $DB->query("INSERT INTO `" . TAB_INSTALL .
                         "`(`cust_id`, `ac_id`, `install_type`, `preferred_date`, `no_of_service`,`remarks`)
-        VALUES('$cid','$ac_id','$ins_type','$ins_date','$no_of_service','$remarks')") or
+                    VALUES('$cid','$ac_id','$ins_type','$ins_date','$no_of_service','$remarks')") or
                     ThrowError($DB->error);
                     if ($DB->affected_rows > 0) {
                         $result['status'] = "ok";
                         $result['result'] = "Successfully Added";
-                        $app->
-                            status(201);
+                        $app->status(201);
+                        $expiration = date('Y-m-d', strtotime('+364 day', strtotime($ins_date)));
+                        $last = $DB->insert_id;
+
+                        $service_dates=getServiceDates("installation",$no_of_service,$ins_date);
+                        for($s=0;$s<count($service_dates); $s++){
+                            $DB->query("INSERT INTO `" . TAB_INSTALL_SERVICE .
+                                "` (`cust_id`,`install_id`,`date`) VALUES ('$cid','$last','$service_dates[$s]')");
+                        }
+
                         $app->response->body(json_encode($result));
                     } else {
                         ThrowError("Unable to create. Error occurred");
                     }
                 }
-
-
             } else {
                 ThrowMissing();
             }
@@ -488,27 +494,28 @@ $app->get("/Customer/:cid/AMC", function ($cid) use ($app) {
         global $DB;
         $qry = $DB->query("SELECT * FROM `" . TAB_AMC . "` WHERE `cust_id`='$cid'");
         if ($qry->num_rows > 0) {
-            $result = array("status" => "ok");
+//$result = array("status" => "ok");
             while ($info = $qry->fetch_assoc()) {
 
-                $q=$DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC .
+                $q = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC .
                     "` as cust_ac INNER JOIN `" . TAB_AC_TYPE . "` as ac_type, `" . TAB_AC_MAKE .
                     "` as make,
-                        `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_LOCATION .
+                                            `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_LOCATION .
                     "` as loc WHERE ac_type.`ac_type_id`=cust_ac.`ac_type` AND cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
-        AND ton.tonnage_id=cust_ac.capacity AND cust_ac.`ac_id`='{$info['ac_id']}'") or ThrowError($DB->error);
-                if($q->num_rows>0){
-                    $data=$q->fetch_assoc();
-                    $data=array_merge($data,$info);
+        AND ton.tonnage_id=cust_ac.capacity AND cust_ac.`ac_id`='{$info['ac_id']}'") or
+                ThrowError($DB->error);
+                if ($q->num_rows > 0) {
+                    $data = $q->fetch_assoc();
                     $info['activation'] = ConvertToIST($info['activation']);
-                    $info['expiration'] =
-                        ConvertToIST($info['expiration']);
+                    $info['expiration'] = ConvertToIST($info['expiration']);
+                    $data = array_merge($data,
+                        $info);
                     $result['data'][] = $data;
-                }else{
+                    $result['status'] = "ok";
+                } else {
+                    $result['status'] = "no";
                     $result['data'][] = "AC NOT FOUND FOR {$info['ac_id']}";
                 }
-
-
 
 
             }
@@ -524,24 +531,34 @@ $app->post("/Customer/:cid/AMC", function ($cid) use ($app) {
         if ($cid > 0) {
 
             $qry = $app->request->post("row");
-            $app->response['Content-Type'] = 'text/html';
             $insert = 0;
             $total = count($qry);
             for ($i = 0; $i < $total; $i++) {
                 $cid = $DB->real_escape_string($qry[$i]["cust_id"]);
-                $ac_id = $DB->real_escape_string($qry[$i]["ac_id"]);
+                $ac_id = $DB->
+                    real_escape_string($qry[$i]["ac_id"]);
                 $amc_type = $DB->real_escape_string($qry[$i]["service_type"]);
                 $dry = $DB->real_escape_string($qry[$i]["dry_service"]);
-                $wet = $DB->real_escape_string($qry[$i]["wet_service"]);
+                $wet = $DB->
+                    real_escape_string($qry[$i]["wet_service"]);
                 $no_of_service = $dry + $wet;
 //$activation =$DB->real_escape_string($qry[$i]["amc_datepicker"]);
                 $activation = ConvertFromIST($DB->real_escape_string($qry[$i]["amc_datepicker"]));
-                $expiration = date('Y-m-d', strtotime('+1 year', strtotime($activation)));
-                $DB->query("INSERT INTO `" . TAB_AMC . "`(`cust_id`,`ac_id`,`amc_type`,`dry`,`wet`,`no_of_service`,`activation`,`expiration`)
+                $expiration = date('Y-m-d', strtotime('+364 day', strtotime($activation)));
+                $DB->
+                    query("INSERT INTO `" . TAB_AMC .
+                        "`(`cust_id`,`ac_id`,`amc_type`,`dry`,`wet`,`no_of_service`,`activation`,`expiration`)
             VALUES('$cid','$ac_id','$amc_type','$dry','$wet','$no_of_service','$activation','$expiration')");
                 if ($DB->affected_rows > 0) {
                     $insert++;
                 }
+                $last = $DB->insert_id;
+               $service_dates=getServiceDates("amc",$no_of_service,$activation);
+                for($s=0;$s<count($service_dates); $s++){
+                    $DB->query("INSERT INTO `" . TAB_AMC_SERVICE .
+                        "` (`cust_id`,`amc_id`,`date`) VALUES ('$cid','$last','$service_dates[$s]')");
+                }
+
 
             }
             if ($insert == 0) {
@@ -617,10 +634,11 @@ $app->get("/Customer/:cid/OTS", function ($cid) use ($app) {
         $qry = $DB->query("SELECT * FROM `" . TAB_OTS .
             "` as ots,(SELECT ac_type as actype,`ac_type_id` FROM `" . TAB_AC_TYPE .
             "`) as ac_type ,
-            (SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE . "`) as ac_make,`" .
-            TAB_AC_LOCATION . "` as acloc INNER JOIN `" . TAB_CUSTOMER_AC . "` as cad
+                        (SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE .
+            "`) as ac_make,`" . TAB_AC_LOCATION . "` as acloc INNER JOIN `" .
+            TAB_CUSTOMER_AC . "` as cad,`" . TAB_AC_TONNAGE . "` as ac_ton
 WHERE ots.`cust_id`='$cid' and ots.`ac_id` = cad.`ac_id` and cad.`make`=ac_make.`make_id`
- and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and ots.`enabled`='1'");
+ and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and ac_ton.`tonnage_id`=cad.capacity and ots.`enabled`='1'");
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
             while ($info = $qry->fetch_assoc()) {
@@ -640,18 +658,18 @@ $app->post("/Customer/:cid/OTS", function ($cid) use ($app) {
         $ac_id = $DB->real_escape_string($app->request->post("ac_id"));
         $service_type =
             $DB->real_escape_string($app->request->post("service_type"));
-            $date = $DB->real_escape_string($app->request->post("p_date"));
-            $date = ConvertFromIST($date);
-        $desc = $DB->
-            real_escape_string($app->request->post("desc"));
-        if ($ac_id > 0 && $service_type !=
-            ""
+        $date = $DB->
+            real_escape_string($app->request->post("p_date"));
+        $date = ConvertFromIST($date);
+        $desc = $DB->real_escape_string($app->request->post("desc"));
+        if ($ac_id > 0 &&
+            $service_type != ""
         ) {
 
             $DB->query("INSERT INTO `" . TAB_OTS .
                 "`(`cust_id`,`ac_id`,`service_type`,`description`,`preferred_date`)
-         VALUES('$cid','$ac_id','$service_type','$desc','$date')") or ThrowError($DB->
-                error);
+         VALUES('$cid','$ac_id','$service_type','$desc','$date')") or ThrowError
+            ($DB->error);
             if ($DB->affected_rows > 0) {
                 $result['status'] = "ok";
                 $result['result'] = "Successfully added";
@@ -701,41 +719,73 @@ $app->delete("/Customer/:cid/OTS/:id", function ($cid, $id) use ($app) {
 );
 
 
-$app->post("/Customer/:cid/AMC_SERVICE", function ($id) use ($app) {
-    global $DB;
-    $result = array();
-    if ($id > 0) {
-        $qry = $app->request->post("row");
-        $app->response['Content-Type'] = 'text/html';
-        $insert = 0;
-        $total = count($qry);
-        for ($i = 0; $i < $total; $i++) {
-            $cid = $DB->real_escape_string($qry[$i]["cust_id"]);
-            $amc_id = $DB->real_escape_string($qry[$i]["amc_id"]);
-            $date = $DB->real_escape_string($qry[$i]["date"]);
-            $date = ConvertFromIST($date);
-            $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
-            $DB->query("INSERT INTO `" . TAB_AMC_SERVICE . "`(`cust_id`,`amc_id`,`remarks`,`date`)
-            VALUES('$cid','$amc_id','$remarks','$date')");
-            if ($DB->affected_rows > 0) {
-                $insert++;
+$app->put("/Customer/:cid/Installation/Service", function ($id) use ($app) {
+        global $DB;
+        $result = array();
+        if ($id > 0) {
+            $qry = $app->request->put("row");
+            $insert = 0;
+            $total = count($qry);
+            for ($i = 0; $i < $total; $i++) {
+                $date = $DB->real_escape_string($qry[$i]["date"]);
+                $date = ConvertFromIST($date);
+                $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
+                $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
+                $DB->query("UPDATE `" .TAB_INSTALL_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `install_service_id`='$service_id'");
+                if ($DB->affected_rows > 0) {
+                    $insert++;
+                }
             }
-        }
-        if ($insert == 0) {
-            $result = array("status" => "no", "result" => "Error occurred while adding data");
-        } else if ($i == $total) {
-            $app->status(201);
-            $result = array("status" => "ok", "result" => "Successfully added", "last_id" => $DB->insert_id);
-        } else if ($i > 0 && $i < $total) {
-            $result = array("status" => "ok", "result" => "Data inserted but with some errors");
-        }
+            if ($insert == 0) {
+                $result = array("status" => "no", "result" => "Error occurred while adding data");
+            } else if ($i == $total) {
+                $app->status(201);
+                $result = array("status" => "ok", "result" =>
+                    "Successfully added");
+            } else if ($i > 0 && $i < $total) {
+                $result = array("status" => "ok", "result" =>
+                    "Data inserted but with some errors");
+            }
 
-    } else {
-        $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
-    }
-    $app->response->body(json_encode($result));
+        } else {
+            $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
+        }
+        $app->response->body(json_encode($result));
 });
 
+$app->put("/Customer/:cid/AMC_Service", function ($id) use ($app) {
+        global $DB;
+        $result = array();
+        if ($id > 0) {
+            $qry = $app->request->put("row");
+            $insert = 0;
+            $total = count($qry);
+            for ($i = 0; $i < $total; $i++) {
+                $date = $DB->real_escape_string($qry[$i]["date"]);
+                $date = ConvertFromIST($date);
+                $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
+                $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
+                $DB->query("UPDATE `" .TAB_AMC_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `amc_service_id`='$service_id'") or ThrowError($DB->error);
+                if ($DB->affected_rows > 0) {
+                    $insert++;
+                }
+            }
+            if ($insert == 0) {
+                $result = array("status" => "no", "result" => "Error occurred while adding data");
+            } else if ($i == $total) {
+                $app->status(201);
+                $result = array("status" => "ok", "result" =>
+                    "Successfully added");
+            } else if ($i > 0 && $i < $total) {
+                $result = array("status" => "ok", "result" =>
+                    "Data inserted but with some errors");
+            }
+
+        } else {
+            $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
+        }
+        $app->response->body(json_encode($result));
+});
 /** ************ COMPLAINTS ************ */
 
 $app->get("/Customer/Complaints", function ($cid) use ($app) {
@@ -758,10 +808,11 @@ $app->get("/Customer/:cid/Complaints", function ($cid) use ($app) {
         $qry = $DB->query("SELECT * FROM `" . TAB_COMPLAINT .
             "`as complaint,(SELECT ac_type as actype,`ac_type_id` FROM `" . TAB_AC_TYPE .
             "`) as ac_type ,
-            (SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE . "`) as ac_make,`" .
-            TAB_AC_LOCATION . "` as acloc,`problem_type` as pt INNER JOIN `" .
-            TAB_CUSTOMER_AC . "` as cad
-WHERE complaint.`cust_id`='$cid' and complaint.`ac_id` = cad.`ac_id` and cad.`make`=ac_make.`make_id`
+                        (SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE .
+            "`) as ac_make,`" . TAB_AC_LOCATION .
+            "` as acloc,`problem_type` as pt INNER JOIN `" . TAB_CUSTOMER_AC . "` as cad,`" .
+            TAB_AC_TONNAGE . "` as ac_ton
+WHERE complaint.`cust_id`='$cid' and complaint.`ac_id` = cad.`ac_id` and cad.`make`=ac_make.`make_id` and ac_ton.`tonnage_id`=cad.capacity
  and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and complaint.`enabled`='1' and pt.`ac_problem_id`=complaint.`problem_type`");
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
@@ -782,11 +833,10 @@ $app->post("/Customer/:cid/Complaints", function ($cid) use ($app) {
             $ac_id = $app->request->post("ac_id");
             $problem_type = $app->request->post("problem_type");
             $problem_desc = $app->request->post("problem_desc");
-            $date = $app->request->post("p_date");
+            $date = $app->request->
+                post("p_date");
             $date = ConvertFromIST($date);
-            if (!empty($ac_id) && !
-                empty($problem_type)
-            ) {
+            if (!empty($ac_id) && !empty($problem_type)) {
 
                 $qry = $DB->query("SELECT `com_id` FROM `" . TAB_COMPLAINT .
                     "` WHERE `cust_id`='$cid' AND `ac_id`='$ac_id'") or ThrowError($DB->error);
@@ -797,8 +847,8 @@ $app->post("/Customer/:cid/Complaints", function ($cid) use ($app) {
                 } else {
                     $DB->query("INSERT INTO `" . TAB_COMPLAINT .
                         "`(`cust_id`, `ac_id`,`problem_type`, `problem_desc`,`preferred_date`)
-        VALUES('$cid','$ac_id','$problem_type','$problem_desc','$date')") or ThrowError
-                    ($DB->error);
+        VALUES('$cid','$ac_id','$problem_type','$problem_desc','$date')") or
+                    ThrowError($DB->error);
                     if ($DB->affected_rows > 0) {
                         $result['status'] = "ok";
                         $result['result'] = "Successfully Added";
@@ -843,7 +893,6 @@ $app->delete("/Customer/:cid/Complaints/:id", function ($cid, $id) use ($app) {
 $app->get("/Customer/:cid/AC/Pending/All", function ($cid) use ($app) {
         global $DB;
         $result = array("status" => "ok");
-
         $ins_qry = $DB->query("SELECT * FROM `" .
             TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
         `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" .
@@ -853,14 +902,15 @@ cust_ac.ac_id NOT IN(SELECT ac_id FROM  `installation` as ins WHERE ins.cust_id=
 AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
-            while ($info = $ins_qry->fetch_assoc()) {
+            while ($info = $ins_qry->
+                fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
             $result["data"]["installations"]["empty"] = true;
         }
-        $ins_qry = $DB->query("SELECT * FROM `" .
-            TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
+        $ins_qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC .
+            "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
         `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" .
             TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
         AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND
@@ -868,7 +918,8 @@ cust_ac.ac_id NOT IN(SELECT ac_id FROM  `installation` as ins WHERE ins.cust_id=
 AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
-            while ($info = $ins_qry->fetch_assoc()) {
+            while ($info = $ins_qry->
+                fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
@@ -876,16 +927,18 @@ AND cust_ac.`cust_id`='{$cid}' ");
         }
 
 
-        $ins_qry = $DB->query("SELECT * FROM `" .
-            TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
+        $ins_qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC .
+            "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
         `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" .
             TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
         AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND
-cust_ac.ac_id NOT IN(SELECT ac_id FROM  `" . TAB_INSTALL . "` as ins WHERE ins.cust_id='{$cid}' )
+cust_ac.ac_id NOT IN(SELECT ac_id FROM  `" . TAB_INSTALL .
+            "` as ins WHERE ins.cust_id='{$cid}' )
 AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
-            while ($info = $ins_qry->fetch_assoc()) {
+            while ($info = $ins_qry->
+                fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
@@ -895,9 +948,9 @@ AND cust_ac.`cust_id`='{$cid}' ");
         /*
         $amc_qry = $DB->query("SELECT * FROM `" .
         TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
-                `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" .
+        `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" .
         TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
-                AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND
+        AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND
         cust_ac.ac_id NOT IN(SELECT ac_id FROM  `amc` as ins WHERE ins.cust_id='{$cid}' )
         AND cust_ac.`cust_id`='{$cid}' "); if ($ins_qry->num_rows > 0)
         {
@@ -910,6 +963,28 @@ AND cust_ac.`cust_id`='{$cid}' ");
         $result["data"]["installations"]["empty"] = true;
         }*/
 
+        $app->response->body(json_encode($result));
+    }
+);
+
+$app->get("/Customer/:cid/Service/:id/:type", function ($cid, $id, $type) use ($app) {
+        global $DB;
+        if ($type == "amc") {
+            $qry = $DB->query("SELECT * FROM `" . TAB_AMC_SERVICE . "` WHERE `cust_id`='$cid' and `amc_id`='$id'");
+        } else if ($type == "install") {
+            $qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` WHERE `cust_id`='$cid' and `install_id`='$id'");
+        }
+        if ($qry->num_rows > 0) {
+
+            while ($info = $qry->fetch_assoc()) {
+                $info['date'] = ConvertToIST($info['date']);
+                $result['data'][] = $info;
+            }
+            $result['status'] = "ok";
+        } else {
+            $result['status'] = "no";
+            $result['result'] = "No Service date found";
+        }
         $app->response->body(json_encode($result));
     }
 );

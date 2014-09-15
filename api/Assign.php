@@ -57,7 +57,7 @@ $app->get("/Assign/Customer/:id",function($cust_id) use($app){
         while($info=$amc_qry->fetch_assoc()){
 
 $service_qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` WHERE `amc_id`='{$info['amc_id']}'
-AND `date` < '$till' AND `amc_service_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='amc') ");
+AND `date` < '$till' AND `amc_service_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='amc') ") or ThrowError($DB->error);
 
 if($service_qry->num_rows>0){
     $service_info["service_info"]=array();
@@ -102,7 +102,7 @@ $d=$d+1;
 
     }
 
-    $qry=$DB->query("SELECT * FROM `".TAB_OTS."` WHERE `cust_id`='$cust_id' AND `preferred_date` < '$till' ");
+    $qry=$DB->query("SELECT * FROM `".TAB_OTS."` WHERE `cust_id`='$cust_id' AND `preferred_date` < '$till' and `ots_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='ots') ");
 
     if($qry->num_rows>0){
         while($info=$qry->fetch_assoc()){
@@ -127,7 +127,7 @@ $d=$d+1;
     }
 
     $qry=$DB->query("SELECT `install_id`, `cust_id`, `ac_id`, `install_type`, `preferred_date`, `no_of_service`,
-    `remarks` as install_remarks, `enabled`, `created_on` FROM `".TAB_INSTALL."` WHERE `cust_id`='$cust_id'  AND `preferred_date` < '$till'");
+    `remarks` as install_remarks, `enabled`, `created_on` FROM `".TAB_INSTALL."` WHERE `cust_id`='$cust_id'  AND `preferred_date` < '$till' and `install_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='installation')");
 
     if($qry->num_rows>0){
         while($info=$qry->fetch_assoc()){
@@ -151,7 +151,7 @@ $d=$d+1;
 
     }
 
-    $qry=$DB->query("SELECT * FROM `".TAB_COMPLAINT."` as c INNER JOIN `".TAB_PROBLEM_TYPE."` as p WHERE c.`cust_id`='$cust_id' AND c.`problem_type`=p.`ac_problem_id`  AND `preferred_date` < '$till'");
+    $qry=$DB->query("SELECT * FROM `".TAB_COMPLAINT."` as c INNER JOIN `".TAB_PROBLEM_TYPE."` as p WHERE c.`cust_id`='$cust_id' AND c.`problem_type`=p.`ac_problem_id`  AND `preferred_date` < '$till' and `com_id` NOT IN (SELECT `type_id` FROM `".TAB_ASSIGN."` WHERE `type`='complaint')");
 
     if($qry->num_rows>0){
 
@@ -271,10 +271,11 @@ $app->post("/Assign",function() use($app){
     $assign_for = $app->request->post("tech_id");
     $assign_date = $app->request->post("assign_date");
     $remarks = $app->request->post("assign_remarks");
+    $cust_id = $app->request->post("cust_id");
     $assign_date = ConvertFromIST($assign_date);
     
-    $qry=$DB->query("INSERT INTO `".TAB_ASSIGN."`(`type`,`type_id`,`assign_for`,`assign_date`,`remarks`)
-                    VALUES('$type','$assign_of','$assign_for','$assign_date','$remarks')") or ThrowError($DB->error);
+    $qry=$DB->query("INSERT INTO `".TAB_ASSIGN."`(`cust_id`,`type`,`type_id`,`assign_for`,`assign_date`,`remarks`)
+                    VALUES('$cust_id','$type','$assign_of','$assign_for','$assign_date','$remarks')") or ThrowError($DB->error);
                     
                     if($DB->affected_rows > 0){
                     $result['status'] = "ok";

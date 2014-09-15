@@ -15,6 +15,7 @@ define("TAB_AMC", "amc");
 define("TAB_ASSIGN", "assignment");
 define("TAB_AMC_SERVICE", "amc_service_date");
 define("TAB_OTS", "one_time_service");
+define("TAB_INSTALL_SERVICE","install_service_date");
 
 define("TAB_AC_MAKE", "ac_make");
 define("TAB_AC_TYPE", "ac_type");

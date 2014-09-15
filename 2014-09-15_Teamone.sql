@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 04, 2014 at 12:49 PM
+-- Generation Time: Sep 15, 2014 at 01:41 PM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `ac_type` (
   `ac_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `ac_type` varchar(20) NOT NULL,
   PRIMARY KEY (`ac_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `ac_type`
@@ -147,7 +147,9 @@ CREATE TABLE IF NOT EXISTS `ac_type` (
 INSERT INTO `ac_type` (`ac_type_id`, `ac_type`) VALUES
 (1, 'Split'),
 (2, 'Window'),
-(3, 'Ducted');
+(3, 'Ducted'),
+(4, 'Cassette'),
+(5, 'VRF');
 
 -- --------------------------------------------------------
 
@@ -171,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `amc` (
   PRIMARY KEY (`amc_id`),
   KEY `cust_id` (`cust_id`),
   KEY `transaction_id` (`transaction_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
 
 --
 -- Dumping data for table `amc`
@@ -198,7 +200,16 @@ INSERT INTO `amc` (`amc_id`, `amc_type`, `cust_id`, `ac_id`, `no_of_service`, `d
 (39, 'c', 65, 86, 3, 1, 2, '', '2014-09-03', '2015-09-03', 0, '2014-09-02 10:20:42'),
 (40, 'c', 65, 87, 4, 2, 2, '', '2014-09-18', '2015-09-18', 0, '2014-09-02 10:21:06'),
 (41, 'c', 27, 59, 3, 1, 2, '', '2014-09-04', '2015-09-04', 0, '2014-09-03 06:39:55'),
-(42, 'c', 2, 95, 3, 1, 2, '', '2014-09-11', '2015-09-11', 0, '2014-09-04 12:09:24');
+(42, 'c', 2, 95, 3, 1, 2, '', '2014-09-11', '2015-09-11', 0, '2014-09-04 12:09:24'),
+(43, 'c', 14, 101, 5, 3, 2, '', '2014-09-17', '2015-09-17', 0, '2014-09-08 06:23:40'),
+(44, 'c', 15, 100, 3, 1, 2, '', '2014-09-10', '2015-09-10', 0, '2014-09-08 09:14:24'),
+(45, 'c', 74, 104, 3, 1, 2, '', '2014-09-24', '2015-09-24', 0, '2014-09-09 12:26:14'),
+(49, 'n', 1, 94, 2, 1, 1, '', '2014-09-30', '2015-09-29', 0, '2014-09-10 11:53:46'),
+(50, 'c', 1, 92, 5, 2, 3, '', '2014-09-30', '2015-09-29', 0, '2014-09-10 13:25:02'),
+(51, 'c', 1, 85, 3, 1, 2, '', '2014-09-30', '2015-09-29', 0, '2014-09-13 10:32:40'),
+(52, 'c', 1, 108, 5, 2, 3, '', '2014-10-12', '2015-10-11', 0, '2014-09-13 10:43:09'),
+(53, 'c', 2, 109, 3, 2, 1, '', '2014-09-17', '2015-09-16', 0, '2014-09-15 10:18:17'),
+(54, 'c', 2, 110, 4, 2, 2, '', '2014-10-01', '2015-09-30', 0, '2014-09-15 12:29:01');
 
 -- --------------------------------------------------------
 
@@ -215,26 +226,21 @@ CREATE TABLE IF NOT EXISTS `amc_service_date` (
   PRIMARY KEY (`amc_service_id`),
   KEY `cust_id` (`cust_id`),
   KEY `amc_id` (`amc_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `amc_service_date`
 --
 
 INSERT INTO `amc_service_date` (`amc_service_id`, `cust_id`, `amc_id`, `remarks`, `date`) VALUES
-(3, 1, 34, 'dfrg', '2014-09-12'),
-(4, 1, 34, 'fv f', '2014-09-19'),
-(5, 1, 34, 'dcfszdfsd', '2014-09-17'),
-(6, 1, 35, 'sdfsdfsdf', '2014-09-24'),
-(9, 1, 35, 'gh', '2014-09-24'),
-(10, 1, 36, 'tgh', '2014-09-23'),
-(11, 1, 36, 'sada', '2014-09-11'),
-(12, 1, 37, 'sdasdas', '2014-09-24'),
-(13, 15, 1, 'first service', '2014-09-17'),
-(14, 15, 1, '2 service', '2014-09-15'),
-(15, 15, 1, '3 service', '2014-09-21'),
-(16, 15, 1, '4 service', '2014-09-29'),
-(17, 15, 1, '6 service', '2014-09-18');
+(1, 1, 38, 'Dummy', '2014-09-30'),
+(18, 2, 53, 'sdf', '2014-09-17'),
+(19, 2, 53, 'sdfsd', '2015-01-17'),
+(20, 2, 53, 'fsdf', '2015-05-19'),
+(21, 2, 54, '', '2014-10-01'),
+(22, 2, 54, '', '2014-12-31'),
+(23, 2, 54, '', '2015-04-01'),
+(24, 2, 54, '', '2015-07-01');
 
 -- --------------------------------------------------------
 
@@ -244,6 +250,7 @@ INSERT INTO `amc_service_date` (`amc_service_id`, `cust_id`, `amc_id`, `remarks`
 
 CREATE TABLE IF NOT EXISTS `assignment` (
   `assign_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cust_id` int(11) NOT NULL,
   `type` enum('amc','ots','installation','complaint') NOT NULL,
   `type_id` int(11) NOT NULL COMMENT '{type} id which need to be assigned',
   `assign_for` int(11) NOT NULL COMMENT 'technician id who need to be assigned',
@@ -252,27 +259,39 @@ CREATE TABLE IF NOT EXISTS `assignment` (
   `status` enum('p','h','f','c') NOT NULL COMMENT 'pending,hold,finished,closed',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`assign_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=68 ;
 
 --
 -- Dumping data for table `assignment`
 --
 
-INSERT INTO `assignment` (`assign_id`, `type`, `type_id`, `assign_for`, `assign_date`, `remarks`, `status`, `created_on`) VALUES
-(24, 'ots', 1, 0, '1970-01-01', '', 'p', '2014-08-27 12:33:37'),
-(25, 'ots', 1, 20, '2014-08-26', 'dhgdhg', 'p', '2014-08-27 12:35:53'),
-(26, 'complaint', 7, 21, '2014-09-02', 'yhjgyj', 'p', '2014-08-27 12:36:25'),
-(27, 'installation', 9, 20, '2014-08-21', 'fdgdfgdfg', 'p', '2014-08-28 06:04:43'),
-(28, 'complaint', 7, 20, '2014-08-16', 'dsdfsdf', 'p', '2014-08-28 06:05:20'),
-(29, 'ots', 1, 16, '2014-08-12', 'sfdg', 'p', '2014-08-28 06:05:40'),
-(30, 'installation', 9, 20, '2014-08-27', 'This is just a test', 'p', '2014-09-01 07:55:57'),
-(35, 'complaint', 7, 20, '2014-08-13', 'sgdsfgsfg', 'p', '2014-09-01 08:44:23'),
-(36, 'ots', 1, 20, '2014-09-10', 'sdfsd', 'p', '2014-09-01 08:44:42'),
-(37, 'ots', 6, 21, '2014-09-10', 'sdfsdf', 'p', '2014-09-01 08:44:53'),
-(49, 'amc', 36, 0, '2014-09-11', '', 'p', '2014-09-04 10:50:29'),
-(52, 'amc', 0, 42, '2014-09-24', 'sadasd', 'p', '2014-09-04 11:05:51'),
-(53, 'amc', 12, 42, '2014-09-24', 'fgdsf', 'p', '2014-09-04 11:08:14'),
-(54, 'complaint', 8, 0, '2014-09-24', 'sdfsdf', 'p', '2014-09-04 11:09:05');
+INSERT INTO `assignment` (`assign_id`, `cust_id`, `type`, `type_id`, `assign_for`, `assign_date`, `remarks`, `status`, `created_on`) VALUES
+(24, 0, 'ots', 1, 19, '1970-01-01', '', 'p', '2014-08-27 12:33:37'),
+(25, 0, 'ots', 1, 19, '2014-08-26', 'dhgdhg', 'p', '2014-08-27 12:35:53'),
+(26, 0, 'complaint', 7, 21, '2014-09-02', 'yhjgyj', 'p', '2014-08-27 12:36:25'),
+(27, 0, 'installation', 9, 17, '2014-08-21', 'fdgdfgdfg', 'p', '2014-08-28 06:04:43'),
+(28, 0, 'complaint', 7, 21, '2014-08-16', 'dsdfsdf', 'p', '2014-08-28 06:05:20'),
+(29, 0, 'ots', 1, 17, '2014-08-12', 'sfdg', 'p', '2014-08-28 06:05:40'),
+(30, 0, 'installation', 9, 41, '2014-08-27', 'This is just a test', 'p', '2014-09-01 07:55:57'),
+(35, 0, 'complaint', 7, 18, '2014-08-13', 'sgdsfgsfg', 'p', '2014-09-01 08:44:23'),
+(36, 0, 'ots', 1, 17, '2014-09-10', 'sdfsd', 'p', '2014-09-01 08:44:42'),
+(37, 0, 'ots', 6, 21, '2014-09-10', 'sdfsdf', 'p', '2014-09-01 08:44:53'),
+(49, 0, 'amc', 36, 21, '2014-09-11', '', 'p', '2014-09-04 10:50:29'),
+(53, 0, 'amc', 12, 42, '2014-09-24', 'fgdsf', 'p', '2014-09-04 11:08:14'),
+(54, 0, 'complaint', 8, 41, '2014-09-24', 'sdfsdf', 'p', '2014-09-04 11:09:05'),
+(55, 0, 'amc', 13, 17, '2014-09-17', 'gtfthgh', 'p', '2014-09-05 11:33:59'),
+(56, 0, 'installation', 9, 19, '2014-08-27', 'gkjgjh', 'p', '2014-09-05 11:37:43'),
+(57, 0, 'complaint', 7, 18, '2014-08-13', 'gfjh', 'p', '2014-09-05 11:37:59'),
+(58, 0, 'amc', 17, 41, '2014-09-18', 'hkj', 'p', '2014-09-05 11:38:16'),
+(59, 0, 'ots', 6, 18, '2014-09-09', 'mbb', 'p', '2014-09-05 11:38:36'),
+(60, 0, 'installation', 9, 17, '2014-08-27', 'adef', 'p', '2014-09-05 11:44:48'),
+(61, 0, 'complaint', 7, 41, '2014-08-13', 'asfasd', 'p', '2014-09-05 11:45:03'),
+(62, 0, 'ots', 6, 17, '2014-09-10', 'asdasd', 'p', '2014-09-05 11:45:42'),
+(63, 0, 'installation', 16, 19, '2014-09-30', 'This remarks is given during assigning technician', 'p', '2014-09-09 09:40:00'),
+(64, 0, 'ots', 9, 18, '2014-09-18', '12', 'p', '2014-09-09 09:52:53'),
+(65, 0, 'complaint', 11, 21, '2014-09-30', 'This is complaint remarks while assignment', 'p', '2014-09-09 10:00:38'),
+(66, 0, 'installation', 17, 41, '2014-09-30', 'remarks', 'p', '2014-09-09 11:59:16'),
+(67, 2, 'installation', 24, 0, '2014-11-01', 'defdsfsdf', 'p', '2014-09-15 12:57:25');
 
 -- --------------------------------------------------------
 
@@ -313,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en',
   PRIMARY KEY (`com_id`),
   KEY `cust_id` (`cust_id`,`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `complaint`
@@ -326,7 +345,9 @@ INSERT INTO `complaint` (`com_id`, `ac_id`, `problem_type`, `problem_desc`, `pre
 (6, 63, 2, 'fbdfg', '2014-09-28', 27, '2014-08-13 07:03:17', '1'),
 (7, 75, 1, 'This is first line\nand this is 2nd\nwhile this is third\nand yes 4th', '2014-08-13', 15, '2014-08-25 06:04:51', '1'),
 (8, 78, 3, 'sadasdasd', '2014-09-24', 1, '2014-09-03 13:40:30', '1'),
-(9, 95, 1, 'This is customer complaints remarks pls make sure it gets sorted soon...', '2014-09-25', 2, '2014-09-04 12:08:42', '1');
+(9, 95, 1, 'This is customer complaints remarks pls make sure it gets sorted soon...', '2014-09-25', 2, '2014-09-04 12:08:42', '1'),
+(10, 100, 2, '', '2014-09-18', 15, '2014-09-08 09:23:48', '1'),
+(11, 104, 2, 'please try to resolve it asap....', '2014-09-23', 74, '2014-09-09 06:57:32', '1');
 
 -- --------------------------------------------------------
 
@@ -358,15 +379,15 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL COMMENT '1-en,',
   PRIMARY KEY (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=68 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
 
 --
 -- Dumping data for table `customer`
 --
 
 INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
-(1, 'r', 'Rafique', 'Mohammed', 'dev.rafiq@live.com', '123', 'ARR Organization', '9876543210', '1234567890', '', '022 25647896', '2014-07-16', 'No.6 Cheeta Camp', 'Deonar Colony', 'Cheeta Camp', '400088', 'Mumbai', 'm', 'Kuch bhi.......', 'Existing Customer', '2014-07-22 11:22:13', '1'),
-(2, 'c', 'Rafique', 'Mohammed', 'ar.rafiq@live.com', '123', '', '9876543210', '785123988', '78510254', '231456966', '2014-07-09', 'Tromab no.6', 'undefined', 'Cheeta Camp', '400088', 'Mumbai', 'm', 'Remarks tab', 'web', '2014-07-22 12:11:24', '1'),
+(1, 'r', 'Rafique', 'Mohammed', 'dev.rafiq@live.com', '123', 'ARR Organization', '9876543210', '1234567890', '', '022 25647896', '2014-07-16', 'No.6 Cheeta Camp', 'Deonar Colony', 'Cheeta Camp', '400088', 'Mumbai', 'b', 'Kuch bhi.......', 'Existing Customer', '2014-07-22 11:22:13', '1'),
+(2, 'c', 'Ronak ', 'Rathod', '', '123', 'Ronak ', '9876543210', '', '', '', '1990-09-18', 'Cheetah Camp', 'Deonar Colony', 'Chembur', '400088', 'Mumbai', 'm', '', 'web', '2014-07-22 12:11:24', '1'),
 (3, 'r', 'Vishal', 'patel', 'vishal@patel.com', '123', '', '9821456456', '', '', '022 25647896', '2014-07-30', 'koldungri', 'Brook', 'Andheri', '400060', 'Mumbai', 'm', 'rsgfdfg', 'Google', '2014-07-22 12:15:21', '1'),
 (7, 'r', 'Rafique', 'Mohammed', 'sachin@gmail.vom', '123', 'ARR Organisation', '2345352353', '98200098200', 'sachin 022 2544744', '022 21545544', '2014-08-02', 'esrtertertes', 'Old Nagardas Road', 'Trombay', '400069', 'Mumbai', 'm', 'Additional remarks..', 'Google', '2014-07-22 12:27:17', '1'),
 (14, 'c', 'Rafique', 'Mohammed', 'ar.rafiq@live.com', '123', 'ARR Organization', '8976288706', '9876543210', 'something', '022 25647896', '2014-07-29', 'No.6 Trombay', 'Trombay,Chembur', 'Trombay', '400088', 'Mumbai', 'm', 'Remarksbox', 'Dealer', '2014-07-23 10:12:41', '1'),
@@ -386,7 +407,14 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (48, 'r', 'Harsh', 'yadav', 'hasrkadbadbadsb', '123', '', '7896455121', '7896541230', '654413513151', '022 25647896', '2014-08-20', 'ladnfjnsdf', 'COTTON GREEN MAZGAON', 'sadasd', '400010', 'Mumbai', 'b', '634512retsdgf', 'Direct Marketing', '2014-08-11 06:27:35', '1'),
 (65, 'r', 'deepika ', 'padukon', '', '123', '', '7774448888', '', '', '', '2014-08-28', '', 'COTTON', 'Andheri', '400010', 'Mumbai', 'm', '', 'Ronak', '2014-08-21 10:08:01', '1'),
 (66, 'r', 'asdasdas', 'dasdassdfd', '', '123', '', 'saasdasdas', '', '', '', '0000-00-00', '', 'Azad Maidan', 'sdfsdf', '400001', 'Mumbai', 'm', '', 'Web', '2014-09-02 10:27:48', '1'),
-(67, 'c', 'rafff', 'mjgff', '', '123', 'Dfgv', '0865324678', '', '', '', '2014-09-19', '', 'Iit Powai', 'nffuj', '400076', 'Mumbai', 'm', '', 'Direct Marketing', '2014-09-04 09:53:38', '1');
+(67, 'c', 'rafff', 'mjgff', '', '123', 'Dfgv', '0865324678', '', '', '', '2014-09-19', '', 'Iit Powai', 'nffuj', '400076', 'Mumbai', 'm', '', 'Direct Marketing', '2014-09-04 09:53:38', '1'),
+(68, 'r', 'Amit', 'Patel', '', '123', '', '7898788656', '', '', '', '0000-00-00', '', 'Malabar Hill', 'India', '400006', 'Mumbai', 'm', '', 'dfsdfsdf', '2014-09-08 08:25:52', '1'),
+(69, 'r', 'dsfsdfsd', 'fsdfsd', '', '123', '', '5754416314', '', '', '', '0000-00-00', '', 'Natwar Nagar Jogeshwari (East)', 'sdfsd', '400060', 'Mumbai', 'm', '', 'Dealer', '2014-09-08 08:28:34', '1'),
+(70, 'r', 'Siddhesh ', 'Shetye', '', '123', '', '8798798978', '', '', '', '2014-09-26', '', 'Ranisati Nagar Malad (West)', 'fgdfgdfg', '400064', 'Mumbai', 'm', '', 'Web', '2014-09-08 08:29:23', '1'),
+(71, 'r', 'Yuvraj ', 'Singh', '', '123', '', '9833128601', '', '', '', '2014-09-17', '', 'Sidharth Nagar', 'Borivali', '400066', 'Mumbai', 'm', '', 'Team one website', '2014-09-09 06:36:01', '1'),
+(72, 'r', 'Suresh', 'Raina', '', '123', '', '9875646513', '', '', '', '0000-00-00', '', 'Adarsh Residency Goregaon (East)', 'Goregoan', '400065', 'Mumbai', 'm', '', 'Team one website', '2014-09-09 06:42:52', '1'),
+(73, 'r', 'Murli', 'Karthik', '', '123', '', '9879864565', '', '', '', '0000-00-00', '', 'Kamani KURLA(WEST)', 'Dahisar', '400070', 'Mumbai', 'm', '', 'Web', '2014-09-09 06:45:23', '1'),
+(74, 'r', 'Ravindra', 'Jadeja', '', '123', '', '8974561654', '', '', '', '2014-09-24', 'Bhayander', 'Rajawadi,Ghatkopar (E)', 'Bhayander', '400077', 'Mumbai', 'm', '', 'Web', '2014-09-09 06:47:54', '1');
 
 -- --------------------------------------------------------
 
@@ -408,7 +436,7 @@ CREATE TABLE IF NOT EXISTS `customer_ac_details` (
   `remarks` varchar(200) NOT NULL,
   PRIMARY KEY (`ac_id`),
   KEY `cust_id` (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=111 ;
 
 --
 -- Dumping data for table `customer_ac_details`
@@ -450,16 +478,10 @@ INSERT INTO `customer_ac_details` (`ac_id`, `cust_id`, `make`, `ac_type`, `capac
 (71, 59, 6, '2', '7', 'gdf', 'gsdf', 'sdfg', 'sdfgdf', 6, 'sdfgdfg'),
 (72, 63, 2, '1', '2', '', '', '', '', 6, 'sd'),
 (73, 29, 3, '2', '5', '', '', '', '', 9, ''),
-(75, 15, 1, '1', '5', '', '', '', '', 6, 'Pls do the requierd thing as informed by ms swaspnali. is out of town. and dont forget to inform rafique sir abt it.'),
 (76, 29, 7, '3', '5', 'sdf', 'fsdfsdf', 'sdf', 'sdfsdf', 8, 'sdfgdsfbgshbdgbfdg'),
 (77, 44, 14, '3', '17', 'wreger', 'ertgergver', 'ewrtw', 'retert', 15, 'g frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdghsedrgerg sweggerg frg tgfnhfdg'),
 (78, 1, 2, '1', '3', '', '', '', '', 6, 'Before you set up Android Studio, be sure you have installed JDK 6 or greater (the JRE alone is not sufficient). To check if you have JDK installed (and which version), open a terminal'),
 (79, 7, 11, '2', '12', 'ODU M24156', 'ODU S25463', 'IDU M2563', 'IDU S254', 17, 'This is remarks of AC'),
-(80, 15, 9, '1', '14', '', '', '', '', 17, ''),
-(81, 15, 7, '2', '9', '', '', '', '', 13, 'Launch the downloaded EXE file, a'),
-(82, 15, 17, '3', '17', '', '', '', '', 15, 'Android Studio is now ready and loaded with the Android developer tools, but there are still a couple packages you should add to make your Android SDK complete.'),
-(83, 15, 3, '2', '5', '', '', '', '', 6, ''),
-(84, 15, 4, '3', '7', '', '', '', '', 9, ''),
 (85, 1, 1, '1', '2', '', '', '', '', 4, 'sdssds sd fsdfsfn ksbdfsbhdf shd gsd fsd fsdgfsgd fajgfjadfdfa   jsagddfdfhvdf jd fdjf df'),
 (86, 65, 4, '1', '12', 'sgs', 'sd', 'sdf', 'sdf', 7, 'dfg sdfgfgzd gdf gdfg fxd gdf gdx gxdhgd hdxghxdghxdgh'),
 (87, 65, 2, '2', '2', 'dfsd', 'sdf', 'fsdf', 'sdfsd', 11, 'sdfsd sd fsd sd fsd fsdfsdfsdf sdf sdfsdf'),
@@ -468,7 +490,17 @@ INSERT INTO `customer_ac_details` (`ac_id`, `cust_id`, `make`, `ac_type`, `capac
 (91, 1, 2, '2', '5', '', '', '', '', 7, 'dsfcsdsdf'),
 (92, 1, 18, '3', '2', '', '', '', '', 7, 'fdgdfgzdgfz'),
 (94, 1, 8, '3', '2', '', '', '', '', 8, 'dsfsdfsd'),
-(95, 2, 2, '2', '8', '', '', '', '', 10, 'This remarks is for customers AC....');
+(100, 15, 1, '1', '2', '', '', '', '', 4, 'jkkhbjjhb'),
+(101, 14, 1, '1', '7', 'uouofyo', 'ofgof', 'IDU456', 'IDU46345', 11, 'fghfgh'),
+(102, 15, 5, '1', '13', 'ODU 2', 'ODU 1', 'IDU 2', 'IDU 1', 6, ''),
+(103, 71, 3, '2', '7', 'ODU m 1', 'ODU m 2', 'IDU m 1', 'IDU m 2', 10, 'This is my samsumg ac remark and it is supposed to be installed at window'),
+(104, 74, 2, '2', '3', 'odu 1', 'odu 2', 'idu 1', 'idu 2', 4, 'adfbfds  sxbgfxdx'),
+(105, 74, 4, '1', '5', 'odu 2', 'odu 1', 'idu 2', 'idu 1', 6, 'This is ac remarks'),
+(106, 1, 13, '2', '17', 'outdo s 21', 'outdo m 31', 'indo m53', 'indo s121', 17, 'This is my new llyod ac remarks'),
+(107, 2, 9, '2', '10', 'odu m 1', 'odu s 1', 'idu m 1', 'Idu s 1', 11, 'this remark is for the ac'),
+(108, 1, 18, '2', '6', 'fsdf', 'dfsd', 'sdfs', 'sd', 9, 'sdfsdfsdf'),
+(109, 2, 11, '4', '15', 'odu 2', 'odu 1', 'idu 2', 'idu 1', 13, 'This is Ogeneral ac'),
+(110, 2, 14, '4', '16', 'odu 2', 'odu 1', 'idu 2', 'idu 1', 21, 'This is my ac remarks');
 
 -- --------------------------------------------------------
 
@@ -489,7 +521,7 @@ CREATE TABLE IF NOT EXISTS `installation` (
   PRIMARY KEY (`install_id`),
   KEY `cust_id` (`cust_id`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `installation`
@@ -503,7 +535,49 @@ INSERT INTO `installation` (`install_id`, `cust_id`, `ac_id`, `install_type`, `p
 (11, 44, 77, 'n', '2014-09-06', 5, 'utr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuutr cuytdedyktdkytd tyfdkuy kuyjfkuyjfkuv', '1', '2014-08-28 10:36:29'),
 (12, 27, 64, 'n', '2014-08-27', 5, 'No remarks of rthis isntallatin....', '1', '2014-08-30 06:58:22'),
 (13, 1, 74, 'f', '2014-09-29', 3, 'Installation remarks and some longgggg texttttttttttttttttttt.............asdf asdfasdf sdf', '1', '2014-09-04 11:35:46'),
-(14, 2, 95, 'n', '2014-09-22', 2, 'This remark is for Installation of customer ac', '1', '2014-09-04 12:07:29');
+(14, 2, 95, 'n', '2014-09-22', 2, 'This remark is for Installation of customer ac', '1', '2014-09-04 12:07:29'),
+(15, 14, 101, 's', '2014-09-22', 2, '', '1', '2014-09-08 08:41:27'),
+(16, 74, 104, 'n', '2014-09-30', 2, 'This remark is for installation of customer', '1', '2014-09-09 09:28:26'),
+(17, 74, 105, 's', '2014-09-23', 2, 'This is been assign for installation', '1', '2014-09-09 11:56:38'),
+(18, 1, 91, 's', '2014-09-30', 2, 'Installation remarks', '1', '2014-09-10 08:12:10'),
+(20, 1, 106, 's', '2014-10-19', 3, 'This remark is tor llyod ac and its installation date', '1', '2014-09-12 13:32:54'),
+(21, 2, 107, 's', '2014-09-24', 3, 'this remark is given during the installation of the ac', '1', '2014-09-13 06:31:40'),
+(22, 2, 109, 's', '2014-09-16', 3, 'This is installation remarks', '1', '2014-09-15 09:42:16'),
+(24, 2, 110, 's', '2014-10-01', 3, 'rfrf', '1', '2014-09-15 12:35:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `install_service_date`
+--
+
+CREATE TABLE IF NOT EXISTS `install_service_date` (
+  `install_service_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cust_id` int(11) NOT NULL,
+  `install_id` int(11) NOT NULL,
+  `remarks` text NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`install_service_id`),
+  KEY `cust_id` (`cust_id`),
+  KEY `install_id` (`install_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+
+--
+-- Dumping data for table `install_service_date`
+--
+
+INSERT INTO `install_service_date` (`install_service_id`, `cust_id`, `install_id`, `remarks`, `date`) VALUES
+(1, 1, 21, 'dummy', '2014-09-22'),
+(18, 2, 22, 'This is 1st ac remarks', '2014-09-16'),
+(19, 2, 22, 'This is 2nd ac remarks....', '2015-01-16'),
+(20, 2, 22, 'This is 3rd ac remarks........', '2015-05-18'),
+(21, 2, 23, '', '2014-10-01'),
+(22, 2, 23, '', '2014-12-31'),
+(23, 2, 23, '', '2015-04-01'),
+(24, 2, 23, '', '2015-07-01'),
+(25, 2, 24, 'ac remarks', '2015-01-31'),
+(26, 2, 24, 'ac remarks', '2015-06-02'),
+(27, 2, 24, 'ac remarks', '2015-10-02');
 
 -- --------------------------------------------------------
 
@@ -517,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `locality` (
   `pincode` varchar(15) NOT NULL,
   `city` varchar(50) NOT NULL DEFAULT 'Mumbai',
   PRIMARY KEY (`locality_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1395 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1416 ;
 
 --
 -- Dumping data for table `locality`
@@ -1896,7 +1970,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1369, 'Telephone Exchange,Ghatkopar (E)', '400086', 'Mumbai'),
 (1370, 'Tilak Nagar', '400075', 'Mumbai'),
 (1371, 'Tilak Nagar,Chembur', '400089', 'Mumbai'),
-(1372, 'Trombay,Chembur', '400088', 'Mumbai'),
+(1409, 'Cheeta Camp, Trombay', '400088', 'Mumbai'),
 (1373, 'Vashi Naka', '400074', 'Mumbai'),
 (1374, 'Vashi Naka,Chembur', '400071', 'Mumbai'),
 (1375, 'Vidya Vihar (W) , Near Station', '400086', 'Mumbai'),
@@ -1911,13 +1985,19 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1384, 'Kpar Khairane', '400709', 'Mumbai'),
 (1385, 'MIDC,Mahape', '400709', 'Mumbai'),
 (1386, 'Nerul', '400706', 'Mumbai'),
+(1408, 'Andheri', '400038', 'Mumbai'),
 (1388, 'Rabale', '400701', 'Mumbai'),
 (1389, 'SECTOR-12, Airoli', '400708', 'Mumbai'),
 (1390, 'Sanpada', '400705', 'Mumbai'),
 (1391, 'Seawoods Nerul', '400706', 'Mumbai'),
 (1392, 'TTC Ind Area,Turbhe', '400613', 'Mumbai'),
 (1393, 'Thane Belapur Road', '400708', 'Mumbai'),
-(1394, 'Vashi plaza', '400703', 'Mumbai');
+(1394, 'Vashi plaza', '400703', 'Mumbai'),
+(1410, 'Near Trombay Bus Depot, Trombay', '400088', 'Mumbai'),
+(1411, 'Mandala, Trombay', '400088', 'Mumbai'),
+(1412, 'Mankhurd', '400088', 'Mumbai'),
+(1415, 'Pailipada, Trombay', '400088', 'Mumbai'),
+(1414, 'Anu Sakti, B.A.R.C', '400088', 'Mumbai');
 
 -- --------------------------------------------------------
 
@@ -1937,7 +2017,7 @@ CREATE TABLE IF NOT EXISTS `one_time_service` (
   PRIMARY KEY (`ots_id`),
   KEY `cust_id` (`cust_id`,`ac_id`),
   KEY `tech_id` (`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `one_time_service`
@@ -1951,7 +2031,8 @@ INSERT INTO `one_time_service` (`ots_id`, `cust_id`, `ac_id`, `service_type`, `d
 (5, 29, 22, 'chemical', 'chemical cleaan', '2014-09-05', '2014-08-09 09:16:49', '1'),
 (6, 15, 75, 'dry', 'This is first line\nand this is 2nd\nwhile this is third\nand yes 4th', '2014-10-01', '2014-08-26 07:37:23', '1'),
 (7, 1, 78, 'dry', 'sgfsfgfg', '2014-09-30', '2014-09-03 13:41:03', '1'),
-(8, 2, 95, 'chemical', 'This remarks is for One time services of the customer...', '2014-09-26', '2014-09-04 12:10:07', '1');
+(8, 2, 95, 'chemical', 'This remarks is for One time services of the customer...', '2014-09-26', '2014-09-04 12:10:07', '1'),
+(9, 74, 104, 'chemical', 'this is ots remarks', '2014-09-30', '2014-09-09 09:52:13', '1');
 
 -- --------------------------------------------------------
 
@@ -2091,42 +2172,18 @@ CREATE TABLE IF NOT EXISTS `technician` (
   `enabled` enum('1','2','3') NOT NULL COMMENT '1-en,2-dis,3-del',
   PRIMARY KEY (`tech_id`),
   KEY `branch` (`branch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 --
 -- Dumping data for table `technician`
 --
 
 INSERT INTO `technician` (`tech_id`, `first_name`, `last_name`, `email`, `mobile`, `branch`, `address`, `enabled`) VALUES
-(16, 'Ronak', 'Rathod', 'ronak@gmail.com', '9920727342', '1', 'jogeshwari', '3'),
-(17, 'Swapnali', 'Rasam', 'rasam@gmail.com', '9874563210', '3', 'kalwa', '3'),
-(18, 'Rafique', 'Mohammed', 'rafique@gmail.com', '8976451230', '2', 'Chember', '3'),
-(19, 'Roshan', 'Shelaar', 'abc@gmail.com', '9897456321', '1', 'dsfdsfsdf', '3'),
-(20, 'Ronak', 'Rathod', 'ronak@gmail.com', '7896541230', '1', 'andheri', '3'),
-(21, 'Fahim', 'Ansari', 'fahim@gmail.xcom', '7896523014', '2', 'oshiwaria', '3'),
-(22, 'Roshan', 'Shelar', '', '8646486844', '1', 'adfdf', '3'),
-(23, 'Kapil', 'Sanghvi', '', '6454565465', '1', 'jndfj', '3'),
-(24, 'dsfsdf', 'sdf', '', '7527852782', '1', 'sdfs', '3'),
-(25, 'rfgf', 'gffg', 'f', '5427527527', '1', 'fgdfg', '3'),
-(26, 'Kapil', 'Sharma', '', '8745442442', '2', 'gvf', '3'),
-(27, 'Rona', 'kj', '', '5645886565', '2', 'sdfgsdfgf', '3'),
-(28, 'saefsfg', 'sdfgfdg', '', '6554654114', '2', 'gdfgdf', '3'),
-(29, 'dfgdfg', 'fgdfg', '', '7777777777', '2', 'dgdfgdfg', '3'),
-(30, 'fgdfgdf', 'gdfgd', '', '5555555555', '2', 'fgdfgd', '3'),
-(31, 'sdfsdf', 'sdfsd', '', '4444444444', '2', 'fsdfs', '3'),
-(32, 'fdgfdg', 'fdgfdgdf', '', '4444444444', '2', 'gdfgd', '3'),
-(33, 'dfdsf', 'sdfsdf', '', '4444444444', '1', 'sdfsdf', '3'),
-(34, 'ghhghjh', 'jhhjkkjkj', '', '4444444444', '1', 'jkjkjkj', '3'),
-(35, 'sfsdf', 'sdfsdf', '', '4444444444', '2', 'sdfsdf', '3'),
-(36, 'dfs', 'dfsdf', '', '4444444444', '2', 'sdfsdf', '3'),
-(37, 'Rafique', 'Mohammed', '', '852741932', '1', 'KB6', '3'),
-(38, 'dfg', 'dsgdf', 'dfgdf', 'gdfgdfg', '1', 'gfgdfgdfgf', '3'),
-(39, 'dfzsfr', 'sdfsad', 'asdfa', 'fasdf', '1', 'sdfasf', '3'),
-(40, 'erger', 'ger', 'gerg', 'ger', '2', 'ergerg', '3'),
-(41, 'rtewrte', 'rtwerter', 'erter', 'tert', '3', 'terter', '3'),
-(42, 'Ronak', 'Rathod', '', '5156465465', '2', 'sdfsdf', '1'),
-(43, 'asda', 'sdasd', '', 'asdasdasda', '2', 'asdasd', '3'),
-(44, 'Darshik', 'Rathod', '', '4864464646', '1', 'dasdasd', '1');
+(17, 'Swapnali', 'Rasam', 'rasam@gmail.com', '9874563210', '3', 'kalwa', '1'),
+(18, 'Rafique', 'Mohammed', 'rafique@gmail.com', '8976451230', '2', 'Chember', '1'),
+(19, 'Roshan', 'Shelaar', 'abc@gmail.com', '9897456321', '1', 'dsfdsfsdf', '1'),
+(21, 'Fahim', 'Ansari', 'fahim@gmail.xcom', '7896523014', '2', 'oshiwaria', '1'),
+(41, 'Ronak', 'Rathod', '', '4864464646', '1', 'dasdasd', '1');
 
 -- --------------------------------------------------------
 

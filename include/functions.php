@@ -41,3 +41,40 @@ function GetDays($sStartDate, $sEndDate){
     // array of days.
     return $aDays;
 }
+
+
+function getServiceDates($type,$total_service,$start_date){
+    $result=array();
+    $expiry_date = date("d-m-Y", strtotime(date("d-m-Y", strtotime($start_date)) . " + 1 year - 1 day"));
+    $dates = GetDays($start_date, $expiry_date);
+    $t=1;
+
+    $n = $total_service;
+    $s = round(365 / $n);
+
+    if($type=="amc"){
+
+        for ($i = 0; $i < count($dates); $i = $i + $s) {
+            $result[]= $dates[$i];
+            if($t==$n){
+                break;
+            }else{
+                $t++;
+            }
+        }
+    }else{
+
+        for($i=0;$i<count($dates);$i=$i+$s){
+            $result[]= date('Y-m-d', strtotime($dates[$i]. ' + '.$s.' days'));
+
+            if($t==$n){
+                break;
+            }else{
+                $t++;
+            }
+        }
+    }
+
+    return $result;
+
+}

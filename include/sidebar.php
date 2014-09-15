@@ -14,6 +14,13 @@
                     <span class="title"> Dashboard </span><span class="selected"></span>
                 </a>
             </li>
+            
+            <li>
+                <a onclick="return LoadPage('Status');" href="Status"><i class="clip-user-5"></i>
+                    <span class="title"> Status </span>
+                    <span class="selected"></span>
+                </a>
+            </li>
 
             <li>
                 <a onclick="return LoadPage('UnAssignedList');" href="UnAssignedList"><i class="clip-user-5"></i>

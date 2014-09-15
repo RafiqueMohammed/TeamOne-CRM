@@ -15,7 +15,7 @@ $(document).ready(function () {
         var mobile2 = $("input[name=mobile2]").val();
         var email = $("input[name=email]").val();
         var landline = $("input[name=landline]").val();
-        var address = $("textarea[name=address]").val();
+        var address = $("#registration_address").val();
         var alt_contact = $("textarea[name=alternate_contact]").val();
         var pincode = $("input[name=pincode]").val();
         var city = $("input[name=city]").val();
@@ -65,9 +65,11 @@ $(document).ready(function () {
             $("#validation_error").hide();
             /* SEND INFO*/
             mobile1 = $("input[name=mobile1]").val();
-
+            
             var query = 'acc_type=' + type + '&org_name=' + org_name + '&firstname=' + fname + '&lastname=' + lname + '&mobile1=' + mobile1 + '&mobile2=' + mobile2 + '&email=' + email + '&landline=' + landline +
                 '&address=' + address + '&alternate_contact=' + alt_contact + '&pincode=' + pincode + '&city=' + city + '&landmark=' + landmark + '&location=' + location + '&communication_type=' + communication_type + '&referred_by=' + referred_by + '&reffered_other=' + reffered_other + '&dob=' + dob + '&remarks=' + remarks + '&registration=' + registration;
+            console.log(address+"<br />");
+            console.log(query);
             $('#registration_submit').html("<i class='clip-busy'></i>  Please wait..");
             $.ajax({
                 type: 'post',
@@ -89,6 +91,7 @@ $(document).ready(function () {
                         var cust_id = data.customer_id;
                         if (cust_id != null || cust_id !== "") {
                             $(".step-2").find("#customer_new_id").val(cust_id);
+                            $("#customer_full_name").html(fname+" "+lname);
                         }
 
 
