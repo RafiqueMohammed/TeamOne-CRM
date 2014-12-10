@@ -996,33 +996,26 @@ $app->get("/Customer/:cid/Uninstalled", function ($cid) use ($app) {
         global $DB;
 
 
-    $check_ac=$DB->query("SELECT `cust_id`,`ac_id` FROM `" . TAB_CUSTOMER_AC . "` as cust INNER JOIN (SELECT `ac_id` as ac FROM `" . TAB_INSTALL . "`) as ins
-        WHERE cust.`cust_id`='$cid' AND cust.`ac_id` NOT IN (ins.`ac`)") or  ThrowError($DB->error);
-
+    $check_ac=$DB->query("SELECT * FROM `".TAB_CUSTOMER_AC."` as cust
+        WHERE cust.`cust_id`='{$cid}' AND cust.ac_id NOT IN (SELECT `ac_id` as ac FROM `".TAB_INSTALL."` where `cust_id`='{$cid}')") or  ThrowError($DB->error);
     if($check_ac->num_rows>0) {
-
         $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC . "` as cad
-    INNER JOIN (SELECT `install_id`, `cust_id` , `ac_id` as ins_ac_id, `install_type`, `preferred_date`, `no_of_service`, `remarks` as install_remarks, `enabled`, `created_on` FROM `" .
-            TAB_INSTALL . "`) as install
-,(SELECT ac_type as actype,`ac_type_id` FROM `" . TAB_AC_TYPE . "`) as ac_type ,
+    INNER JOIN (SELECT ac_type as actype,`ac_type_id` FROM `" . TAB_AC_TYPE . "`) as ac_type ,
 (SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE . "`) as ac_make,`" .
             TAB_AC_LOCATION . "` as acloc,`" . TAB_AC_TONNAGE . "` as ac_ton
-WHERE install.`cust_id`='$cid' and cad.cust_id='$cid' and cad.`ac_id` NOT IN (install.`ins_ac_id`) and cad.`make`=ac_make.`make_id`
- and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and ac_ton.`tonnage_id`=cad.capacity and install.`enabled`='1' ") or
+WHERE  cad.cust_id='$cid'  and cad.`make`=ac_make.`make_id`
+ and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and ac_ton.`tonnage_id`=cad.capacity  ") or
         ThrowError($DB->error);
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
             while ($info = $qry->fetch_assoc()) {
-                $info['preferred_date'] = ConvertToIST($info['preferred_date']);
-                $info['created_on'] =
-                    ConvertToIST($info['created_on']);
                 $result['data'][] = $info;
             }
         } else {
             $result = array("status" => "no", "result" => "All AC Added for the installation");
         }
     }else{
-        $result = array("status" => "no", "result" => "All AC Added for the installation 1");
+        $result = array("status" => "no", "result" => "Customer has no AC for the installation. Please add AC first");
     }
         $app->response->body(json_encode($result));
     }

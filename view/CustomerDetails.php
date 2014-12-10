@@ -86,7 +86,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
     </li>
     <li>
         <a data-toggle="tab" id="tab_services_status" href="#panel_status">
-            Request Status
+            Ticket Status
         </a>
     </li>    
 </ul>

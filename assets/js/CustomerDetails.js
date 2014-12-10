@@ -348,6 +348,7 @@ $(document).ready(function () {
         var modal_box = $("#installation_modal_box");
         var title = modal_box.find(".modal-title");
         var modal_body = modal_box.find(".modal-body");
+        var modal_footer=modal_box.find(".modal-footer");
         var ac_dropdown = "<option onClick='onUninstallACSelect(\"-1\")' value='-1'> -- Select AC -- </option>";
 
         $.getJSON("api/Customer/" + customer_id + "/Uninstalled", function (response) {
@@ -359,13 +360,14 @@ $(document).ready(function () {
                         ac_dropdown += "<option onClick='onUninstallACSelect("+key+")' value='" + key + "'> " + val.brand_name + " (" + val.location + ")  </option>";
                     });
                     ac_dropdown += "</select>";
-                    console.log(ac_dropdown);
                     modal_body.find(".select_uninstalled_ac").html(ac_dropdown);
                 } else {
-                    modal_body = "<div class='alert alert-danger'>AC Data is corrupt or not retrieved. Please refresh the page</div>";
+                    modal_body.html("<div class='alert alert-danger'>AC Data is corrupt or not retrieved. Please refresh the page</div>");
+                    modal_footer.html("");
                 }
             } else {
-                modal_body = "<div class='alert alert-danger'>" + response.result + "</div>";
+                modal_body.html("<div class='alert alert-danger'>" + response.result + "</div>");
+                modal_footer.html("");
 
             }
             unblockThisUI(mThis);
