@@ -1,7 +1,7 @@
 <?php
 require '../common.php';
-require_once(SLIM_DIR."Slim.php");
-sleep(2);
+require_once(SLIM_DIR . "Slim.php");
+require_once('cfg/functions.php');
 /**
  * Created by  Rafique
  * Date: 6/21/14
@@ -12,7 +12,7 @@ sleep(2);
 
 $app = new \Slim\Slim();
 
-$app->response['Content-Type']='application/json';
+$app->response['Content-Type'] = 'application/json';
 
 $app->get('/', function () use ($app) {
 
@@ -36,50 +36,46 @@ $app->hook('slim.before', function () use ($app) {
 
 
 });
-$app->hook("slim.before.router",function() use ($app){
+$app->hook("slim.before.router", function () use ($app) {
     if (strpos($app->request()->getPathInfo(), "/Manage") === 0) {
         require_once('Manage.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Customer") === 0) {
+    } else if (strpos($app->request()->getPathInfo(), "/Customer") === 0) {
         require_once('Customer.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Search") === 0) {
+    } else if (strpos($app->request()->getPathInfo(), "/Search") === 0) {
         require_once('Search.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Technicians") === 0) {
+    } else if (strpos($app->request()->getPathInfo(), "/Technicians") === 0) {
         require_once('Technicians.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Staff") === 0) {
+    } else if (strpos($app->request()->getPathInfo(), "/Staff") === 0) {
         require_once('Staff.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Assign") === 0) {
+    } else if (strpos($app->request()->getPathInfo(), "/Assign") === 0) {
         require_once('Assign.php');
-    }else if (strpos($app->request()->getPathInfo(), "/Status") === 0) {
-        require_once('Status.php');
-    }else {
+    } else if (strpos($app->request()->getPathInfo(), "/Tickets") === 0) {
+        require_once('Tickets.php');
+    } else if (strpos($app->request()->getPathInfo(), "/Reports") === 0) {
+        require_once('Reports.php');
+    } else {
         require_once('index.php');  // default routes
     }
 });
 
-function ThrowError($msg){
+function ThrowError($msg)
+{
     global $app;
     $app->halt(200, json_encode(array("status" => "no", "result" => $msg)));
 }
-function ThrowMissing(){
+
+function ThrowMissing()
+{
     global $app;
-    $app->halt(200, json_encode(array("status" => "no", "result" =>"Missing Required Field")));
+    $app->halt(200, json_encode(array("status" => "no", "result" => "Missing Required Field")));
 }
 
-function ThrowInvalid(){
+function ThrowInvalid()
+{
     global $app;
-    $app->halt(200, json_encode(array("status" => "no", "result" =>"Invalid Request")));
+    $app->halt(200, json_encode(array("status" => "no", "result" => "Invalid Request")));
 }
 
-function check($array){
-    if(is_array($array)){
 
-        for($i=0;$i<count($array);$i++){
-            if(empty($array[$i])){
-                return false;
-            }
-        }
-return true;
-    }else{
-        return false;
-    }
-}
+
+

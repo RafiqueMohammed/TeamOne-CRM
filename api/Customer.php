@@ -7,37 +7,32 @@ require_once("common.php");
 $app->post("/Customer", function () use ($app) {
         global $DB;
         if (isset($_POST['registration']) && !empty($_POST['registration'])) {
-            $fname = (isset($_POST['firstname'])) ? $_POST['firstname'] : "";
+            $fname = (isset($_POST['firstname'])) ? $DB->real_escape_string($_POST['firstname']) : "";
             $lname = (isset
-            ($_POST['lastname'])) ? $_POST['lastname'] : "";
+            ($_POST['lastname'])) ? $DB->real_escape_string($_POST['lastname']) : "";
             $acc_type = (isset($_POST['acc_type'])) ?
                 $_POST['acc_type'] : "r";
-            $org = (isset($_POST['org_name'])) ? $_POST['org_name'] :
+            $org = (isset($_POST['org_name'])) ? $DB->real_escape_string($_POST['org_name']) :
                 "";
-            $mob1 = (isset($_POST['mobile1'])) ? $_POST['mobile1'] : "";
+            $mob1 = (isset($_POST['mobile1'])) ? $DB->real_escape_string($_POST['mobile1']) : "";
             $mob2 = (isset
-            ($_POST['mobile2'])) ? $_POST['mobile2'] : "";
-            $email = (isset($_POST['email'])) ?
-                $_POST['email'] : "";
-            $landline = (isset($_POST['landline'])) ? $_POST['landline'] :
-                "";
-            $address = (isset($_POST['address'])) ? $_POST['address'] : "";
-            $pincode = (isset
-            ($_POST['pincode'])) ? $_POST['pincode'] : "";
-            $city = (isset($_POST['city'])) ?
-                $_POST['city'] : "";
-            $landmark = (isset($_POST['landmark'])) ? $_POST['landmark'] :
-                "";
-            $location = (isset($_POST['location'])) ? $_POST['location'] : "";
+            ($_POST['mobile2'])) ? $DB->real_escape_string($_POST['mobile2']) : "";
+            $email = (isset($_POST['email'])) ?    $DB->real_escape_string($_POST['email']) : "";
+            $landline = (isset($_POST['landline'])) ? $DB->real_escape_string($_POST['landline']) :"";
+            $address = (isset($_POST['address'])) ? $DB->real_escape_string($_POST['address']) : "";
+            $pincode = (isset($_POST['pincode'])) ? $DB->real_escape_string($_POST['pincode']) : "";
+            $city = (isset($_POST['city'])) ?$DB->real_escape_string($_POST['city']) : "";
+            $landmark = (isset($_POST['landmark'])) ? $DB->real_escape_string($_POST['landmark']) : "";
+            $location = (isset($_POST['location'])) ? $DB->real_escape_string($_POST['location']) : "";
             $alt_contacts =
-                (isset($_POST['alternate_contact'])) ? $_POST['alternate_contact'] : "";
+                (isset($_POST['alternate_contact'])) ? $DB->real_escape_string($_POST['alternate_contact']) : "";
             $mode_of_com =
-                (isset($_POST['communication_type'])) ? $_POST['communication_type'] : "";
+                (isset($_POST['communication_type'])) ? $DB->real_escape_string($_POST['communication_type']) : "";
             $referred =
-                (isset($_POST['referred_by'])) ? $_POST['referred_by'] : "";
+                (isset($_POST['referred_by'])) ? $DB->real_escape_string($_POST['referred_by']) : "";
             $other = (isset($_POST['reffered_other'])) ?
                 $_POST['reffered_other'] : "";
-            $dob = (isset($_POST['dob'])) ? $_POST['dob'] :
+            $dob = (isset($_POST['dob'])) ? $DB->real_escape_string($_POST['dob']) :
                 "";
             $reference = "";
             if ($referred == "other" || $referred == "exist_cust") {
@@ -48,14 +43,14 @@ $app->post("/Customer", function () use ($app) {
             if (!empty($dob)) {
                 $dob = date("Y-m-d", strtotime($dob));
             }
-            $remarks = (isset($_POST['remarks'])) ? $_POST['remarks'] : "";
+            $remarks = (isset($_POST['remarks'])) ? $DB->real_escape_string($_POST['remarks']) : "";
             $DB->query("INSERT INTO `" .
                 TAB_CUSTOMER . "`(`account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`,
          `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`,
          `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`)
          VALUES('$acc_type','$fname','$lname','$email','123','$org','$mob1','$mob2','$alt_contacts','$landline','$dob','$address',
          '$landmark','$location','$pincode','$city','$mode_of_com','$remarks','$reference')
-         ");
+         ") or ThrowError($DB->error);
             if ($DB->affected_rows > 0) {
                 $app->status(201);
                 $result = array(
@@ -80,7 +75,7 @@ $app->get("/Customers", function () use ($app) {
         global $DB;
         $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "`");
         if ($qry->
-                num_rows > 0
+            num_rows > 0
         ) {
 
             while ($data = $qry->fetch_assoc()) {
@@ -163,36 +158,36 @@ $app->put("/Customer/:id", function ($id) use ($app) {
         global $DB;
         $result = array();
         $fname = $DB->real_escape_string($app->request->
-            put('fname'));
+        put('fname'));
         $lname = $DB->real_escape_string($app->request->put('lname'));
         $org =
             $DB->real_escape_string($app->request->put('org'));
         $mob1 = $DB->
-            real_escape_string($app->request->put('mobile1'));
+        real_escape_string($app->request->put('mobile1'));
         $mob2 = $DB->
-            real_escape_string($app->request->put('mobile2'));
+        real_escape_string($app->request->put('mobile2'));
         $email = $DB->
-            real_escape_string($app->request->put('email'));
+        real_escape_string($app->request->put('email'));
         $landline = $DB->
-            real_escape_string($app->request->put('landline'));
+        real_escape_string($app->request->put('landline'));
         $address = $DB->
-            real_escape_string($app->request->put('address'));
+        real_escape_string($app->request->put('address'));
         $pincode = $DB->
-            real_escape_string($app->request->put('pincode'));
+        real_escape_string($app->request->put('pincode'));
         $city = $DB->
-            real_escape_string($app->request->put('city'));
+        real_escape_string($app->request->put('city'));
         $landmark = $DB->
-            real_escape_string($app->request->put('landmark'));
+        real_escape_string($app->request->put('landmark'));
         $location = $DB->
-            real_escape_string($app->request->put('location'));
+        real_escape_string($app->request->put('location'));
         $alt_contacts = $DB->
-            real_escape_string($app->request->put('alt_contacts'));
+        real_escape_string($app->request->put('alt_contacts'));
         $mode_of_com = $DB->
-            real_escape_string($app->request->put('communication'));
+        real_escape_string($app->request->put('communication'));
         $remarks = $DB->
-            real_escape_string($app->request->put('remarks'));
+        real_escape_string($app->request->put('remarks'));
         $dob = $DB->
-            real_escape_string($app->request->put('dob'));
+        real_escape_string($app->request->put('dob'));
         $newdate = date("Y-m-d",
             strtotime($dob));
         $DB->query("UPDATE `" . TAB_CUSTOMER . "` SET `first_name`='{$fname}',`last_name`='{$lname}',`email`='{$email}',`organisation`='{$org}',`mobile`='{$mob1}',
@@ -200,7 +195,7 @@ $app->put("/Customer/:id", function ($id) use ($app) {
         `landmark`='{$landmark}',`location`='{$location}',`pincode`='{$pincode}',`city`='{$city}',`mode_of_contact`='{$mode_of_com}',
          `remarks`='{$remarks}' WHERE `cust_id`='{$id}'");
         if ($DB->
-                affected_rows > 0
+            affected_rows > 0
         ) {
             $result = array("status" => "ok", "result" => "Successfully Updated");
         } else {
@@ -214,7 +209,7 @@ $app->put("/Customer/:id", function ($id) use ($app) {
 $app->delete("/Customer/:id", function ($id) use ($app) {
         $result = array("status" => "ok", "result" => "You deleted info for $id");
         $app->
-            response->body(json_encode($result));
+        response->body(json_encode($result));
     }
 );
 
@@ -235,15 +230,15 @@ $app->post("/Customer/:id/AC", function ($id) use ($app) {
                 //$model_no = $DB->real_escape_string($qry[$i]["model_no"]);
                 $make = $DB->real_escape_string($qry[$i]["make"]);
                 $idu_model_no = $DB->
-                    real_escape_string($qry[$i]["idu_model_no"]);
+                real_escape_string($qry[$i]["idu_model_no"]);
                 $idu_serial_no = $DB->
-                    real_escape_string($qry[$i]["idu_serial_no"]);
+                real_escape_string($qry[$i]["idu_serial_no"]);
                 $odu_model_no = $DB->
-                    real_escape_string($qry[$i]["odu_model_no"]);
+                real_escape_string($qry[$i]["odu_model_no"]);
                 $odu_serial_no = $DB->
-                    real_escape_string($qry[$i]["odu_serial_no"]);
+                real_escape_string($qry[$i]["odu_serial_no"]);
                 $location = $DB->
-                    real_escape_string($qry[$i]["location"]);
+                real_escape_string($qry[$i]["location"]);
                 $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
                 $capacity = $DB->real_escape_string($qry[$i]["ton"]);
                 $DB->query("INSERT INTO `" .
@@ -252,7 +247,7 @@ $app->post("/Customer/:id/AC", function ($id) use ($app) {
             VALUES('$id','$make','$ac_type','$capacity','$odu_model_no','$odu_serial_no',
             '$idu_model_no','$idu_serial_no','$location','$remarks')");
                 if ($DB->
-                        affected_rows > 0
+                    affected_rows > 0
                 ) {
                     $insert++;
                 }
@@ -401,7 +396,7 @@ $app->post("/Customer/:cid/Installations", function ($cid) use ($app) {
             $ins_type = $app->request->post("ins_type");
             $no_of_service = $app->request->post("no_of_service");
             $ins_date = $app->
-                request->post("ins_date");
+            request->post("ins_date");
             $ins_date = date("Y-m-d", strtotime($ins_date));
             $remarks =
                 $app->request->post("remarks");
@@ -411,7 +406,7 @@ $app->post("/Customer/:cid/Installations", function ($cid) use ($app) {
                 $qry = $DB->query("SELECT `install_id` FROM `" . TAB_INSTALL .
                     "` WHERE `cust_id`='$cid' AND `ac_id`='$ac_id'") or ThrowError($DB->error);
                 if ($qry->
-                        num_rows > 0
+                    num_rows > 0
                 ) {
                     ThrowError("This customer has already requested this AC for installation");
                 } else {
@@ -420,17 +415,20 @@ $app->post("/Customer/:cid/Installations", function ($cid) use ($app) {
                         "`(`cust_id`, `ac_id`, `install_type`, `preferred_date`, `no_of_service`,`remarks`)
                     VALUES('$cid','$ac_id','$ins_type','$ins_date','$no_of_service','$remarks')") or
                     ThrowError($DB->error);
+
                     if ($DB->affected_rows > 0) {
                         $result['status'] = "ok";
                         $result['result'] = "Successfully Added";
                         $app->status(201);
-                        $expiration = date('Y-m-d', strtotime('+364 day', strtotime($ins_date)));
-                        $last = $DB->insert_id;
 
-                        $service_dates=getServiceDates("installation",$no_of_service,$ins_date);
-                        for($s=0;$s<count($service_dates); $s++){
+                        $last = $DB->insert_id;
+                        $DB->query("INSERT INTO `" . TAB_INSTALL_SERVICE .
+                            "` (`cust_id`,`type`,`install_id`,`date`) VALUES ('$cid','installation','$last','$ins_date')");
+
+                        $service_dates = getServiceDates("installation", $no_of_service, $ins_date);
+                        for ($s = 0; $s < count($service_dates); $s++) {
                             $DB->query("INSERT INTO `" . TAB_INSTALL_SERVICE .
-                                "` (`cust_id`,`install_id`,`date`) VALUES ('$cid','$last','$service_dates[$s]')");
+                                "` (`cust_id`,`type`,`install_id`,`date`) VALUES ('$cid','ins_service','$last','$service_dates[$s]')");
                         }
 
                         $app->response->body(json_encode($result));
@@ -536,25 +534,26 @@ $app->post("/Customer/:cid/AMC", function ($cid) use ($app) {
             for ($i = 0; $i < $total; $i++) {
                 $cid = $DB->real_escape_string($qry[$i]["cust_id"]);
                 $ac_id = $DB->
-                    real_escape_string($qry[$i]["ac_id"]);
+                real_escape_string($qry[$i]["ac_id"]);
                 $amc_type = $DB->real_escape_string($qry[$i]["service_type"]);
                 $dry = $DB->real_escape_string($qry[$i]["dry_service"]);
                 $wet = $DB->
-                    real_escape_string($qry[$i]["wet_service"]);
+                real_escape_string($qry[$i]["wet_service"]);
                 $no_of_service = $dry + $wet;
 //$activation =$DB->real_escape_string($qry[$i]["amc_datepicker"]);
                 $activation = ConvertFromIST($DB->real_escape_string($qry[$i]["amc_datepicker"]));
                 $expiration = date('Y-m-d', strtotime('+364 day', strtotime($activation)));
+                $remarks = $DB->real_escape_string($qry[$i]["amc_remarks"]);
                 $DB->
-                    query("INSERT INTO `" . TAB_AMC .
-                        "`(`cust_id`,`ac_id`,`amc_type`,`dry`,`wet`,`no_of_service`,`activation`,`expiration`)
-            VALUES('$cid','$ac_id','$amc_type','$dry','$wet','$no_of_service','$activation','$expiration')");
+                query("INSERT INTO `" . TAB_AMC .
+                    "`(`cust_id`,`ac_id`,`amc_type`,`dry`,`wet`,`no_of_service`,`activation`,`expiration`,`remarks`)
+            VALUES('$cid','$ac_id','$amc_type','$dry','$wet','$no_of_service','$activation','$expiration','$remarks')");
                 if ($DB->affected_rows > 0) {
                     $insert++;
                 }
                 $last = $DB->insert_id;
-               $service_dates=getServiceDates("amc",$no_of_service,$activation);
-                for($s=0;$s<count($service_dates); $s++){
+                $service_dates = getServiceDates("amc", $no_of_service, $activation);
+                for ($s = 0; $s < count($service_dates); $s++) {
                     $DB->query("INSERT INTO `" . TAB_AMC_SERVICE .
                         "` (`cust_id`,`amc_id`,`date`) VALUES ('$cid','$last','$service_dates[$s]')");
                 }
@@ -659,7 +658,7 @@ $app->post("/Customer/:cid/OTS", function ($cid) use ($app) {
         $service_type =
             $DB->real_escape_string($app->request->post("service_type"));
         $date = $DB->
-            real_escape_string($app->request->post("p_date"));
+        real_escape_string($app->request->post("p_date"));
         $date = ConvertFromIST($date);
         $desc = $DB->real_escape_string($app->request->post("desc"));
         if ($ac_id > 0 &&
@@ -674,7 +673,7 @@ $app->post("/Customer/:cid/OTS", function ($cid) use ($app) {
                 $result['status'] = "ok";
                 $result['result'] = "Successfully added";
                 $app->
-                    status(201);
+                status(201);
                 $app->response->body(json_encode($result));
             } else {
                 ThrowError("Unable to add. Error occurred");
@@ -720,71 +719,71 @@ $app->delete("/Customer/:cid/OTS/:id", function ($cid, $id) use ($app) {
 
 
 $app->put("/Customer/:cid/Installation/Service", function ($id) use ($app) {
-        global $DB;
-        $result = array();
-        if ($id > 0) {
-            $qry = $app->request->put("row");
-            $insert = 0;
-            $total = count($qry);
-            for ($i = 0; $i < $total; $i++) {
-                $date = $DB->real_escape_string($qry[$i]["date"]);
-                $date = ConvertFromIST($date);
-                $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
-                $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
-                $DB->query("UPDATE `" .TAB_INSTALL_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `install_service_id`='$service_id'");
-                if ($DB->affected_rows > 0) {
-                    $insert++;
-                }
+    global $DB;
+    $result = array();
+    if ($id > 0) {
+        $qry = $app->request->put("row");
+        $insert = 0;
+        $total = count($qry);
+        for ($i = 0; $i < $total; $i++) {
+            $date = $DB->real_escape_string($qry[$i]["date"]);
+            $date = ConvertFromIST($date);
+            $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
+            $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
+            $DB->query("UPDATE `" . TAB_INSTALL_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `install_service_id`='$service_id'");
+            if ($DB->affected_rows > 0) {
+                $insert++;
             }
-            if ($insert == 0) {
-                $result = array("status" => "no", "result" => "Error occurred while adding data");
-            } else if ($i == $total) {
-                $app->status(201);
-                $result = array("status" => "ok", "result" =>
-                    "Successfully added");
-            } else if ($i > 0 && $i < $total) {
-                $result = array("status" => "ok", "result" =>
-                    "Data inserted but with some errors");
-            }
-
-        } else {
-            $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
         }
-        $app->response->body(json_encode($result));
+        if ($insert == 0) {
+            $result = array("status" => "no", "result" => "Error occurred while adding data");
+        } else if ($i == $total) {
+            $app->status(201);
+            $result = array("status" => "ok", "result" =>
+                "Successfully added");
+        } else if ($i > 0 && $i < $total) {
+            $result = array("status" => "ok", "result" =>
+                "Data inserted but with some errors");
+        }
+
+    } else {
+        $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
+    }
+    $app->response->body(json_encode($result));
 });
 
 $app->put("/Customer/:cid/AMC_Service", function ($id) use ($app) {
-        global $DB;
-        $result = array();
-        if ($id > 0) {
-            $qry = $app->request->put("row");
-            $insert = 0;
-            $total = count($qry);
-            for ($i = 0; $i < $total; $i++) {
-                $date = $DB->real_escape_string($qry[$i]["date"]);
-                $date = ConvertFromIST($date);
-                $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
-                $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
-                $DB->query("UPDATE `" .TAB_AMC_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `amc_service_id`='$service_id'") or ThrowError($DB->error);
-                if ($DB->affected_rows > 0) {
-                    $insert++;
-                }
+    global $DB;
+    $result = array();
+    if ($id > 0) {
+        $qry = $app->request->put("row");
+        $insert = 0;
+        $total = count($qry);
+        for ($i = 0; $i < $total; $i++) {
+            $date = $DB->real_escape_string($qry[$i]["date"]);
+            $date = ConvertFromIST($date);
+            $remarks = $DB->real_escape_string($qry[$i]["remarks"]);
+            $service_id = $DB->real_escape_string($qry[$i]["service_id"]);
+            $DB->query("UPDATE `" . TAB_AMC_SERVICE . "` SET `date`='$date',`remarks`='$remarks' WHERE `amc_service_id`='$service_id'") or ThrowError($DB->error);
+            if ($DB->affected_rows > 0) {
+                $insert++;
             }
-            if ($insert == 0) {
-                $result = array("status" => "no", "result" => "Error occurred while adding data");
-            } else if ($i == $total) {
-                $app->status(201);
-                $result = array("status" => "ok", "result" =>
-                    "Successfully added");
-            } else if ($i > 0 && $i < $total) {
-                $result = array("status" => "ok", "result" =>
-                    "Data inserted but with some errors");
-            }
-
-        } else {
-            $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
         }
-        $app->response->body(json_encode($result));
+        if ($insert == 0) {
+            $result = array("status" => "no", "result" => "Error occurred while adding data");
+        } else if ($i == $total) {
+            $app->status(201);
+            $result = array("status" => "ok", "result" =>
+                "Successfully added");
+        } else if ($i > 0 && $i < $total) {
+            $result = array("status" => "ok", "result" =>
+                "Data inserted but with some errors");
+        }
+
+    } else {
+        $result = array("status" => "no", "result" => "Invalid Customer ID Passed");
+    }
+    $app->response->body(json_encode($result));
 });
 /** ************ COMPLAINTS ************ */
 
@@ -834,14 +833,14 @@ $app->post("/Customer/:cid/Complaints", function ($cid) use ($app) {
             $problem_type = $app->request->post("problem_type");
             $problem_desc = $app->request->post("problem_desc");
             $date = $app->request->
-                post("p_date");
+            post("p_date");
             $date = ConvertFromIST($date);
             if (!empty($ac_id) && !empty($problem_type)) {
 
                 $qry = $DB->query("SELECT `com_id` FROM `" . TAB_COMPLAINT .
                     "` WHERE `cust_id`='$cid' AND `ac_id`='$ac_id'") or ThrowError($DB->error);
                 if ($qry->
-                        num_rows > 0
+                    num_rows > 0
                 ) {
                     ThrowError("Complaint already registered for this AC");
                 } else {
@@ -853,7 +852,7 @@ $app->post("/Customer/:cid/Complaints", function ($cid) use ($app) {
                         $result['status'] = "ok";
                         $result['result'] = "Successfully Added";
                         $app->
-                            status(201);
+                        status(201);
                         $app->response->body(json_encode($result));
                     } else {
                         ThrowError("Unable to create. Error occurred");
@@ -903,7 +902,7 @@ AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
             while ($info = $ins_qry->
-                fetch_assoc()) {
+            fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
@@ -919,7 +918,7 @@ AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
             while ($info = $ins_qry->
-                fetch_assoc()) {
+            fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
@@ -938,7 +937,7 @@ AND cust_ac.`cust_id`='{$cid}' ");
         if ($ins_qry->num_rows > 0) {
             $result["data"]["installations"]["empty"] = false;
             while ($info = $ins_qry->
-                fetch_assoc()) {
+            fetch_assoc()) {
                 $result["data"]["installations"][] = $info;
             }
         } else {
@@ -985,6 +984,46 @@ $app->get("/Customer/:cid/Service/:id/:type", function ($cid, $id, $type) use ($
             $result['status'] = "no";
             $result['result'] = "No Service date found";
         }
+        $app->response->body(json_encode($result));
+    }
+);
+
+
+/********** UNINSTALLED AC ***************/
+
+
+$app->get("/Customer/:cid/Uninstalled", function ($cid) use ($app) {
+        global $DB;
+
+
+    $check_ac=$DB->query("SELECT `cust_id`,`ac_id` FROM `" . TAB_CUSTOMER_AC . "` as cust INNER JOIN (SELECT `ac_id` as ac FROM `" . TAB_INSTALL . "`) as ins
+        WHERE cust.`cust_id`='$cid' AND cust.`ac_id` NOT IN (ins.`ac`)") or  ThrowError($DB->error);
+
+    if($check_ac->num_rows>0) {
+
+        $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC . "` as cad
+    INNER JOIN (SELECT `install_id`, `cust_id` , `ac_id` as ins_ac_id, `install_type`, `preferred_date`, `no_of_service`, `remarks` as install_remarks, `enabled`, `created_on` FROM `" .
+            TAB_INSTALL . "`) as install
+,(SELECT ac_type as actype,`ac_type_id` FROM `" . TAB_AC_TYPE . "`) as ac_type ,
+(SELECT make_id,make as brand_name FROM `" . TAB_AC_MAKE . "`) as ac_make,`" .
+            TAB_AC_LOCATION . "` as acloc,`" . TAB_AC_TONNAGE . "` as ac_ton
+WHERE install.`cust_id`='$cid' and cad.cust_id='$cid' and cad.`ac_id` NOT IN (install.`ins_ac_id`) and cad.`make`=ac_make.`make_id`
+ and acloc.`ac_location_id`=cad.`ac_location`  and ac_type.`ac_type_id` = cad.`ac_type` and ac_ton.`tonnage_id`=cad.capacity and install.`enabled`='1' ") or
+        ThrowError($DB->error);
+        if ($qry->num_rows > 0) {
+            $result = array("status" => "ok");
+            while ($info = $qry->fetch_assoc()) {
+                $info['preferred_date'] = ConvertToIST($info['preferred_date']);
+                $info['created_on'] =
+                    ConvertToIST($info['created_on']);
+                $result['data'][] = $info;
+            }
+        } else {
+            $result = array("status" => "no", "result" => "All AC Added for the installation");
+        }
+    }else{
+        $result = array("status" => "no", "result" => "All AC Added for the installation 1");
+    }
         $app->response->body(json_encode($result));
     }
 );

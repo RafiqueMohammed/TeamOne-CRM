@@ -9,15 +9,15 @@
         <!-- end: MAIN MENU TOGGLER BUTTON -->
         <!-- start: MAIN NAVIGATION MENU -->
         <ul class="main-navigation-menu">
-            <li class="active open">
+            <li >
                 <a href="index.php" onclick="return LoadPage('dashboard')"><i class="clip-home-3"></i>
                     <span class="title"> Dashboard </span><span class="selected"></span>
                 </a>
             </li>
-            
+
             <li>
-                <a onclick="return LoadPage('Status');" href="Status"><i class="clip-user-5"></i>
-                    <span class="title"> Status </span>
+                <a onclick="return LoadPage('Ticket');" href="Ticket"><i class="clip-bars"></i>
+                    <span class="title"> Ticket Status </span>
                     <span class="selected"></span>
                 </a>
             </li>
@@ -31,7 +31,7 @@
 
             <li>
                 <a href="javascript:void(0)"><i class="fa fa-group"></i>
-                    <span class="title"> Customer </span><i class="icon-arrow"></i>
+                    <span class="title"> Customers </span><i class="icon-arrow"></i>
                     <span class="selected"></span>
                 </a>
                 <ul class="sub-menu">
@@ -53,12 +53,12 @@
                             <span class="title">View Customers List</span>
                             <span class="selected"></span>
                         </a>
-                    </li>                    
+                    </li>
                 </ul>
             </li>
 
             <li>
-                <a href="javascript:void(0)"><i class="clip-settings"></i>
+                <a href="javascript:void(0)"><i class="clip-database"></i>
                     <span class="title">Manage </span><i class="icon-arrow"></i>
                     <span class="selected"></span>
                 </a>
@@ -83,7 +83,7 @@
 
 
             <li>
-                <a href="#"><i class="clip-bars"></i>
+                <a onclick="return LoadPage('Report')" href="Report"><i class="clip-stats"></i>
                     <span class="title">Reports</span>
                     <span class="selected"></span>
                 </a>

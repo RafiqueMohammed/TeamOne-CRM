@@ -84,11 +84,11 @@ if($customer_id!=-1){
                     <table id="at_install_table" class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th class="center"><i class="clip-menu-2"></i></th>
-                            <th class="col-md-3">AC Information</th>
+                            <th class="col-md-2">AC Information</th>
+                            <th class="col-md-2">Type</th>
                             <th class="col-md-2">Installation Type</th>
-                            <th class="col-md-4">Remarks</th>
-                            <th class="col-md-2">Created On</th>
+                            <th class="col-md-3">Remarks</th>
+                            <th class="col-md-2">Service Date</th>
                             <th class="center col-md-1"><i class="clip-wrench-2"></i></th>
                         </tr>
                         </thead>
@@ -110,7 +110,6 @@ if($customer_id!=-1){
                     <table id="at_complaint_table" class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th class="center"><i class="clip-menu-2"></i></th>
                             <th class="col-md-3">Ac Info</th>
                             <th class="col-md-3">Problem</th>
                             <th class="col-md-4">Remarks</th>
@@ -136,7 +135,6 @@ if($customer_id!=-1){
                     <table id="at_amc_table" class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th class="center"><i class="clip-menu-2"></i></th>
                             <th class="col-md-2">AC Info</th>
                             <th class="col-md-2">AMC Info</th>
                             <th class="col-md-1">No of Services</th>
@@ -163,7 +161,6 @@ if($customer_id!=-1){
                     <table id="at_ots_table" class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th class="center"><i class="clip-menu-2"></i></th>
                             <th class="col-md-3">Ac Info</th>
                             <th class="col-md-2">Service Type</th>
                             <th class="col-md-4">Remarks</th>

@@ -1,4 +1,5 @@
 <?php require_once("common.php"); ?>
+<link rel="stylesheet" type="text/css" href="assets/plugins/select2/select2.css" />
 <div class="row">
 
     <div class="col-sm-12">
@@ -134,8 +135,9 @@
 
         ?>
 
+<script type="text/javascript" src="assets/js/Brand.js"></script>
+<script type="text/javascript" src="assets/js/pincode.js"></script>
 
-<!---  --->
 
 <div class="col-md-10">        
 <div class="tabbable">
@@ -174,7 +176,12 @@
                 <a href="#panel_tab_branch" data-toggle="tab">
                     <i class="fa fa-rocket"></i> Branch
                 </a>
-            </li>            
+            </li> 
+            <li class="">
+                <a href="#panel_tab_pincode" data-toggle="tab">
+                    <i class="fa fa-rocket"></i> Pincode
+                </a>
+            </li>           
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="panel_tab_actype">
@@ -283,9 +290,50 @@
                         <?php echo $branch; ?>
                     </ul>
             </div>
+            <div class="tab-pane" id="panel_tab_pincode">
+                <div class="col-md-12">
+                <div class="col-md-6">
+                <table class="table table-bordered">
+                <tr>
+                <td class="col-md-4"><b>Select Pincode</b></td>
+                <td class="col-md-8">
+                <select class="" id="pincode" name="pincode">
+                <?php
+                $pin = "<option value='-1'>Select Pincode</option>";
+                for($i=400001;$i<=401000;$i++){
+                    $pin .= "<option value=".$i.">".$i."</option>";   
+                }
+                echo $pin;
+                ?>
+                </select>
+                </td>
+                </tr>
+                </table>
+                </div>
+                <div class="col-md-6">
+                <table class="table table-bordered">
+                <tr>
+                <td><input type="text" name="new_landmark" placeholder="Landmark" class="form-control" id="new_landmark"/></td>
+                <td><button id="add_pincode" class="btn btn-primary">Add</button></td>
+                <input type="hidden" id="hidden_pincode"/>
+                </tr>
+                </table>
+                </div>     
+                </div>    
+                <div class="clearfix"></div>  
+                <div id="show_my_output"></div>
+                <table class="pin_row table table-striped table-bordered table-hover table-full-width" id="pincode_table">
+                    <thead><tr>
+						<th>Pincode</th>
+                        <th>Landmark</th>
+                        <th class="center"><i class="clip-wrench-2"></i></th>
+					</tr></thead>
+                    <tbody>
+                        <tr><td colspan="3" class="alert alert-info center"> <i class="clip-info"></i> Please Select Pincode first</td></tr>
+                    </tbody>
+                </table>  
+            </div>
         </div>
 </div>
 </div>
 
-<!---  --->
-<script type="text/javascript" src="assets/js/Brand.js"></script>

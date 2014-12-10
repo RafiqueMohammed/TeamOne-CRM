@@ -35,7 +35,8 @@ a, a:focus, a:hover, a:active {
 	outline: 0 !important;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
+    font-weight: lighter;
 	font-family: 'Raleway', sans-serif;
 }
 /* ------- CUSTOM CSS -------*/
@@ -45,6 +46,8 @@ cursor: pointer;
 .big_icon{
     font-size: 1.3em;
 }
+
+
 /* ---------------------------------------------------------------------- */
 /*	Forms
 /* ---------------------------------------------------------------------- */

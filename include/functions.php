@@ -78,3 +78,20 @@ function getServiceDates($type,$total_service,$start_date){
     return $result;
 
 }
+
+
+function fetchDatafromApi($url){
+    $c=curl_init();
+    curl_setopt($c,CURLOPT_URL,$_SERVER['HTTP_HOST'].SUB_FOLDER.$url);
+    curl_setopt($c,CURLOPT_RETURNTRANSFER,true);
+    $output=curl_exec($c);
+
+    if(curl_getinfo($c,CURLINFO_HTTP_CODE)=="200" && $output!=""){
+        $json_content=json_decode($output,true);
+
+
+    }else{
+        $json_content=array("status"=>"no","result"=>"Cannot fetch data from the API.Try Again..");
+    }
+    return $json_content;
+}

@@ -9,8 +9,8 @@ $app->get("/Manage", function () use ($app) {
     $l_qry = $DB->query("SELECT * FROM `" . TAB_AC_LOCATION . "` ");
     $a_qry = $DB->query("SELECT * FROM `" . TAB_AC_TYPE . "` ");
     if ($b_qry->num_rows > 0) {
-        while($info=$b_qry->fetch_assoc()){
-            $result['brand'][]=$info;
+        while ($info = $b_qry->fetch_assoc()) {
+            $result['brand'][] = $info;
         }
         $result['brand']["empty"] = false;
     } else {
@@ -18,8 +18,8 @@ $app->get("/Manage", function () use ($app) {
     }
 
     if ($t_qry->num_rows > 0) {
-        while($info=$t_qry->fetch_assoc()){
-            $result['tonnage'][]=$info;
+        while ($info = $t_qry->fetch_assoc()) {
+            $result['tonnage'][] = $info;
         }
         $result['tonnage']["empty"] = false;
     } else {
@@ -27,16 +27,16 @@ $app->get("/Manage", function () use ($app) {
     }
 
     if ($l_qry->num_rows > 0) {
-        while($info=$l_qry->fetch_assoc()){
-            $result['location'][]=$info;
+        while ($info = $l_qry->fetch_assoc()) {
+            $result['location'][] = $info;
         }
         $result['location']["empty"] = false;
     } else {
         $result['location']["empty"] = true;
     }
     if ($a_qry->num_rows > 0) {
-        while($info=$a_qry->fetch_assoc()){
-            $result['ac_type'][]=$info;
+        while ($info = $a_qry->fetch_assoc()) {
+            $result['ac_type'][] = $info;
         }
         $result['ac_type']["empty"] = false;
     } else {
@@ -94,18 +94,18 @@ $app->get("/Manage/Complaints/ProblemType", function () use ($app) {
 
     global $DB;
 
-        $qry = $DB->query("SELECT * FROM `" . TAB_PROBLEM_TYPE . "` ");
+    $qry = $DB->query("SELECT * FROM `" . TAB_PROBLEM_TYPE . "` ");
 
-        if ($qry->num_rows > 0) {
-            $result["status"] ="ok";
-            while($info=$qry->fetch_assoc()){
-                $result['data'][]=$info;
-            }
-            $app->response->body(json_encode($result));
-        } else {
-
-ThrowError("No Problem Type Found in Database");
+    if ($qry->num_rows > 0) {
+        $result["status"] = "ok";
+        while ($info = $qry->fetch_assoc()) {
+            $result['data'][] = $info;
         }
+        $app->response->body(json_encode($result));
+    } else {
+
+        ThrowError("No Problem Type Found in Database");
+    }
 
 
 });
@@ -224,8 +224,8 @@ $app->get("/Manage/Customer/Reference", function () use ($app) {
     global $DB;
     $qry = $DB->query("SELECT * FROM `" . TAB_REFERRED_BY . "` ");
     if ($qry->num_rows > 0) {
-        while($info=$qry->fetch_assoc()){
-            $result[]=$info;
+        while ($info = $qry->fetch_assoc()) {
+            $result[] = $info;
         }
         $result["status"] = "ok";
     } else {
@@ -294,8 +294,8 @@ $app->get("/Manage/AC/location", function () use ($app) {
     global $DB;
     $qry = $DB->query("SELECT `tonnage` FROM `" . TAB_AC_TONNAGE . "` ");
     if ($qry->num_rows > 0) {
-        while($info=$qry->fetch_assoc()){
-            $result[]=$info;
+        while ($info = $qry->fetch_assoc()) {
+            $result[] = $info;
         }
         $result["status"] = "ok";
     } else {
@@ -353,8 +353,8 @@ $app->get("/Manage/AC/Tonnage", function () use ($app) {
         $qry = $DB->query("SELECT * FROM `" . TAB_AC_TONNAGE . "` ");
 
         if ($qry->num_rows > 0) {
-            while($info=$qry->fetch_assoc()){
-                $result[]=$info;
+            while ($info = $qry->fetch_assoc()) {
+                $result[] = $info;
             }
             $result["status"] = "ok";
         } else {
@@ -446,8 +446,8 @@ $app->get("/Manage/AC/Make", function () use ($app) {
         $qry = $DB->query("SELECT `make_id`,`make` FROM `" . TAB_AC_MAKE . "` ");
 
         if ($qry->num_rows > 0) {
-            while($info=$qry->fetch_assoc()){
-                $result[]=$info;
+            while ($info = $qry->fetch_assoc()) {
+                $result[] = $info;
             }
             $result["status"] = "ok";
         } else {
@@ -538,8 +538,8 @@ $app->get("/Manage/pincode/", function () use ($app) {
     if ($qry->num_rows > 0) {
 
         $result['status'] = "ok";
-        while($info=$qry->fetch_assoc()){
-            $result['data'][]=$info;
+        while ($info = $qry->fetch_assoc()) {
+            $result['data'][] = $info;
         }
     } else {
         $result['status'] = "no";
@@ -558,8 +558,8 @@ $app->get("/Manage/pin/:pincode", function ($pincode) use ($app) {
     if ($qry->num_rows > 0) {
 
         $result['status'] = "ok";
-        while($info=$qry->fetch_assoc()){
-            $result['data'][]=$info;
+        while ($info = $qry->fetch_assoc()) {
+            $result['data'][] = $info;
         }
     } else {
         $result['status'] = "no";
@@ -569,25 +569,25 @@ $app->get("/Manage/pin/:pincode", function ($pincode) use ($app) {
 
 });
 
-$app->post("/Manage/pin/", function() use ($app){
+$app->post("/Manage/pin/", function () use ($app) {
     global $DB;
-    if(isset($_POST['pincode']) && isset($_POST['landmark'])  && !empty($_POST['pincode'])  && !empty($_POST['pincode'])){  
+    if (isset($_POST['pincode']) && isset($_POST['landmark']) && !empty($_POST['pincode']) && !empty($_POST['pincode'])) {
         $pincode = $_POST['pincode'];
         $landmark = $_POST['landmark'];
-        $qry = $DB->query("SELECT * FROM `".TAB_LOCALITY."` WHERE `pincode`='$pincode' and `locality_name`='$landmark'");
-        if($qry->num_rows > 0){
+        $qry = $DB->query("SELECT * FROM `" . TAB_LOCALITY . "` WHERE `pincode`='$pincode' and `locality_name`='$landmark'");
+        if ($qry->num_rows > 0) {
             $result['status'] = "no";
             $result['result'] = "Landmark already added in masters";
-        }else{
-            $DB->query("INSERT INTO `".TAB_LOCALITY."`(`pincode`,`locality_name`) VALUES('$pincode','$landmark')");
-            if($DB->affected_rows >0){
+        } else {
+            $DB->query("INSERT INTO `" . TAB_LOCALITY . "`(`pincode`,`locality_name`) VALUES('$pincode','$landmark')");
+            if ($DB->affected_rows > 0) {
                 $result['status'] = "ok";
                 $result['result'] = $DB->insert_id;
-            }else{
+            } else {
                 ThrowError("Unable to update into database");
             }
         }
-    }else{
+    } else {
         $result['status'] = "no";
         $result['result'] = "Please provide the required fields";
     }

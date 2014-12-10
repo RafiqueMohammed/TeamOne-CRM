@@ -16,7 +16,7 @@ $cust_id=(isset($_GET['cust_id'])&&!empty($_GET['cust_id']))? $_GET['cust_id']:-
 
         <div class="page-header">
 
-            <h1>New Customer
+            <h1 id="customer_full_name">New Customer
                 <small>Customer Registration Form</small>
             </h1>
         </div>
@@ -100,7 +100,7 @@ $cust_id=(isset($_GET['cust_id'])&&!empty($_GET['cust_id']))? $_GET['cust_id']:-
     <td><span class="input-icon">
 
 <input type="text"  id="registration_mobile1" name="mobile1" maxlength="10"
-       class="form-control req" placeholder="Mobile Number"/><i
+       class="form-control req" placeholder="Mobile Number" onkeypress="return isNumber(event)" /><i
                 class=" clip-mobile "></i></span>
         <span class="error_span"></span>
     </td>
@@ -110,7 +110,7 @@ $cust_id=(isset($_GET['cust_id'])&&!empty($_GET['cust_id']))? $_GET['cust_id']:-
     <td><span class="input-icon">
 
 <input type="text" id="registration_mobile2" class="form-control" maxlength="10"
-       name="mobile2" placeholder="Mobile Number"/><i class=" clip-mobile "></i></span>
+       name="mobile2" placeholder="Mobile Number" onkeypress="return isNumber(event)" /><i class=" clip-mobile "></i></span>
         <span class="error_span"></span>
     </td>
 
@@ -124,7 +124,7 @@ $cust_id=(isset($_GET['cust_id'])&&!empty($_GET['cust_id']))? $_GET['cust_id']:-
 
 <span class="input-icon">
 
-<input type="text" id="registration_email" class="form-control" name="email" placeholder="Email"/><i
+<input type="text" id="registration_email" class="form-control email" name="email" placeholder="Email"/><i
         class="fa fa-envelope-o"></i></span>
         <span class="error_span"></span>
     </td>

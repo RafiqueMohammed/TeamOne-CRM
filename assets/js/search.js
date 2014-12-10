@@ -35,6 +35,7 @@ $(".search-keyword").html("Search for \""+search+"\"");
                            $(".search-result").html(opt);                    
                     }else if(response.status=="no"){
                        opt="<div class='alert alert-danger'>"+response.result+"</div>";
+                        $(".search-result").html(opt); 
                     }
                     unblockThisUI($(".search-classic"));
                 },error:function(response){

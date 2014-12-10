@@ -27,6 +27,8 @@ $(function () {
         $(".main-navigation-menu").find(".active").removeClass("active");
         $(this).addClass("active");
     });
+
+
 });
 
 
@@ -81,7 +83,10 @@ function blockThisUI(element) {
 }
 function LoadPage(name) {
     var main = $("#main-content");
-    if (name.indexOf("?")) {
+    var match=name.indexOf('?');
+    console.log("match "+match);
+    if (match>=0){
+        console.log("I am inside match "+match);
         blockThisUI(main);
         var qry = name.split("?");
         main.find(".container").eq(0).load("view/" + qry[0] + ".php?" + qry[1],function () {
@@ -99,6 +104,33 @@ function LoadPage(name) {
         }).slideDown();
     }
 
+    return false;
+}
+
+function LoadPage(name,class_name) {
+
+    var main = $("#main-content");
+    var match=name.indexOf('?');
+    console.log("match "+match);
+    if (match>=0){
+        console.log("I am inside match "+match);
+        blockThisUI(main);
+        var qry = name.split("?");
+        main.find(".container").eq(0).load("view/" + qry[0] + ".php?" + qry[1],function () {
+            unblockThisUI(main);
+            var stateObj = {"state": "changed"}
+            window.history.pushState(stateObj, name, name);
+        }).slideDown();
+
+    } else {
+        blockThisUI(main);
+        main.find(".container").eq(0).load("view/" + name + ".php",function () {
+            unblockThisUI(main);
+            var stateObj = {"state": "changed"}
+            window.history.pushState(stateObj, name, name);
+        }).slideDown();
+    }
+$('.class_name')
     return false;
 }
 

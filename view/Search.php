@@ -1,6 +1,8 @@
 <?php require_once("common.php");
 if(isset($_GET['keyword'])&&!empty($_GET['keyword'])){
     $keyword=trim($_GET['keyword']);
+
+
     $c=curl_init();
     curl_setopt($c,CURLOPT_URL,$_SERVER['HTTP_HOST'].SUB_FOLDER."api/Search/{$keyword}");
     curl_setopt($c,CURLOPT_RETURNTRANSFER,true);
@@ -8,6 +10,7 @@ if(isset($_GET['keyword'])&&!empty($_GET['keyword'])){
 
     if(curl_getinfo($c,CURLINFO_HTTP_CODE)=="200" && $output!=""){
         $json_content=json_decode($output,true);
+
 
     }else{
 $json_content=array("status"=>"no","result"=>"Cannot fetch data from the API.Try Again..");

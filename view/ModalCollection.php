@@ -30,14 +30,15 @@
                                     <thead>
                                     <tr>
                                         <th  class="center col-md-2">Select AC</th>
-                                        <th  class="center col-md-4"> AC Information</th>
+                                        <th  class="center col-md-3"> AC Information</th>
                                         <th  class="center  col-md-2" >Service Type</th>
                                         <th  class="center  col-md-2" >AMC Starts on</th>
-                                        <th  class="center  col-md-2">No. of Services</th>
+                                        <th  class="center  col-md-1">No. of Services</th>
+                                        <th  class="center  col-md-2">Remarks</th>
                                         <th class="center"><i class="fa fa-wrench"></i> </th>
                                     </tr>
                                     <tr>
-                                                     <td colspan="7" class="center display_output"></td>
+                                                     <td colspan="8" class="center display_output"></td>
                                     </tr>
                                     </thead>
                                     <tbody class="table_body count">
@@ -57,6 +58,7 @@
                                         </select> </td>
                                         <td class="center col-md-1"><input type="number" class="form-control" placeholder="Dry" size="1"> <br>
                                             <input type="number" class="form-control" placeholder="Wet" size="1"></td>
+                                        <td class="center col-md-1"><textarea class="form-control"></textarea></td>
                                         <td class="" style='color: brown'><i onclick='remove_amc_row(1);' class='clip-minus-circle-2'></i></td>
                                     </tr>
                                     </tbody>
@@ -86,18 +88,20 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <tr>
-                                <td colspan="2"><select class="select_ac form-control">
+                                <td colspan="2"><select class="select_uninstalled_ac form-control">
                                         <option value=""> -- Select AC -- </option>
                                     </select>
                                     <br/>
                                     <input type="hidden" class="select_ac_id" value="-1"><div class="display_ac_info">
                                         <table class="table table-bordered">
-                                            <tr><th>Type</th><td class="display_ac_info_type"> --N/A-- </td>
+                                            <tr><th>AC Type</th><td class="display_ac_info_type"> --N/A-- </td>
                                                 <th>Make</th><td class="display_ac_info_make"> --N/A-- </td></tr>
                                             <tr><th>Place</th><td class="display_ac_info_place"> --N/A-- </td>
-                                                <th>Tonnage</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
+                                                <th>Tonnage / HP</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
                                             <tr><th>IDU Serial No.</th><td class="display_ac_info_idu_sr"> --N/A-- </td>
                                                 <th>ODU Serial No.</th><td class="display_ac_info_odu_sr"> --N/A-- </td></tr>
+                                            <tr><th>IDU Model No.</th><td class="display_ac_info_idu_md"> --N/A-- </td>
+                                                <th>ODU Model No.</th><td class="display_ac_info_odu_md"> --N/A-- </td></tr>
                                         </table>
                                     </div></td>
                             </tr>
@@ -116,7 +120,7 @@
                             </tr>
                             <tr>
                                 <th>Preferred date of installation</th>
-                                <td><input data-date-viewmode="years" data-date-format="dd-mm-yyyy" type="text"  class="date-picker form-control installation_date" /></td>
+                                <td><input data-date-viewmode="years" placeholder="dd-mm-yyyy" data-date-format="dd-mm-yyyy" type="text"  class="date-picker form-control installation_date" /></td>
                             </tr>
                             <tr>
                                 <th>Remarks</th>
@@ -130,7 +134,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary create_btn">+ Create</button>
+                <button type="button" onclick="addInstallation()" class="btn btn-primary create_btn">+ Create</button>
             </div>
         </div><!-- /.modal-content -->
 </div>
@@ -152,12 +156,14 @@
                                 <br/>
                             <input type="hidden" class="select_ac_id" value="-1"><div class="display_ac_info">
                                     <table class="table table-bordered">
-                                        <tr><th>Type</th><td class="display_ac_info_type"> --N/A-- </td>
+                                        <tr><th>AC Type</th><td class="display_ac_info_type"> --N/A-- </td>
                                         <th>Make</th><td class="display_ac_info_make"> --N/A-- </td></tr>
                                         <tr><th>Place</th><td class="display_ac_info_place"> --N/A-- </td>
-                                            <th>Tonnage</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
+                                            <th>Tonnage / HP</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
                                         <tr><th>IDU Serial No.</th><td class="display_ac_info_idu_sr"> --N/A-- </td>
                                         <th>ODU Serial No.</th><td class="display_ac_info_odu_sr"> --N/A-- </td></tr>
+                                        <tr><th>IDU Model No.</th><td class="display_ac_info_idu_md"> --N/A-- </td>
+                                        <th>ODU Model No.</th><td class="display_ac_info_odu_md"> --N/A-- </td></tr>
                                     </table>
                                        </div></td>
                         </tr>
@@ -206,12 +212,14 @@
                                 <br/>
                                 <input type="hidden" class="select_ac_id" value="-1"><div class="display_ac_info">
                                     <table class="table table-bordered">
-                                        <tr><th>Type</th><td class="display_ac_info_type"> --N/A-- </td>
+                                        <tr><th>AC Type</th><td class="display_ac_info_type"> --N/A-- </td>
                                             <th>Make</th><td class="display_ac_info_make"> --N/A-- </td></tr>
                                         <tr><th>Place</th><td class="display_ac_info_place"> --N/A-- </td>
-                                            <th>Tonnage</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
+                                            <th>Tonnage / HP</th><td class="display_ac_info_tonnage"> --N/A-- </td></tr>
                                         <tr><th>IDU Serial No.</th><td class="display_ac_info_idu_sr"> --N/A-- </td>
                                             <th>ODU Serial No.</th><td class="display_ac_info_odu_sr"> --N/A-- </td></tr>
+                                        <tr><th>IDU Model No.</th><td class="display_ac_info_idu_md"> --N/A-- </td>
+                                            <th>ODU Model No.</th><td class="display_ac_info_odu_md"> --N/A-- </td></tr>
                                     </table>
                                 </div></td>
                         </tr>
@@ -269,48 +277,47 @@
                 <h4 class="modal-title">Add New AC </h4>
             </div>
             <div class="modal-body"><div id="error"></div>
-                <table class="table table-bordered">
+                <table class="table table-bordered add_ac_table">
                     <thead>
                             <tr>
-                            <th>AC Type</th>
-                            <td class="cust_details_ac_type"></td>
-
-                            <td >IDU serial number</td>
-                                <td > <input type="text" placeholder="IDU serial number" class="form-control add_cust_ac_idu_sr_no" />
-                                </td>
+                                <th>AC Type</th>
+                                <td class="cust_details_ac_type"></td>
                             </tr>
                             <tr>
-                            <th>Make</th>
-                            <td class="cust_details_make"></td>
-
-                            <td > IDU model number</td>
-                            <td ><input type="text" placeholder="IDU model number" class="form-control add_cust_ac_idu_model_no" />
-                            </td>
-
+                                <th>Make</th>
+                                <td class="cust_details_make"></td>
                             </tr>
                             <tr>
-                            <th>Tonnage</th>
-                            <td class="cust_details_tonnage"></td>
+                                <th>Tonnage / HP</th>
+                                <td class="cust_details_tonnage"></td>
+                            </tr>
+                            <tr>
+                                <th>Location</th>
+                                <td class="cust_details_location"></td>
+                            </tr>
+                            <tr>
+                                <td >IDU serial number</td>
+                                <td > <input type="text" placeholder="IDU serial number" class="form-control add_cust_ac_idu_sr_no" /></td>
+                            </tr>
+                            <tr>
+                                <td > IDU model number</td>
+                                <td ><input type="text" placeholder="IDU model number" class="form-control add_cust_ac_idu_model_no" /></td>
+                            </tr>
+                            <tr>
                                 <td >ODU serial number</td>
                                 <td > <input type="text" placeholder="ODU serial number" class="form-control add_cust_ac_odu_sr_no" />
                                 </td>
                             </tr>
                             <tr>
-                                <th>Location</th>
-                                <td class="cust_details_location"></td>
-                                <td>
-                                    ODU model number </td>
-                                <td> <input type="text" placeholder="ODU model number" class="form-control add_cust_ac_odu_model_no" />
-
-                                </td>
+                                <td>ODU model number </td>
+                                <td><input type="text" placeholder="ODU model number" class="form-control add_cust_ac_odu_model_no" />                                </td>
                             </tr>
-
                             <tr>
                             <th>Remarks</th>
-                            <td colspan="3"><textarea class="form-control add_cust_ac_remarks"></textarea></td>
+                                <td colspan="2"><textarea class="form-control add_cust_ac_remarks"></textarea></td>
                             </tr>
                             <tr>
-                            <td colspan="4">
+                            <td colspan="2">
                             <div id="result"></div>
                             <button class="btn btn-primary pull-right" id="face_add_ac">Add</button>
                             </td>
@@ -606,7 +613,9 @@
             <div id="result"></div>
         </div>
         <div class="modal-footer">
-                
+              <div id="assign_tech_table_footer">
+
+              </div>
 		</div>
     </div>
 </div>
@@ -621,21 +630,12 @@
 				<h4 class="modal-title">Service Date</h4>
 		</div>
         <div class="col-md-12" style="background-color: white;"><div id="error"></div>
-            
-                <div class="col-md-6">
-                    <h4>Dry Service</h4>
-                    <table id="assign_tech_table_dry" class="table table-striped table-bordered table-condensed">
+
+                    <table id="service_date_table" class="table table-striped table-bordered table-condensed">
                         
                     </table>              
-                </div>
-                
-                <div class="col-md-6">
-                    <h4>Wet Service</h4>
-                    <table id="assign_tech_table_wet" class="table table-striped table-bordered table-condensed">
-                        
-                    </table>
-                
-                </div>
+
+
   
             <div id="result"></div>
         </div>

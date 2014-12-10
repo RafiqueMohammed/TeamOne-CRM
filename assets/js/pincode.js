@@ -1,7 +1,8 @@
 $(function (){
-    
+ 
+      $("#pincode").select2();
     $("#pincode").on("change", function(){
-        console.log($("#pincode").val());
+        
         var p = $("#pincode").val();
         if(p==""||p=="-1"){
             

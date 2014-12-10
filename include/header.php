@@ -8,7 +8,7 @@
             </button>
             <!-- end: RESPONSIVE MENU TOGGLER -->
             <!-- start: LOGO -->
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!--CLIP<i class="clip-clip"></i>ONE
                 <img src="assets/images/logo.png" style="height: 40px; margin-top: -10px;" />-->
                 TEAM <i class="clip-users-2"></i> ONE
@@ -21,42 +21,12 @@
 
                 <!-- start: USER DROPDOWN -->
                 <li class="dropdown current-user">
-                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true"
-                       href="#">
-                        <img src="assets/images/avatar-1-small.jpg" class="circle-img" alt="">
-                        <span class="username">Rafique Mohammed</span>
-                        <i class="clip-chevron-down"></i>
+                    <a >
+
+                        Welcome, <span class="staff_username text-primary">Administrator!</span>
+
                     </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="pages_user_profile.html">
-                                <i class="clip-user-2"></i>
-                                &nbsp;My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="pages_calendar.html">
-                                <i class="clip-calendar"></i>
-                                &nbsp;My Calendar
-                            </a>
-                        <li>
-                            <a href="pages_messages.html">
-                                <i class="clip-bubble-4"></i>
-                                &nbsp;My Messages (3)
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="utility_lock_screen.html"><i class="clip-locked"></i>
-                                &nbsp;Lock Screen </a>
-                        </li>
-                        <li>
-                            <a href="login_example1.html">
-                                <i class="clip-exit"></i>
-                                &nbsp;Log Out
-                            </a>
-                        </li>
-                    </ul>
+
                 </li>
                 <!-- end: USER DROPDOWN -->
             </ul>

@@ -12,7 +12,7 @@ $(function(){
             });
             $("#all_cust_list tbody").html(cust_list_row);      
         } else if(response.status=="no"){
-            $("#all_cust_list tbody").html("<tr><td class='colspan='7 center'><i class='clip-info'></i> No Customer Added Yet</td></tr>");
+            $("#all_cust_list tbody").html("<tr><td colspan='7' class='center alert alert-info'><i class='clip-info'></i> No Customer Added Yet</td></tr>");
         }
     unblockThisUI($(".container .row").eq(1))
    }); 

@@ -58,10 +58,14 @@
 
 <script src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
+<!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script type="text/javascript" src="assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="assets/plugins/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/plugins/DataTables/media/js/DT_bootstrap.js"></script>
+<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+
 <script>
     jQuery(document).ready(function () {
         Main.init();
-
-
     });
 </script>

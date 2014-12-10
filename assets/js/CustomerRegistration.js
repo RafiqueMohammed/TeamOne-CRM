@@ -13,7 +13,7 @@ $(document).ready(function () {
         var lname = $("input[name=lastname]").val();
         var mobile1 = $("input[name=mobile1]");
         var mobile2 = $("input[name=mobile2]").val();
-        var email = $("input[name=email]").val();
+        var email = $(".email").val();
         var landline = $("input[name=landline]").val();
         var address = $("#registration_address").val();
         var alt_contact = $("textarea[name=alternate_contact]").val();
@@ -349,4 +349,13 @@ function fill_locality(Value) {
 function delete_cust_ac_row(parent) {
     //console.log(parent);
     $(parent).slideUp("slow").remove();
+}
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
 }

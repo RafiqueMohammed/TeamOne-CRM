@@ -1,5 +1,0 @@
-[18-Aug-2014 01:48:50 America/Chicago] PHP Fatal error:  Call to undefined method mysqli_result::fetch_all() in /home/teamone/public_html/crm/api/Manage.php on line 12
-[18-Aug-2014 01:49:24 America/Chicago] PHP Fatal error:  Call to undefined method mysqli_result::fetch_all() in /home/teamone/public_html/crm/api/Manage.php on line 12
-[18-Aug-2014 01:49:45 America/Chicago] PHP Fatal error:  Call to undefined method mysqli_result::fetch_all() in /home/teamone/public_html/crm/api/Manage.php on line 12
-[18-Aug-2014 01:54:03 America/Chicago] PHP Fatal error:  Call to undefined method mysqli_result::fetch_all() in /home/teamone/public_html/crm/api/Manage.php on line 12
-[18-Aug-2014 01:54:09 America/Chicago] PHP Fatal error:  Call to undefined method mysqli_result::fetch_all() in /home/teamone/public_html/crm/api/Manage.php on line 12
