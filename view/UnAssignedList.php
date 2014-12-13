@@ -10,7 +10,7 @@
 
         <div class="page-header">
 
-            <h1>Assign <small>Technicians</small></h1>
+            <h1>Assign Technicians <small>Assign technicians for respective service request</small></h1>
 
         </div>
 

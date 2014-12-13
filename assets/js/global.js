@@ -10,7 +10,8 @@ $(function () {
     $('#QuickSearch').click(function () {
         var str = $("#QuickSearchInput").val();
         if (str.length > 0 && str != "") {
-            LoadPage("Search?keyword=" + str);
+            var link="Search?keyword=" + str;
+            LoadPage(link);
         }
     });
 

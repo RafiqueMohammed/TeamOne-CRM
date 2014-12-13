@@ -1,5 +1,8 @@
 <?php
-require '../common.php';
+session_start();
+ob_start();
+require_once("../include/config.php");
+
 require_once(SLIM_DIR . "Slim.php");
 require_once('cfg/functions.php');
 /**

@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4
+-- version 3.4.11.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 10, 2014 at 07:34 AM
--- Server version: 5.6.12-log
--- PHP Version: 5.4.12
+-- Generation Time: Dec 13, 2014 at 04:31 AM
+-- Server version: 5.5.40
+-- PHP Version: 5.4.23
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,10 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `team_crm`
+-- Database: `teamone_crm`
 --
-CREATE DATABASE IF NOT EXISTS `team_crm` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `team_crm`;
 
 -- --------------------------------------------------------
 
@@ -32,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `ac_location` (
   `ac_location_id` int(11) NOT NULL AUTO_INCREMENT,
   `location` varchar(50) NOT NULL,
   PRIMARY KEY (`ac_location_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
 -- Dumping data for table `ac_location`
@@ -53,7 +51,8 @@ INSERT INTO `ac_location` (`ac_location_id`, `location`) VALUES
 (17, 'Pantry'),
 (18, 'Powder Room'),
 (19, 'Walk in closet area'),
-(21, 'Kitchen');
+(21, 'Kitchen'),
+(22, 'Accounts Department');
 
 -- --------------------------------------------------------
 
@@ -65,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `ac_make` (
   `make_id` int(3) NOT NULL AUTO_INCREMENT,
   `make` varchar(50) NOT NULL,
   PRIMARY KEY (`make_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `ac_make`
@@ -92,7 +91,10 @@ INSERT INTO `ac_make` (`make_id`, `make`) VALUES
 (18, 'IFB'),
 (20, 'Westinghouse'),
 (21, 'National'),
-(23, 'TCL');
+(23, 'TCL'),
+(24, 'Whirlpool'),
+(25, 'Hyundai'),
+(26, 'Vestar');
 
 -- --------------------------------------------------------
 
@@ -104,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `ac_tonnage` (
   `tonnage_id` int(2) NOT NULL AUTO_INCREMENT,
   `tonnage` float NOT NULL,
   PRIMARY KEY (`tonnage_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `ac_tonnage`
@@ -126,7 +128,9 @@ INSERT INTO `ac_tonnage` (`tonnage_id`, `tonnage`) VALUES
 (15, 4),
 (16, 5),
 (17, 7.5),
-(19, 2);
+(19, 2),
+(20, 1.6),
+(21, 2.1);
 
 -- --------------------------------------------------------
 
@@ -148,8 +152,8 @@ INSERT INTO `ac_type` (`ac_type_id`, `ac_type`) VALUES
 (1, 'Split'),
 (2, 'Window'),
 (3, 'Ducted'),
-(4, 'Cassette'),
-(5, 'VRF');
+(4, 'VRF'),
+(5, 'Cassette');
 
 -- --------------------------------------------------------
 
@@ -171,10 +175,9 @@ CREATE TABLE IF NOT EXISTS `amc` (
   `transaction_id` int(11) NOT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`amc_id`),
-  KEY `cust_id` (`cust_id`),
   KEY `transaction_id` (`transaction_id`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -190,9 +193,8 @@ CREATE TABLE IF NOT EXISTS `amc_service_date` (
   `date` date NOT NULL,
   PRIMARY KEY (`amc_service_id`),
   KEY `cust_id` (`cust_id`),
-  KEY `amc_id` (`amc_id`),
-  KEY `amc_id_2` (`amc_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `amc_id` (`amc_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 -- --------------------------------------------------------
 
@@ -213,8 +215,8 @@ CREATE TABLE IF NOT EXISTS `assignment` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`assign_id`),
   UNIQUE KEY `ticket_id` (`ticket_id`),
-  KEY `cust_id` (`cust_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `assign_for` (`assign_for`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
 
 -- --------------------------------------------------------
 
@@ -254,8 +256,7 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en',
   PRIMARY KEY (`com_id`),
-  UNIQUE KEY `ac_id` (`ac_id`),
-  KEY `cust_id` (`cust_id`,`ac_id`)
+  UNIQUE KEY `ac_id` (`ac_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -288,14 +289,217 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL COMMENT '1-en,',
   PRIMARY KEY (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=277 ;
 
 --
 -- Dumping data for table `customer`
 --
 
 INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
-(1, 'r', 'Ronak', 'Rathod', 'ronakrathod@hotmail.com', '123', '', '9920727342', '9833366043', '', '', '1992-11-21', 'B/705-706, KBC, Laxmi Nagar, Behind Everest Gardens', 'Laxmi Nagar', 'Ghatkopar', '400075', 'Mumbai', 'm', '', 'Team one website', '2014-12-10 06:03:09', '1');
+(69, 'r', 'Ronak', 'Rathod', '', '123', '', '9920727342', '', '', '', '1992-11-21', 'Hindu Friends society', 'Hindu Friends Colony Jogeshwari (East)', 'Jogeshwari', '400060', 'Mumbai', 'm', 'Hello', 'Team one website', '2014-09-23 10:38:12', '1'),
+(72, 'r', 'Girish', 'Rahumalani', 'girish.rahumalani@gmail.com', '123', '', '9987588905', '', '', '02225176172', '0000-00-00', '2A-74, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-09-25 18:07:44', '1'),
+(73, 'r', 'Nevidita', 'Gulati', ' ', '123', '', '9930399507', '9867026995', '', 'Maharashtra', '1969-12-31', 'C-1407 Oberoi,splendor, JVLR\n', 'Opp Majas Bus Depot', 'andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 06:45:54', '1'),
+(74, 'c', 'Shasha', 'Jhunjhunwala', 'admin@globecot.co.in ', '123', 'Globe Cotyarn Pvt Ltd', '9820733456', '', '', '', '0000-00-00', '1st floor, bldg no 7, mittal industrial estate.', 'Andheri Kurla Road', 'Marol', '400059', 'Mumbai', 'm', '', '', '2014-11-27 07:51:39', '1'),
+(77, 'r', 'C.G.', 'Paithankar', '', '123', '', '9619675782', '', '', '', '0000-00-00', 'B/502, Rajshri Shah Society,', '90 Feet Road', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 11:10:47', '1'),
+(78, 'r', 'seema', 'khot', '', '123', '', '9833026834', '', '', '', '0000-00-00', '12 /25 sai Apt. Sai Hill', 'Tebhi Pada,Bhandup (W)', 'Bhandup west', '400078', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 12:27:08', '1'),
+(79, 'r', 'Das', 'Udiyar', '', '123', '', '9821178097', '', '', '', '1969-12-31', '13, Sagar Vaibhav, Ashok Nagar\n', 'Near D Mart', 'mulund east', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 12:30:16', '1'),
+(80, 'r', 'Deniz', 'Vaz', '', '123', '', '9819421461', '', '', '02226404365', '1969-12-31', '301,pianade d Engance,29th road\n', 'Linking Road  BANDRA(WEST)', 'Bandra west', '400050', 'Mumbai', 'b', '', 'Team one website', '2014-11-27 12:35:32', '1'),
+(81, 'r', 'B.D.', 'Raul', '', '123', '', '9321638138', '', '', '', '0000-00-00', 'A-303, Palkhi CHS., Next to VPM School\n', 'Mithagar Road ,Mulund(E)', 'mulund east', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 12:38:51', '1'),
+(82, 'r', 'Davindra', 'Joshi', '', '123', '', '8879650470', '', '', '', '0000-00-00', 'Lalit Communication, Sai baba Mandir Road, opp. Jai Shastri Nagar \n', 'Mulund colony', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 12:52:37', '1'),
+(83, 'r', 'Madhu', 'Mansukhani', '', '123', '', '9619238085', '', '', '022-21634754', '0000-00-00', 'A-1/ Amol Soc. Neelam Nagar\n', 'V.B. Phadake Marg', 'mulund east', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 12:55:59', '1'),
+(84, 'r', 'S.', 'Vivek', '', '123', '', '9821197682', '', '', '', '1969-12-31', 'Ectacy, City of Joy\n', 'Jai Shastri Nagar', 'mulund west', '400082', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 13:06:43', '1'),
+(86, 'r', 'Ashok ', 'Shinde', '', '123', '', '8767805614', '', '', '', '0000-00-00', 'D/901 Jalvayu Vihar. Hiranandani\n', 'S M Shetty High School', 'Powai', '400076', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:06:37', '1'),
+(87, 'r', 'Bhushan', 'Gokhale', '', '123', '', '8080929551', '', '', '2225636303', '0000-00-00', 'A-401, Akashdeep Chs.\n', 'Mulund colony', 'mulund east', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:09:56', '1'),
+(88, 'r', 'Chandra Govind', 'Taksali', '', '123', '', '9819696891', '', '', '2225966312', '0000-00-00', '408,Bewitching Apts, Nr. Pimpleshwar Mandir,\n', 'Bhandup (W) , Near Station', 'Bhandup west', '400078', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:13:11', '1'),
+(89, 'r', 'Meghna', 'Manek', '', '123', '', '9821275335', '', '', '', '1969-12-31', 'D-2406, Oberoi Splendor, JVLR\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:17:24', '1'),
+(90, 'r', 'Pooja ', 'Ashley', '', '123', '', '9769621515', '', '', '', '0000-00-00', '2A-151 Kalpataru Aura, LBS Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:20:01', '1'),
+(91, 'r', 'Shailesh ', 'Panchal', '', '123', '', '9320771027', '', '', '', '0000-00-00', 'R3/14, Kalpataru Aura.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:23:04', '1'),
+(92, 'r', 'Sunil', 'Makhijani', '', '123', '', '9272546898', '', '', '', '1969-12-31', '3F/11 Kalptaru Aura,LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:24:55', '1'),
+(93, 'r', 'Ashwin', 'Kothari', '', '123', '', '9930963640', '', '', '', '0000-00-00', '3H /141 Kalptaru Aura LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:29:44', '1'),
+(94, 'c', 'K K ', 'Stock Management', '', '123', 'KK Stock Management', '9820351147', '', '', '022266102850', '1969-12-31', 'Sadhana  Bldg. 3rd Floor, Flat No-35,  "B" Road, \n', 'Opp Sydenham college', 'churchgate', '400020', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:41:20', '1'),
+(95, 'c', 'K. K.', 'Stock Management', '', '123', 'K K Stock Management', '9820351147', '', '', '022266102850', '0000-00-00', '37, potdar Chambers, 2nd Floor,bellard Rd.\n', 'Opp Mumbai Samachar  Press', 'Fort', '400001', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 12:07:36', '1'),
+(96, 'r', 'Ketan ', 'Vyas', '', '123', '', '9821994299', '', '', '', '0000-00-00', 'B-113/2nd floor, Vrindavan Soc.Opp. Pentrol Pump, L.B.S. Rd.\n', 'Near Pipeline', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 12:28:23', '1'),
+(97, 'r', 'Sonal ', 'Gandhi', '', '123', '', '9820143040', '', '', '', '0000-00-00', 'odyses Bldg.1 Orchard Avenue.', 'Hiranandani Garden', 'Powai', '400076', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 12:38:50', '1'),
+(98, 'r', 'Anandita', 'Narag', '', '123', '', '9833129157', '', '', '', '0000-00-00', 'Flat No.196,19th Floor,  "2C" wing, Karmkshetra, \n', 'SHANMUKHANADAN HALL SION', 'Sion East', '400022', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 12:46:29', '1'),
+(99, 'c', 'Vinay', 'Jain', '', '123', 'Natural Gems\n', '9821152934', '', '', '', '1969-12-31', '109/111 Dhanji Street, Zaveri Bazar,\n', 'Abddul Rehman Street', 'Mumbai', '400003', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 13:03:25', '1'),
+(100, 'r', 'Arnab', 'Chakrvarty', '', '123', '', '9820222541', '', '', '', '0000-00-00', 'B-2808,Rustomje Enaza', 'Nr. Inorbit Mall ', 'Malad west', '400064', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 05:48:36', '1'),
+(101, 'r', 'Amit ', 'Naik', '', '123', '', '9619195563', '', '', '', '0000-00-00', '107, Vishranti bldg.\n', 'Senapati Bapat Marg', 'Curry Rd.', '400013', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 05:56:16', '1'),
+(102, 'r', 'Amit ', 'Satra', '', '123', '', '9322697888', '', '', '2225176046', '0000-00-00', '1A-144 kalptaru Aura, LBS.Marg', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 05:59:34', '1'),
+(103, 'r', 'Dilip', 'Dalal', '', '123', '', '9821420552', '9324258860', '', '', '0000-00-00', '3G-33-34, Kalpataru Aura, LBS.Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:03:38', '1'),
+(104, 'r', 'Asit', 'Shah', 'i', '123', '', '9820427639', '', '', '2223442400', '0000-00-00', '1D-24 kalptaru Aura.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:16:33', '1'),
+(105, 'r', 'Ketan ', 'Lodha', '', '123', '', '9220001344', '', '', '', '0000-00-00', ' 11 Tirupati Apts.  Opp Mulund west bus depot\n', 'Devidayal RoadÂ ', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:24:42', '1'),
+(106, 'r', 'Suman ', 'Azad', '', '123', '', '9930983502', '', '', '', '0000-00-00', 'E-1008,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:30:05', '1'),
+(107, 'r', 'Vikrant', 'Gandhi', 'vikrant.gandhi@gmail.com', '123', '', '9821526892', '', '', '', '1969-12-31', '1F/53 Kalpataru Aura, L.B.S. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:32:11', '1'),
+(108, 'r', 'Mitesh', 'Thakkar', '', '123', '', '9821082770', '', '', '', '0000-00-00', 'B/702, Vinayak Ashish,\n', 'Madan MohanÂ Malviya Rd.', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:42:14', '1'),
+(109, 'r', 'Rohit ', 'Garg', 'ro.2014.garg@gmail.com', '123', '', '9833801193', '', '', '', '1969-12-31', '2B-111, kalptaru Aura, L.B.S. Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:45:08', '1'),
+(110, 'r', 'Krishna', 'Kachhela', '', '123', '', '9820002703', '', '', '', '0000-00-00', 'A1-12, kalptaru Aura, LBS. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:47:54', '1'),
+(111, 'r', 'Pradeep', 'Kedia', '', '123', '', '9820056704', '', '', '', '0000-00-00', 'D-1001, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:52:17', '1'),
+(112, 'r', 'Tejas ', 'Shah', '', '123', '', '9892155240', '', '', '2225645839', '0000-00-00', 'D8/601,Munisurat Bldg.\n', 'Sarvodaya Nagar', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:54:55', '1'),
+(113, 'r', 'Vishwas', 'Bhadsavle', '', '123', '', '9820950363', '', '', '2225176213', '0000-00-00', '1B-33, kalptaru Aura, L.B.S. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:57:20', '1'),
+(114, 'r', 'Saifuddin', 'Kapasi', '', '123', '', '9820018172', '9820052786', '', '', '0000-00-00', '3rd Flr. Kapadiya Mansion Line 2142,  Modi Street\n', 'Opp Khaitan Chembers', 'Fort', '400001', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:14:33', '1'),
+(115, 'r', 'Valerian', 'D''suza', '', '123', '', '9619512120', '', '', '', '1969-12-31', 'C-2602,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:27:33', '1'),
+(116, 'r', 'Suresh', 'Agrawal', 'agrawal1104@gmail.com', '123', '', '9702004500', '', '', '', '1969-12-31', 'A-1104, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:29:23', '1'),
+(117, 'c', 'Jaydeep', 'Thakrar', '', '123', 'Thakrar Infotrendz\n', '9869140304', '', '', '25009000', '1969-12-31', '412 Swastik  Disa Cerperal Park, L.B.S Rd.\n', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:37:48', '1'),
+(118, 'r', 'Sonal ', 'Holland', '', '123', '', '9820056530', '', '', '', '0000-00-00', 'G-1806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:39:32', '1'),
+(119, 'r', 'Shivraman', 'Subramaniam', '', '123', '', '9920970270', '', '', '', '0000-00-00', 'C-101, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:41:33', '1'),
+(120, 'c', 'Mitesh', 'Zaveri', '', '123', 'Rever Modular Kitchen\n', '9004235110', '', '', '', '0000-00-00', 'Opp. Samata Nagar Police Station.\n\n', 'Western Express Highway.', 'Kandivali East', '400101', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:03:07', '1'),
+(121, 'r', 'Rahul', 'Gupta', '', '123', '', '9820164952', '', '', '', '0000-00-00', '506,Oystar Hall, Nr. Domniz Pizza\n', 'Juhu Tara Road Juhu', 'juhu', '400049', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:05:24', '1'),
+(122, 'r', 'Prajakta', 'Rane', '', '123', '', '8691902828', '', '', '', '0000-00-00', 'B-505,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:07:34', '1'),
+(123, 'r', 'Nandita', 'Chakravarti', '', '123', '', '9833197843', '', '', '', '0000-00-00', 'G-906,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:09:15', '1'),
+(124, 'r', 'Nandita', 'Chakravarti', '', '123', '', '9833197843', '', '', '', '0000-00-00', 'G-906,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:10:47', '1'),
+(125, 'r', 'Mr.', 'Shreyas', '', '123', '', '9833099663', '', '', '', '0000-00-00', 'E-2102,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:14:02', '1'),
+(126, 'r', 'Naini ', 'Madan', '', '123', '', '9619232690', '', '', '', '1969-12-31', 'C-2706,Oberoi Splendor, JVLR Rd.\n ', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:17:17', '1'),
+(127, 'r', 'Shubhangi', 'Tendulkar', '', '123', '', '9819411505', '', '', '', '0000-00-00', 'G-403,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:23:29', '1'),
+(128, 'r', 'Paramjeet', 'Kaur', '', '123', '', '9820095683', '', '', '', '0000-00-00', '2403,Oberoi Splendor ground, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:31:09', '1'),
+(129, 'r', 'Neha', 'Parwal', '', '123', '', '9769395432', '', '', '', '0000-00-00', 'D-907, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:33:19', '1'),
+(130, 'r', 'Archana', 'Gupta', '', '123', '', '9833970425', '', '', '', '0000-00-00', 'F-1402,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:34:49', '1'),
+(131, 'r', 'Anish ', 'Matapurkar', '', '123', '', '9820368483', '', '', '', '0000-00-00', 'G-1301,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 08:38:05', '1'),
+(132, 'r', 'Mrs.', 'Pawa', '', '123', '', '9324737566', '', '', '', '1969-12-31', 'Bhakti Park , Bolivian Alps B to 103 \n', 'Imax Theater', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 09:40:13', '1'),
+(133, 'r', 'Raj', 'Kalady', '', '123', '', '9920028762', '', '', '', '0000-00-00', '1D/134, kalptaru  Aura,L.B.S. Marg\n', 'Opp R-city Mall', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 09:59:16', '1'),
+(134, 'r', 'Shravan', 'Mehta', '', '123', '', '9920700622', '', '', '', '0000-00-00', 'B-1904, Oberoi Splendor', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:10:16', '1'),
+(135, 'r', 'Mr.', 'Shah', '', '123', '', '9833099663', '', '', '', '0000-00-00', 'E- 2102, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:21:55', '1'),
+(136, 'r', 'Seshadri', 'Vedanarayanan', '', '123', '', '7666666277', '', '', '', '0000-00-00', 'B-1902, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:30:06', '1'),
+(137, 'r', 'Satish', 'Chandra', '', '123', '', '9833546184', '9820322592', '', '', '0000-00-00', '2A/32, Kalpataru Aura, LBS Marg\n', 'Amrut Nagar,Ghatkopar (W)', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:36:19', '1'),
+(138, 'r', 'Sameer ', 'Sablok', '', '123', '', '9619691667', '9820423137', '', '', '1969-12-31', 'B-2001,Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 10:41:18', '1'),
+(139, 'r', 'Rajvi', 'Shah', '', '123', '', '9619583620', '', '', '28764898', '1969-12-31', 'Mandor Classic, Plot no.50, Flat no.203, Rd. No. 4\n', 'Jawahar Nagar', 'Goregaon west', '400062', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:49:54', '1'),
+(140, 'r', 'S.V.', 'Sahani', '', '123', '', '9820414338', '', '', '', '0000-00-00', 'A-2307/08, Oberoi Splendor,JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 10:53:32', '1'),
+(141, 'r', 'Rajesh', 'Krishanamurti', '', '123', '', '9820365436', '', '', '022266712841', '0000-00-00', 'G - 2101, Oberoi Splendor, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:02:20', '1'),
+(142, 'r', 'Rajeev', 'Kheror', '', '123', '', '9920913162', '9920254838', '', '', '0000-00-00', 'L 2 A/704, Bakland Park, Yamuna Nagar', 'Lokhandwala Andheri West', 'Andheri west', '400053', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:13:03', '1'),
+(143, 'r', 'Rahul', 'Mahipal', '', '123', '', '9820119468', '', '', '', '0000-00-00', 'F-1106,Oberoi Splendor, JVLR Rd.\n', 'AGARKAR CHOCK', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:17:42', '1'),
+(144, 'r', 'Prakash', 'Gododia', '', '123', '', '9821046379', '', '', '', '0000-00-00', ' G-2605-06, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:24:29', '1'),
+(145, 'r', 'Nilamba', 'Shyam', '', '123', '', '9820622984', '', '', '', '0000-00-00', '904 Eldeco Residency \n', 'Hill Road BANDRA(WEST)', 'Bandra West', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:32:00', '1'),
+(146, 'r', 'N. S.', 'Verma', '', '123', '', '9820346284', '', '', '', '1969-12-31', '101 B Link Apartments, Hira Nagar\n', 'Near Mulund Goregaon Link Road', 'Mulund West', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:45:23', '1'),
+(147, 'r', 'Devinder singh', 'Morwah', '', '123', '', '9820095683', '9036559853', '', '', '1969-12-31', 'G-2404 Oberoi Splendor, JVLR Rd.', 'Opp', 'Andheri east', '400093', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 11:51:35', '1'),
+(148, 'r', 'Ashish', 'Gupta', '', '123', '', '9833378998', '', '', '', '1969-12-31', 'C-1602 Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 11:53:52', '1'),
+(149, 'r', 'Abhishek', 'jain', '', '123', '', '9833892567', '9870067703', '', '', '1969-12-31', 'G-705 Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 12:01:10', '1'),
+(150, 'r', 'Gopal', 'Menon', '', '123', '', '9820566150', '', '', '', '0000-00-00', 'E- 1606, Oberoi Splendor, JVLR Rd', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 12:29:19', '1'),
+(151, 'r', 'Moushami', 'Karnik', '', '123', '', '9821422465', '', '', '', '1969-12-31', 'A-302, shalaka Soc. S.N. Rd. Behind Punjab Vihar Hotel.\n', 'TELLI GALLI Andheri East', 'Andheri East', '400069', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 12:34:27', '1'),
+(152, 'r', 'Saloni', 'Zaveri', '', '123', '', '9821013138', '2223621101', '', '', '0000-00-00', 'G-1603, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 06:40:54', '1'),
+(153, 'r', 'Luiza', 'Hendrick', '', '123', '', '9821556131', '', '', '02228822136', '1969-12-31', 'Red House, Rathod Village', 'Marve Road Malad (West)', 'Malad West', '400095', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 07:00:49', '1'),
+(154, 'r', 'Lubena', 'Mirza', '', '123', '', '9820110536', '', '', '', '0000-00-00', 'Noor Mahal, Flat No.104,"A" Wing', 'City Hospital (Kurla West)', 'Kurla West', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 07:21:25', '1'),
+(155, 'r', 'Lalit', 'Gunani', '', '123', '', '9867133115', '', '', '', '0000-00-00', '202, Sand Pebbles, perry Cross Road.', 'Near Otters Club, Bandra West', 'Bandra West', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 07:27:09', '1'),
+(156, 'r', 'Kishor ', 'Tanna', '', '123', '', '9833771573', '', '', '2228385675', '0000-00-00', 'G-2605-06, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 07:32:47', '1'),
+(157, 'r', 'Jasmin', 'Bhanushali', '', '123', '', '9967178548', '', '', '', '0000-00-00', '1C-24, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 07:40:29', '1'),
+(158, 'c', 'Jasmin', 'Bhanushali', '', '123', 'OFFICIAL', '9869038884', '9967178548', '', '', '0000-00-00', '605, Swastik Disha Corporate Park.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:11:02', '1'),
+(159, 'r', 'J. K.', 'Gupta', '', '123', '', '9769560607', '', '', '', '0000-00-00', 'B-2402,Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:12:55', '1'),
+(160, 'r', 'Siddharth', 'Singh', '', '123', '', '9594525175', '', '', '', '0000-00-00', 'E-1807,Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:21:33', '1'),
+(161, 'r', 'Kapil', 'Sanghavi', '', '123', '', '9892711444', '9702011444', '', '', '0000-00-00', '2A-71, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:24:14', '1'),
+(162, 'r', 'Miss', 'Varsha', '', '123', '', '9820069715', '', '', '', '0000-00-00', 'B-1806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:28:46', '1'),
+(163, 'r', 'Miss', 'Varsha', '', '123', '', '9820069715', '', '', '', '0000-00-00', 'B-1806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:28:46', '1'),
+(164, 'r', 'Nikhil', 'Banerjee', '', '123', '', '9820409247', '7506053760', '', '', '0000-00-00', 'G-103, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:31:56', '1'),
+(165, 'r', 'Mrs.', 'Pawa', '', '123', '', '9324737566', '', '', '', '0000-00-00', 'Vijay Bldg. Flat No.182, Ground Floor.\n', 'Fine Arts Cultural Centre', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:45:31', '1'),
+(166, 'c', 'D', 'Murali', '', '123', 'Asian Tiger Lines India Pvt. Ltd.', '9321027340', '', '', '022242951415 ', '0000-00-00', '209 Bhaweshwar Arket A wing  2nd Floor ', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 09:02:09', '1'),
+(167, 'r', 'Satish', 'Shenoy', '', '123', '', '9967011825', '9967655673', '', '02225176244', '0000-00-00', '2A-22, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 09:06:47', '1'),
+(168, 'c', 'Mr.', 'Jagdish', '', '123', 'GKN Securities', '9769080034', '', '', '222881700', '1969-12-31', '414, Palm Spring Centre,\n', 'New Link Road Malad (west)', 'Malad west', '400064', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 10:12:31', '1'),
+(169, 'r', 'Mr.', 'Eklahare', '', '123', '', '9820284403', '', '', '', '0000-00-00', 'C-404,\n', 'Palm Beach Road, Sec. No. 3', 'Navi Mumbai', '400614', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 10:27:33', '1'),
+(170, 'r', 'Vinod ', 'Gada', '', '123', '', '9702877777', '/982030203', '', '02225179999', '0000-00-00', '1C-193/194, Kalptaru Aura, LBS Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 10:37:21', '1'),
+(171, 'c', 'Vinod', 'Gada', '', '123', 'Glitorium India Pvt. Ltd.\n', '9702877777', '9820302032', '', '', '1969-12-31', '2nd Floor , Swastik Esplanade, Alpana Society Compound,', 'j.v.', 'Ghatkopar west', '400086', 'Mumbai', 'b', '', 'Team one website', '2014-12-01 10:49:28', '1'),
+(172, 'r', 'C. ', 'Madhupa', '', '123', '', '9769414807', '8554999883', '', '', '0000-00-00', 'F-808,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 10:52:17', '1'),
+(173, 'r', 'Anand', 'Ayer', '', '123', '', '9869406373', '9869424406', '', '', '0000-00-00', '54, 3rd Floor. Juhu Khadi Nivas', 'Gulmohar Road, opp. Axis Bank', 'Vileparle west', '400049', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:22:41', '1'),
+(174, 'c', 'Mayur', 'Mehta', '', '123', 'OFFICIAL', '9870094514', '', '', '2223092150', '0000-00-00', 'Gala No. 27, Deen Bldg. Compound, Opp Pragati Ind. Estate, Delied Rd.\n', 'N.M JOSHI MARG LOWER PAREL', 'Lower parel', '400013', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:26:33', '1'),
+(175, 'r', 'Vikas ', 'Shivaraman', '', '123', '', '9819428266', '', '', '', '0000-00-00', 'G-1204,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:40:41', '1'),
+(176, 'r', 'Cedric', 'Crasto', '', '123', '', '9869489640', '', '', '', '0000-00-00', 'G-1002,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:46:00', '1'),
+(177, 'r', 'Subhash ', 'Jhalla', '', '123', '', '9322223025', '', '', '02225218429', '1969-12-31', '1B-51,52, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:55:57', '1'),
+(178, 'r', 'Mahender', 'Shah', '', '123', '', '9323020528', '2221635640', '', '', '0000-00-00', '11 F 302, Neelam Nagar, Phase II\n', 'Opp. Kirit Somaya', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 12:06:52', '1'),
+(179, 'c', 'Mahindra Holidays 	', '', '', '123', 'OFFICIAL', '9869404977', '', '', '', '0000-00-00', 'Vashi Navi Mumbai\n', 'BSEL Tech Park Navi Mumbai', 'Vashi', '400705', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 12:18:31', '1'),
+(180, 'c', 'M/S', 'Syapse', ' ', '123', 'M/S Syapse Works India Pvt. Ltd.', '9833130851', '', '', '', '0000-00-00', 'A-302, Oxford Chembar, Sakivihar Rd. Tunga Village.', 'Opp sakivihar Telaphone Exchange', 'Andheri East', '400072', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 05:56:43', '1'),
+(181, 'r', 'Ketan', 'Thakkar', '', '123', '', '9223266769', '9930600515', '', '', '0000-00-00', '1F /162,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:06:08', '1'),
+(182, 'r', 'Chandrashekhar', 'Sakpal', 'sakpal@gmail.com', '123', '', '9819092719', '', '', '', '0000-00-00', '1C-172, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghtakopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:18:19', '1'),
+(183, 'c', 'Lalit', 'Gunani', '', '123', 'La- Kaira', '9867133115', '', '', '', '0000-00-00', 'Silver Apt, Ground Floor, Shop No.2, ', 'Picko Road Bandra West', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:28:12', '1'),
+(184, 'r', 'Shikha', 'Gupta', '', '123', '', '9819824299', '', '', '', '0000-00-00', 'A- 1401, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:36:29', '1'),
+(185, 'r', 'Ashok', 'Chhabriya', '', '123', '', '9870033114', '', '', '', '0000-00-00', '1602, polaries, LBS Road.\n', 'Johanson and johanson', 'Mulund West', '400082', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 07:06:05', '1'),
+(186, 'r', 'Mr.', ' Ravikant', '', '123', '', '9167059418', '', '', '02228632727', '0000-00-00', 'Hydrabad Estate, Flat No.A/2, Napansi Road, Nest to SRP Camp.', 'Mahananda Dairy Goregaon East', 'Goregaon east', '400065', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 08:15:20', '1'),
+(187, 'c', 'Shvetal', 'Desai', 'shvetal@nividous.com', '123', 'Nividous Software Solutions Pvt Ltd', '9322251928', '', '', '', '1969-12-31', '201, Embassy Chambers, 3rd Road', 'Near Khar West Railway Station', 'Khar West', '400052', 'Mumbai', 'b', '', 'Pallavi gaggar', '2014-12-05 06:33:50', '1'),
+(188, 'r', 'Mr.', 'Chandu', '', '123', '', '8879207050', '', '', '', '0000-00-00', 'Bldg 03/7  2nd floo, Dhanji Estate, Zaveri Bazar\n', 'Abddul Rehman Street', 'Mumbai', '400003', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 08:55:05', '1'),
+(189, 'r', 'Sandeep', 'Dhariya', '', '123', '', '9819966649', '', '', '', '0000-00-00', 'A 5,Ground floor oberoy Block Bhardawadi. Nr. Navrang Theatre.', 'J P Road Andheri West', 'Andheri west', '400058', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:07:17', '1'),
+(190, 'r', 'Nagma', 'Morarji', '', '123', '', '9820010551', '', '', '', '0000-00-00', 'Plot No.401, Arjuna tower.\n', 'Mount Mary Road BANDRA(WEST)', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:18:06', '1'),
+(191, 'r', 'Nagma', 'Morarji', '', '123', '', '9820010551', '', '', '', '0000-00-00', 'Plot No.401, Arjuna tower.\n', 'Mount Mary Road BANDRA(WEST)', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:18:06', '1'),
+(192, 'c', 'Pradeep Kumar Singh', 'Associates', '', '123', 'OFFICIAL', '9594646696', '', '', '', '0000-00-00', '315, Kala Bhavan.', 'Mathew Rd, Opera House, Girgaon.', 'Girgaon', '400004', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:29:48', '1'),
+(193, 'r', 'Jaswant', 'Sanghani', '', '123', '', '9967232733', '8652358419', '', '', '0000-00-00', '15 Kothari Estate.Gulshan Galli.', 'M. G. Road Mulund West', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:39:36', '1'),
+(194, 'r', 'Paresh', 'Giridhar', '', '123', '', '9987068773', '9892169756', '', '', '0000-00-00', 'A-1 Sunil Tulsirm Society\n', 'Mulund  Colony, Opp. Chheda Petrol Pump, LBS Marg', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:55:23', '1'),
+(195, 'r', 'Pioneer', 'Pharma', '', '123', 'OFFICIAL', '9867380503', '', '', '', '0000-00-00', '80 New Unique industrial Estate, LBS Marg.\n', 'Dr. R. P. Road, Mulund west', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:03:12', '1'),
+(196, 'c', 'Chandrakant ', 'Kapadia', '', '123', 'OFFICIAL', '9892530980', '2225694766', '', '', '0000-00-00', '301, Bhilleshwer Tower.\n', 'Panch Rasta Mulund (w)', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:20:19', '1'),
+(197, 'r', 'Ravi ', 'Kukreja', '', '123', '', '9821031168', '', '', '222839339', '0000-00-00', 'E-2502, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:24:57', '1'),
+(198, 'r', 'Mitesh ', 'Zaveri', '', '123', '', '9004235110', '', '', '', '0000-00-00', '502,Shantaram Bldg. ', 'Tiny Tots School, Bhai Thakkar Rd.', 'Vileparle East', '400057', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:39:57', '1'),
+(199, 'r', 'Ravi', 'Kukreja', '', '123', 'OFFICIAL', '9821031163', '', '', '0226850910', '0000-00-00', 'Studio 150, New Satguru Nanak Ind. Estate. Plot  No.498', 'Standard Chartered Towers,Western Express Highway.', 'Goregaon East', '400063', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 11:28:34', '1'),
+(200, 'c', 'Dr.', 'Patil', '', '123', 'Ashwini Homeopathic Clinic.', '9820571571', '', '', '', '1969-12-31', 'Ashwini Homeopathic Clinic, B/29/03', 'Sector 15, Opp. Vijaya bank', 'Vashi', '400703', 'Navi Mumabai', 'm', '', 'Team one website', '2014-12-05 11:38:01', '1'),
+(201, 'r', 'Imtiyaz', 'Roshan', '', '123', '', '9820020686', '', '', '', '0000-00-00', 'Bostan Apt.2/A, 3rd Floor, Flat No. 33\n', ' Bellasis road, Opp. Bus Depot,Mumbai central', 'Mumbai Central', '400008', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 12:45:32', '1'),
+(202, 'r', 'Guruvinder', 'Kaur', '', '123', '', '9920925108', '', '', '', '0000-00-00', 'Hno- 3 Gururnanak Nagar,\n', 'Opp. Gurudwara, Gurunanak Nagar.', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 12:59:16', '1'),
+(203, 'r', 'Nimish', 'Ashar', '', '123', '', '9819446853', '', '', '', '0000-00-00', '1D-182,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 13:00:28', '1'),
+(204, 'r', 'Gaurav', 'Madan', '', '123', '', '9819730403', '', '', '', '0000-00-00', 'C -14, 3rd floor, Shivkrishnadham Chs. LBS Road.\n', 'Shloka Restaurants, Veena Nagar', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 05:42:08', '1'),
+(205, 'r', 'Nimesh', 'Shah', '', '123', '', '9820271217', '', '', '', '0000-00-00', '3E-131,Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 05:46:54', '1'),
+(206, 'r', 'Mr.', 'Gandhi', '', '123', 'Official', '9820033950', '9321017766', '', '02225019000', '0000-00-00', '101 B Kailash Plaza, above ICICI Bank.\n', 'Nr.Odeon Theater, V.B. Lane.', 'Ghatkopar East', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:00:12', '1'),
+(207, 'r', 'Mr.', 'Gandhi', '', '123', '', '9820033950', '9321017766', '', '02225019000', '1969-12-31', '101 B Kailash Plaza, above ICICI Bank.\n', 'Odean Cinema Hall.', 'Ghatkopar East', '400077', 'Mumbai', 'b', '', 'Team one website', '2014-12-06 06:00:12', '1'),
+(208, 'c', 'Mr.', 'Gandhi', '', '123', '(Gandhi ', '9820033950', '932107766', '', '', '0000-00-00', '201, Shantinath Tower.\n', 'Sudha Park Ghatkopar (E)', 'Ghatkopar East', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:17:02', '1'),
+(209, 'r', 'Damodar', 'Sahu', '', '123', '', '7303102337', '9324053334', '', '', '0000-00-00', '1A-171 ,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:23:02', '1'),
+(210, 'r', 'Santosh', 'Jha', '', '123', '', '9820029746', '', '', '', '0000-00-00', '3-C / 43, Kalpataru Aura, LBS Marg\n', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:26:09', '1'),
+(211, 'r', 'Meghna ', 'Kishor', '', '123', '', '9930612234', '', '', '', '0000-00-00', 'C- 1301, Ashoka Tower.\n', 'Opp. Bharatmata Cinema Hall.', 'Parel East', '400012', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:33:38', '1'),
+(212, 'r', 'Hamidulla', 'Khan', '', '123', '', '9892754865', '', '', '', '0000-00-00', 'Noor Manjil. B-22, 2nd Floor, Nr. Skyway Hotel.\n', 'Next to Sheetal Cinema', 'Kurla West', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:40:53', '1'),
+(213, 'r', 'Manpreet singh', 'Duggal', 'msduggal01@gmail.com', '123', '', '9004927970', '', '', '2225176970', '0000-00-00', '3B-184,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:45:47', '1'),
+(214, 'r', 'Vijayshree', 'BalasubramaniamÂ ', '', '123', '', '9820291502', '', '', '', '0000-00-00', 'A - 303, Savitri Apts, Plot No.105B,', 'Nerul', 'Nerul', '400706', 'Navi Mumbai', 'm', '', 'Team one website', '2014-12-06 06:59:33', '1'),
+(215, 'r', 'Ravi', 'Vishwakarma', '', '123', '', '9820178977', '', '', '', '0000-00-00', 'Vishwakarma Compound, S.N.Dubey Rd.', 'Rawalpada', 'Dahisar East', '400068', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:07:45', '1'),
+(216, 'r', 'Vinod', 'Luthria', '', '123', '', '9987035275', '', '', '', '0000-00-00', 'Flat No. 1o4, Namshivay Bldg.\n', 'Above Trupati Farsan Chembur', 'Chembur East', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:17:37', '1'),
+(217, 'r', 'Techno', 'Export', '', '123', '', '9820271217', '', '', '', '0000-00-00', '11-B, 2nd, Ghanshyam Industrial Estate\n', 'ANDHERI WEST', 'Andheri west', '400053', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:32:41', '1'),
+(218, 'c', 'M/S', 'DJF', '', '123', 'Official', '9820271217', '', '', '', '0000-00-00', '14 Samrat Mill Compound.', 'Godrej Petrol Pump', 'Vikhroli west', '400079', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:45:03', '1'),
+(219, 'r', 'Glen ', 'Sequeira', '', '123', '', '9920522658', '', '', '2228340965', '0000-00-00', 'B-806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:57:22', '1'),
+(220, 'r', 'Shankar', 'Amberkar', '', '123', '', '9819585941', '', '', '', '0000-00-00', 'Muktal Bldg. 102/1st floor, Bavala Compound. Dr. Dattaram Lad Marg.', 'Behind Ganesh Talkies', 'Chinchpokli East', '400012', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 08:09:08', '1'),
+(221, 'r', 'Mr.', 'Vinay', '', '123', '', '9769990510', '', '', '', '0000-00-00', 'Orchard Residency, Flat  No.1102, Tower No.10\n', 'Behind R- CITY Mall.', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 08:17:21', '1'),
+(222, 'r', 'Rahul', 'Banka', '', '123', '', '9867022600', '9619203560', '', '', '0000-00-00', 'Flat No. 407, ''B'' wing Panchsheela-3\n', 'Raheja Township, Off.Western Express Highway', 'Malad East', '400097', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 08:41:41', '1'),
+(223, 'r', 'Naini ', 'Madaan', '', '123', '', '9820271217', '', '', '', '0000-00-00', 'Flat No. 163, Juhu Natraj Bldg, Gulmohar cross cut Rd.\n', 'Nr. Ecloe Mondiale School, JVPD Scheme juhu', 'Juhu', '400049', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 09:11:25', '1'),
+(224, 'r', 'Sanjay ', 'Mehta', 'mehta@imprezzive.com', '123', '', '9930901350', '', '', '', '0000-00-00', 'D- 1603, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 09:25:12', '1'),
+(225, 'c', 'Nikshit', 'Gada', '', '123', 'Glitorium Plus.\n', '9769777700', '123456789', '', '', '1969-12-31', 'Opp.Vikhroli Fire Station, LBS Road.\n ', 'Opp. Vikhroli Fire Station.', 'Ghatkopar west', '400079', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 09:51:40', '1'),
+(226, 'r', 'Hari', 'Surya', '', '123', '', '9833932080', '', '', '', '0000-00-00', 'Flat No. 105, ''A'' Wing, Akruti Apt.\n', 'Sec-14, Palm Beach Road.', 'Sanpada', '400705', 'Navi Mumbai', 'm', '', 'Team one website', '2014-12-06 10:14:59', '1'),
+(227, 'r', 'Miss', 'Nisha', '', '123', '', '9820748952', '', '', '', '0000-00-00', 'A/3, Krishna Kunj. V.B.Lane.', 'Opp. Parasdham Temple.', 'Ghatkopar East', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 10:28:47', '1'),
+(228, 'r', 'Jagdish', 'Thakkar', '', '123', '', '9820144090', '', '', '', '0000-00-00', 'Vikas Paradise,Tower No- 3, ''B'' Wing, Flat No. 1002, 10th Floor.\n', 'Opp. Balrajeshwar Temple.', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 10:39:01', '1'),
+(229, 'r', 'Mahesh ', 'Utge', 'mahesh.utge@gmail.com', '123', '', '9819793796', '9223127981', '', '', '0000-00-00', 'Flat No.11, Paramhans Soc. Postal Colony Rd.', 'Sion trombay Road', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 10:51:08', '1'),
+(230, 'c', 'Mahesh ', 'Utge', '', '123', 'Vividha Boutique\n', '9819810819', '', '', '', '0000-00-00', 'Vividha Boutique, Murga Galli, Tagore Nagar\n', 'Opp. Visava wine Mart ', 'Vikhroli East', '400083', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 11:19:11', '1'),
+(231, 'r', 'Abdul', 'Rehman', '', '123', '', '9821780635', '', '', '', '0000-00-00', 'Flat No. 14, Ground Floor,Rassiwala Compound, Pipe Road\n', 'Opp. Akash Dairy', 'Kurla West', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 11:36:10', '1'),
+(232, 'r', 'Jatin', 'Mehta', '', '123', '', '9820100672', '', '', '', '0000-00-00', '207/5630, Aita Kutir, 3rd Floor, R. N. Narkar Marg\n', 'Odean Cinema Hall.', 'Ghatkopar East.', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 11:50:36', '1'),
+(233, 'r', 'M/S', 'S.R.Electricals', '', '123', 'Official', '9820027127', '', '', '', '0000-00-00', '215, 2nd Floor, Jhalwar Bldg. Patnwala Compound,\nLBS. Marg.', 'OPP. Shreyas Cinema', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 11:59:23', '1'),
+(234, 'r', 'Yogesh', 'Nanda', '', '123', '', '9594075563', '', '', '', '0000-00-00', 'D-301, Kailash Esplande,', 'Amrut Nagar,Ghatkopar (W)', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:06:17', '1'),
+(235, 'c', 'M/S', 'Brahmencha Associate', '', '123', 'Official', '9821173292', '', '', '', '0000-00-00', '535,Avior\n', 'Nirmallifestyle Mall', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:18:45', '1'),
+(236, 'c', 'M/S', 'Oriental Jewellery Manufacturing Pvt. Ltd.', '', '123', 'Official', '9820271217', '', '', '', '0000-00-00', '114, 3rd Bhoiwada, Bhuleshwar, Nr. Phool Galli\n', 'Nr.Mumbadevi Temple', 'Mumbai', '400002', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:32:14', '1'),
+(237, 'r', 'K.B.', 'Mehta', '', '123', '', '9821907570', '', '', '', '0000-00-00', 'Bldg.No. 45, Room No.1345, Pantnagar', 'Near Post Office Ghatkopar (E)', 'Ghatkopar East', '400075', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:42:08', '1'),
+(238, 'r', 'Shirish', 'Pulaskar', '', '123', '', '9867604464', '', '', '', '0000-00-00', 'A/11, Devikrupa, Behind Chandrganga Hospital, v.b.phadke Road.', 'Neelam Nagar,Mulund(E)', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:55:34', '1'),
+(239, 'r', 'S.L.', 'Mondkar', '', '123', '', '9821110191', '', '', '', '0000-00-00', 'Willow Tower, Swapna Nagari', 'Veena Nagar', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 13:06:44', '1'),
+(240, 'c', 'My ', 'Task', 'sohil.viradhia@tratagroup.com', '123', 'Trata E System', '9820676996', '', '', '', '0000-00-00', '309-317, Jhalawar, Patnwala Compound,LBS Marg.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 06:46:16', '1'),
+(241, 'r', 'Prachi', 'Gaggar', '', '123', '', '9820777092', '', '', '26046054', '0000-00-00', '51, Premal Building, 14 Sarojini Naidu Road,', 'Behind Arya Samaj Mandir', 'Santacruz West', '400054', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 06:59:37', '1'),
+(242, 'r', 'Mr.', 'Milind', '', '123', '', '9920203284', '', '', '', '1969-12-31', '110 Muncipal Trenatment, 8/6 B.G. Mahajani Road', 'Near Fatima Church', 'Sewree', '400015', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 07:11:11', '1'),
+(243, 'r', 'M/S', 'Pharma Agency', 'ppc-vora22@yahoo.co.in', '123', 'Official', '9820058041', '', '', '25006446', '1969-12-31', 'D- 402, Kailash Esplands, LBS Road,', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 07:18:32', '1'),
+(244, 'r', 'Nanda ', 'Naik', '', '123', '', '9869489753', '', '', '', '0000-00-00', 'A- 101, Preetam Park, Thakur Complex.', 'Opp. Cambridge International School', 'Kandivali East', '400067', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 08:11:17', '1'),
+(245, 'r', 'A.C.', 'Soni', '', '123', '', '9867674624', '', '', '', '0000-00-00', 'Sabri Shikhar Room No. 602, 4/34, R.C. Marg.', 'Opp.Swami Vivekanand school Sindhi Society', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 08:23:02', '1'),
+(246, 'r', 'Hanuman', 'Gupta', '', '123', '', '9619609097', '', '', '', '0000-00-00', 'Thakur Raghudas Chawll No.11, Room No.7.', 'Patelwadi pipe line ', 'Kurla west', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 11:50:02', '1'),
+(247, 'c', 'B.D.', 'Transport', '', '123', 'Official', '9920092900', '', '', '', '0000-00-00', '2A-181/182, 18th Floor, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 11:53:21', '1'),
+(248, 'c', 'Matrix Distributer', 'Pvt. Ltd.', '', '123', 'Official', '8108500055', '', '', '', '0000-00-00', '16,Anand Estate, 189-A, Sane Guruji Marg,', 'Opp. Arthur Road jail', 'Chinchpokali ', '400011', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:01:03', '1'),
+(249, 'r', 'Sagar', 'Palnitkar', '', '123', '', '9967325000', '9892155001', '', '', '0000-00-00', '18, Giriraj Bldg. Sant Namdev Path. Gokhale Road.', 'Nr. Bhagwati High school Thane', 'Thane west', '400602', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:07:43', '1'),
+(250, 'r', 'Sagar', 'Palnitkar', '', '123', '', '9967325000', '9892155001', '', '', '0000-00-00', '18, Giriraj Bldg. Sant Namdev Path. Gokhale Road.', 'Nr. Bhagwati High school Thane', 'Thane west', '400602', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:07:43', '1'),
+(251, 'r', 'Dipesh', 'Kothari', '', '123', '', '9820836360', '', '', '', '0000-00-00', '  Flat No.1601, 16th Floor, ''A''  Wing,Gundecha Garden,\n', 'Near Gas Compound', 'Lalbaug', '400012', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:13:14', '1'),
+(252, 'c', 'Access Life Assistance', 'Foundation', '', '123', 'Official', '9821806685', '', '', '', '0000-00-00', 'Jally Land Co- Op. Soc. Bunglow No. 6, Ghantale village Rd.\n', 'Nr. Maitri Park', 'Chembur East', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:21:36', '1'),
+(253, 'r', 'Rajendra ', 'Kadam', '', '123', '', '9819556125', '', '', '', '0000-00-00', '1/17, Pancharati Chs, Kajupada.Bhatwadi', 'Near Shivsena Office ', 'Ghatkopar West', '400084', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:29:24', '1'),
+(254, 'r', 'Sushma', 'Shyamkul', '', '123', '', '9820484837', '', '', '', '0000-00-00', 'B/ 703 Oasis Bldg. LBS Road,', 'Nr.Vasant Oscar Complex ', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:35:22', '1'),
+(255, 'r', 'Mayuresh', 'Tendulkar', '', '123', '', '9820254362', '8378996562', '', '2228749200', '0000-00-00', '7 Madhumilan, Maratha Vaibhav Co-Op. Soc.\nPandurangwadi', 'Road No.-6, Nr. Masurashram ', 'Goregaon East', '400063', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 12:46:24', '1'),
+(256, 'r', 'C.V.', 'Eshwaran', '', '123', '', '9820293465', '', '', '', '0000-00-00', '401, Abhilash Annex, 10th Road, 10th road', 'Sion trombay Road', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 13:19:42', '1'),
+(257, 'r', 'Vishal', 'Construction', '', '123', 'Official', '9869202272', '', '', '', '0000-00-00', '3 Ghantale Sai Prasad Chs.', 'Sahyog Mandir path Ghantali Colony', 'Thane West', '400602', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 13:24:17', '1'),
+(258, 'r', 'Mr.', 'Veerbhau', '', '123', '', '9022767617', '', '', '', '0000-00-00', 'G4/402, Moraj Residency, Sector 16', 'Palm Beach Road', 'Sanpada', '400705', 'Navi Mumbai', 'm', '', 'Team one website', '2014-12-09 06:05:51', '1'),
+(259, 'r', 'Ashok', 'Jain', '', '123', '', '9821078536', '', '', '', '0000-00-00', '903, Oberoi Splendor, JVLR Rd.', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 06:14:19', '1'),
+(260, 'r', 'Tushar', 'Aggrawal', 'aggarwal.tushar@gmail.com', '123', '', '9869865333', '', '', '', '1969-12-31', '235, Vijay Bhavan, 10th Road,', 'Near Joy Hospital', 'Chembur East', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 06:59:19', '1'),
+(261, 'c', 'Dilip ', 'Dalal', '', '123', 'Official', '9323475002', '', '', '', '0000-00-00', ' E-5, Kailash Esplane Bldg, LBS. Marg', 'Amrut Nagar,Ghatkopar (W)', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 08:56:20', '1'),
+(262, 'r', 'Girish', 'Nair', '', '123', '', '9820215154', '', '', '', '0000-00-00', 'C-1504, Palm Beach Road, Sector-3', 'Palm Beach Road', 'Nerul', '400705', 'Navi Mumbai', 'm', '', 'Team one website', '2014-12-09 11:09:44', '1'),
+(263, 'r', 'Dolphy', 'D''suza', '', '123', '', '9820048807', '8080068111', '', '', '0000-00-00', 'G-1606, Oberoi,splendor.JVLR Road\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 11:45:02', '1'),
+(264, 'r', 'Vinod ', 'Gada', '', '123', '', '9820271217', '', '', '', '0000-00-00', '1C-193-194, kalptaru Aura, ', 'Amrut Nagar,Ghatkopar (W)', 'Ghatkopar', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 12:38:45', '1'),
+(265, 'r', 'Krishna', 'Tiwari', '', '123', '', '9820222652', '', '', '', '0000-00-00', 'A-202, Sector-3,', 'Palm Beach Road', 'Nerul', '400705', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 12:51:19', '1'),
+(266, 'r', 'Diraj', 'Gada', '', '123', '', '9820271217', '', '', '', '0000-00-00', '1C-181-182, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 12:59:26', '1'),
+(267, 'r', 'Growthwell', 'Consultancy', '', '123', '', '9820271217', '', '', '', '0000-00-00', 'B-705/ 706, Kanara Business, Centre\n', 'Ghatkopar Bus Depot', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 13:06:22', '1'),
+(268, 'r', 'Parag', 'Joshi', '', '123', '', '9820365246', '', '', '', '0000-00-00', 'A- 205,Malikarjun kandarpada, New link Rd, Opp.\nMacdonald.', 'Next Building of Natural Ice Cream.', 'Dahisar West', '400068', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 09:40:44', '1'),
+(269, 'c', 'Shwet Ratan', 'Impex', '', '123', 'Official', '9820271217', '', '', '02223447121', '0000-00-00', '39, Shyam Seth Street, 2nd Floor,', 'Zaveri Bazar', 'Mumbai', '400002', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 09:47:25', '1'),
+(270, 'r', 'Karansingh', 'Sodi', 'karan.sodi@gmail.com', '123', '', '8879656605', '', '', '022265600232', '1969-12-31', 'Aster Apartment, ''C'' Wing. Flat No.912, Antop hill Durgah.', 'DOSTI ACRESS WADALA', 'Wadala East', '400037', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:12:28', '1');
+INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
+(271, 'r', 'Tanuja', 'Gupta', '', '123', '', '9820271217', '', '', '', '0000-00-00', 'F/ 1602, Oberoi Splendor, JVLR Rd', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:24:17', '1'),
+(272, 'r', 'Nikshit', 'Morakhiya', '', '123', '', '9930242537', '', '', '', '0000-00-00', '2nd Floor, 26/28, Tejniketan Bldg.', 'Babulnath shiv Mandir', 'Girgaon', '400007', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:36:03', '1'),
+(273, 'r', 'Tarun', 'Ghosh', '', '123', '', '9322604216', '9892134418', '', '', '0000-00-00', '602, Zenith Apartments.', 'P.K. Road.', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:50:00', '1'),
+(274, 'r', 'Satish', 'Nair', 'psatishnair@yahoo.com', '123', '', '9819669566', '', '', '02221636051', '0000-00-00', '402, Horizon Pearloop, Vijaya Bank,', 'Ganesh Gawade Cross Road', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:11:02', '1'),
+(275, 'c', 'Vipul', 'Mehta', '', '123', 'Centre of Recognition ', '9920403535', '', '', '', '0000-00-00', '203, jhalawar Building, Patanwala Compound.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:45:30', '1'),
+(276, 'r', 'Ashish', 'Bhansali', 'nabarts74@gmail.com', '123', '', '9930098847', '', '', '', '0000-00-00', 'C-204, Shreeji Heights, Plot No.1A, B.C.', 'Sector No- 46A, Palm Beach Road', 'Seawood', '400706', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:58:01', '1');
 
 -- --------------------------------------------------------
 
@@ -317,14 +521,27 @@ CREATE TABLE IF NOT EXISTS `customer_ac_details` (
   `remarks` varchar(200) NOT NULL,
   PRIMARY KEY (`ac_id`),
   KEY `cust_id` (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
 
 --
 -- Dumping data for table `customer_ac_details`
 --
 
 INSERT INTO `customer_ac_details` (`ac_id`, `cust_id`, `make`, `ac_type`, `capacity`, `odu_model_no`, `odu_serial_no`, `idu_model_no`, `idu_serial_no`, `ac_location`, `remarks`) VALUES
-(1, 1, 1, '1', '5', 'qwe', '321', 'asd', '645', 4, '');
+(98, 72, 5, '1', '2', 'RTE35MV16', 'E002447', 'FTE35MV16', 'E002456', 7, ''),
+(100, 73, 5, '1', '3', '', '', '', '', 10, ''),
+(101, 73, 5, '1', '2', '', '', '', '', 7, ''),
+(102, 73, 5, '1', '2', '', '', '', '', 8, ''),
+(103, 73, 5, '1', '2', '', '', '', '', 9, ''),
+(104, 74, 9, '2', '3', '', '', '', '', 4, ''),
+(108, 187, 5, '1', '2', 'RC35PRV16', '0024016', 'FTC35PRV16', '00194559', 16, 'Installation done by Ajay'),
+(109, 187, 5, '1', '2', 'RC35PRV16', '0024012', 'FTC35PRV16', '0019458', 6, 'Installation done by Ajay'),
+(110, 187, 5, '1', '2', 'RC35PRV16', '002407', 'FTC35PRV16', '00194111', 4, 'Installation has been done by Ajay'),
+(111, 187, 5, '1', '2', 'RC35PRV16', '00239355', 'FTC35PRV16', '0019847', 17, 'Installation has been done by Ajay'),
+(112, 187, 5, '1', '2', 'RC35PRV16', '0024010', 'FTC35PRV16', '0094425', 15, 'Installation has been done.'),
+(113, 187, 5, '1', '3', '0017342', 'RF50PRV16', '0017236', 'FTF50PRV16', 14, 'Installation has been done by Ajay'),
+(114, 187, 5, '1', '3', 'RF50PRV16', '0017352', 'FTF50PRV16', '0017241', 11, 'Installation has been done by Ajay'),
+(115, 260, 5, '1', '3', '', '', '', '', 7, '');
 
 -- --------------------------------------------------------
 
@@ -361,39 +578,8 @@ CREATE TABLE IF NOT EXISTS `install_service_date` (
   `remarks` text NOT NULL,
   `date` date NOT NULL,
   PRIMARY KEY (`install_service_id`),
-  KEY `cust_id` (`cust_id`),
   KEY `install_id` (`install_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
-
---
--- Dumping data for table `install_service_date`
---
-
-INSERT INTO `install_service_date` (`install_service_id`, `type`, `cust_id`, `install_id`, `remarks`, `date`) VALUES
-(1, 'ins_service', 1, 1, '1st service', '2014-10-17'),
-(2, 'ins_service', 1, 1, '2nd service', '2014-12-31'),
-(3, 'ins_service', 1, 2, '', '2014-12-30'),
-(4, 'ins_service', 1, 2, '', '2015-03-31'),
-(5, 'ins_service', 1, 2, '', '2015-06-30'),
-(6, 'ins_service', 1, 2, '', '2015-09-29'),
-(7, 'installation', 1, 3, '', '2014-09-29'),
-(8, 'ins_service', 1, 3, '', '2014-10-19'),
-(9, 'ins_service', 1, 3, '', '2015-05-31'),
-(10, 'ins_service', 1, 3, '', '2015-09-30'),
-(11, 'installation', 2, 4, '', '2014-11-29'),
-(12, 'ins_service', 2, 4, '', '2015-05-31'),
-(13, 'ins_service', 2, 4, '', '2015-11-30'),
-(14, 'installation', 2, 5, '', '2014-12-10'),
-(15, 'ins_service', 2, 5, '', '2015-06-11'),
-(16, 'ins_service', 2, 5, '', '2015-12-11'),
-(17, 'installation', 3, 6, '', '2014-11-19'),
-(18, 'ins_service', 3, 6, '', '2015-03-21'),
-(19, 'ins_service', 3, 6, '', '2015-07-21'),
-(20, 'ins_service', 3, 6, '', '2015-11-20'),
-(21, 'installation', 3, 7, '', '1970-01-01'),
-(22, 'ins_service', 3, 7, '', '2014-05-03'),
-(23, 'ins_service', 3, 7, '', '2014-09-02'),
-(24, 'ins_service', 3, 7, '', '2014-01-02');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -407,7 +593,7 @@ CREATE TABLE IF NOT EXISTS `locality` (
   `pincode` varchar(15) NOT NULL,
   `city` varchar(50) NOT NULL DEFAULT 'Mumbai',
   PRIMARY KEY (`locality_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1417 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1506 ;
 
 --
 -- Dumping data for table `locality`
@@ -431,7 +617,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (15, 'Azad Road', '400069', 'Mumbai'),
 (16, 'Azad Road', '400057', 'Mumbai'),
 (17, 'Bamandaya Wada', '400069', 'Mumbai'),
-(18, 'Barvenagar Andheri East', '400084', 'Mumbai'),
+(1480, 'Bhatwadi', '400084', 'Mumbai'),
 (19, 'Bhagat Singh Colony', '400069', 'Mumbai'),
 (20, 'Bhamni Pada', '400059', 'Mumbai'),
 (21, 'Bhavani Nagar', '400059', 'Mumbai'),
@@ -758,7 +944,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (342, 'Vaishali Nagar', '400080', 'Mumbai'),
 (343, 'Vaishali Nagar,Mulund(E)', '400080', 'Mumbai'),
 (344, 'Veena Nagar', '400080', 'Mumbai'),
-(345, 'Veena Nagar,Mulund(E)', '400080', 'Mumbai'),
+(1476, 'Veena Nagar,Mulund(w)	', '400080', 'Mumbai'),
 (346, 'Abddul Rehman Street', '400003', 'Mumbai'),
 (347, 'Abddul Rehman Street Masjid Bandar', '400003', 'Mumbai'),
 (348, 'Apollo Reclamation', '400039', 'Mumbai'),
@@ -1454,9 +1640,9 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1038, 'Veer Savarkar Nagar Vasai', '401202', 'Mumbai'),
 (1039, 'Vikramgad', '401605', 'Mumbai'),
 (1040, 'Virar (E)', '401303', 'Mumbai'),
-(1041, 'Virar (W)', '401302', 'Mumbai');
+(1041, 'Virar (W)', '401302', 'Mumbai'),
+(1042, 'Virar East', '401305', 'Mumbai');
 INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUES
-(1042, 'Virar East', '401305', 'Mumbai'),
 (1043, 'Virar Virar', '404313', 'Mumbai'),
 (1044, 'Virar West', '401303', 'Mumbai'),
 (1045, 'Waliv Vasai', '401208', 'Mumbai'),
@@ -1481,7 +1667,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1064, 'Khira Nagar SANTACRUZ(WEST)', '400054', 'Mumbai'),
 (1065, 'Kurla Depot KURLA(WEST)', '400070', 'Mumbai'),
 (1066, 'Kurla Market KURLA(WEST)', '400070', 'Mumbai'),
-(1067, 'Kurla Pipeline Road KURLA(WEST)', '400070', 'Mumbai'),
+(1484, 'Patelwadi pipe line ', '400070', 'Mumbai'),
 (1068, 'Milan Subway SANTACRUZ(WEST)', '400054', 'Mumbai'),
 (1069, 'Military Camp SANTACRUZ (EAST)', '400029', 'Mumbai'),
 (1070, 'Military Road Juhu', '400049', 'Mumbai'),
@@ -1563,7 +1749,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1146, 'Arya Nagar', '400034', 'Mumbai'),
 (1147, 'August Kranti Marg', '400034', 'Mumbai'),
 (1148, 'August Kranti Marg Kemps Corner', '400036', 'Mumbai'),
-(1149, 'Babulnath', '400007', 'Mumbai'),
+(1502, 'Babulnath shiv Mandir', '400007', 'Mumbai'),
 (1150, 'Babulnath Grant road', '400007', 'Mumbai'),
 (1151, 'Badamwadi', '400002', 'Mumbai'),
 (1152, 'Bhoiwada Charni Road', '400004', 'Mumbai'),
@@ -1786,7 +1972,7 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1369, 'Telephone Exchange,Ghatkopar (E)', '400086', 'Mumbai'),
 (1370, 'Tilak Nagar', '400075', 'Mumbai'),
 (1371, 'Tilak Nagar,Chembur', '400089', 'Mumbai'),
-(1409, 'Cheeta Camp, Trombay', '400088', 'Mumbai'),
+(1372, 'Trombay,Chembur', '400088', 'Mumbai'),
 (1373, 'Vashi Naka', '400074', 'Mumbai'),
 (1374, 'Vashi Naka,Chembur', '400071', 'Mumbai'),
 (1375, 'Vidya Vihar (W) , Near Station', '400086', 'Mumbai'),
@@ -1801,7 +1987,6 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1384, 'Kpar Khairane', '400709', 'Mumbai'),
 (1385, 'MIDC,Mahape', '400709', 'Mumbai'),
 (1386, 'Nerul', '400706', 'Mumbai'),
-(1408, 'Andheri', '400038', 'Mumbai'),
 (1388, 'Rabale', '400701', 'Mumbai'),
 (1389, 'SECTOR-12, Airoli', '400708', 'Mumbai'),
 (1390, 'Sanpada', '400705', 'Mumbai'),
@@ -1809,12 +1994,108 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1392, 'TTC Ind Area,Turbhe', '400613', 'Mumbai'),
 (1393, 'Thane Belapur Road', '400708', 'Mumbai'),
 (1394, 'Vashi plaza', '400703', 'Mumbai'),
-(1410, 'Near Trombay Bus Depot, Trombay', '400088', 'Mumbai'),
-(1411, 'Mandala, Trombay', '400088', 'Mumbai'),
-(1412, 'Mankhurd', '400088', 'Mumbai'),
-(1415, 'Pailipada, Trombay', '400088', 'Mumbai'),
-(1414, 'Anu Sakti, B.A.R.C', '400088', 'Mumbai'),
-(1416, 'Laxmi Nagar', '400075', 'Mumbai');
+(1397, 'Opp R-city Mall', '400086', 'Mumbai'),
+(1398, 'Opp Majas Bus Depot', '400093', 'Mumbai'),
+(1399, 'Opp Shatabdi Hospital', '400088', 'Mumbai'),
+(1400, 'V.B. Phadake Marg', '400081', 'Mumbai'),
+(1401, '90 Feet Road', '400081', 'Mumbai'),
+(1402, 'Mulund colony', '400080', 'Mumbai'),
+(1403, 'Johanson and johanson', '400082', 'Mumbai'),
+(1404, 'Opp Sydenham college', '400020', 'Mumbai'),
+(1405, 'Opp Mumbai Samachar  Press', '400001', 'Mumbai'),
+(1406, 'Zaveri Bazar', '400002', 'Mumbai'),
+(1407, 'Nr. Inorbit Mall ', '400064', 'Mumbai'),
+(1408, 'OPP. Shreyas Cinema', '400086', 'Mumbai'),
+(1409, 'Devidayal RoadÂ ', '400080', 'Mumbai'),
+(1410, 'Madan MohanÂ Malviya Rd.', '400080', 'Mumbai'),
+(1411, 'Opp Khaitan Chembers', '400001', 'Mumbai'),
+(1412, 'opp Samata Nagar police stn.', '400067', 'Mumbai'),
+(1413, 'Western Express Highway.', '400067', 'Mumbai'),
+(1414, 'Western Express Highway.', '400101', 'Mumbai'),
+(1415, 'Samta Nagar Police Station', '400101', 'Mumbai'),
+(1416, 'Imax Theater', '400071', 'Mumbai'),
+(1417, 'Bhakti Park', '400071', 'Mumbai'),
+(1418, 'Telli Galli Cross lane.', '400069', 'Mumbai'),
+(1419, 'City Hospital (Kurla West)', '400070', 'Mumbai'),
+(1420, 'Near Otters Club, Bandra West', '400050', 'Mumbai'),
+(1421, 'Fine Arts Cultural Centre', '400071', 'Mumbai'),
+(1422, 'New Link Road Malad (west)', '400064', 'Mumbai'),
+(1423, 'Palm Beach Road, Sec. No. 3', '400614', 'Mumbai'),
+(1424, 'Gulmohar Road', '400049', 'Mumbai'),
+(1425, 'Gulmohar Road, opp. Axis Bank', '400049', 'Mumbai'),
+(1426, 'Ganesh Cinema Hall', '400012', 'Mumbai'),
+(1427, 'Opp. Kirit Somaya', '400081', 'Mumbai'),
+(1428, 'BSEL Tech Park Navi Mumbai', '400705', 'Mumbai'),
+(1429, 'Opp sakivihar Telaphone Exchange', '400072', 'Mumbai'),
+(1430, 'Picko Road Bandra West', '400050', 'Mumbai'),
+(1431, 'Mahananda Dairy Goregaon East', '400065', 'Mumbai'),
+(1432, 'Near Khar West Railway Station', '400052', 'Mumbai'),
+(1433, 'Mathew Rd, Opera House, Girgaon.', '400004', 'Mumbai'),
+(1434, 'M. G. Road Mulund West', '400080', 'Mumbai'),
+(1435, 'Mulund  Colony, Opp. Chheda Petrol Pump, LBS Marg', '400080', 'Mumbai'),
+(1436, 'Dr. R. P. Road, Mulund west', '400080', 'Mumbai'),
+(1437, 'opp. Kirti Mahal Hotel, M.G. Road. ', '400080', 'Mumbai'),
+(1438, 'Panch Rasta Mulund (w)', '400080', 'Mumbai'),
+(1439, 'Tiny Tots School, Bhai Thakkar Rd.', '400057', 'Mumbai'),
+(1440, 'Sector 15,', '400703', 'Mumbai'),
+(1441, 'Sector 15, Opp. Vijaya bank', '400703', 'Mumbai'),
+(1442, 'Raheja Township, Off.Western Express Highway', '400097', 'Mumbai'),
+(1443, 'Standard Chartered Towers,Western Express Highway.', '400063', 'Mumbai'),
+(1444, ' Bellasis road, Mumbai central', '400008', 'Mumbai'),
+(1445, ' Bellasis road, Opp. Bus Depot,Mumbai central', '400008', 'Mumbai'),
+(1446, 'Opp. Gurudwara, Gurunanak Nagar.', '400086', 'Mumbai'),
+(1447, 'Shloka Restaurants, Veena Nagar', '400080', 'Mumbai'),
+(1449, 'Nr.Odeon Theater, V.B. Lane.', '400077', 'Mumbai'),
+(1450, 'Sudha Park Ghatkopar (E)', '400077', 'Mumbai'),
+(1451, 'Dr.Baba Saheb Ambedkar Road', '400012', 'Mumbai'),
+(1452, 'Opp. Bharatmata Cinema Hall.', '400012', 'Mumbai'),
+(1453, 'Next to Sheetal Cinema', '400070', 'Mumbai'),
+(1454, 'Sec-23,DARAVE Nerul', '400706', 'Mumbai'),
+(1455, '1617, Sindhi Society', '400071', 'Mumbai'),
+(1456, 'Above Trupati Farsan Chembur', '400071', 'Mumbai'),
+(1457, 'Godrej Petrol Pump', '400079', 'Mumbai'),
+(1458, 'Bavala Compound, Dr. Dattaram Lad Marg', '400012', 'Mumbai'),
+(1459, 'Behind Ganesh Talkies', '400012', 'Mumbai'),
+(1460, 'Behind R- CITY Mall.', '400086', 'Mumbai'),
+(1461, 'Nr. Ecloe Mondiale School, JVPD Scheme juhu', '400049', 'Mumbai'),
+(1464, 'Opp. Vikhroli Fire Station.', '400079', 'Mumbai'),
+(1465, 'Sec-14, Palm Beach Road.', '400705', 'Mumbai'),
+(1466, 'Opp. Parasdham Temple.', '400077', 'Mumbai'),
+(1467, 'Opp. Balrajeshwar Temple.', '400080', 'Mumbai'),
+(1468, 'Opp.Golden Lawn Restaurant', '400071', 'Mumbai'),
+(1469, 'Opp. Visava wine Mart ', '400083', 'Mumbai'),
+(1470, 'Opp. Akash Dairy', '400070', 'Mumbai'),
+(1471, 'Odean Cinema Hall.', '400077', 'Mumbai'),
+(1472, 'Nirmallifestyle', '400080', 'Mumbai'),
+(1473, 'Nirmallifestyle Mall', '400080', 'Mumbai'),
+(1474, 'Nr.Mumbadevi Temple', '400002', 'Mumbai'),
+(1475, 'Near Post Office Ghatkopar (E)', '400075', 'Mumbai'),
+(1477, 'Behind Arya Samaj Mandir', '400054', 'Mumbai'),
+(1478, 'Sarojini Naidu Road', '400054', 'Mumbai'),
+(1479, 'Near Fatima Church', '400015', 'Mumbai'),
+(1481, 'Barve Nagar', '400084', 'Mumbai'),
+(1482, 'Opp. Cambridge International School', '400067', 'Mumbai'),
+(1483, 'Opp.Swami Vivekanand school Sindhi Society', '400071', 'Mumbai'),
+(1485, 'Nr. Sama Building', '400071', 'Mumbai'),
+(1486, 'Opp. Arthur Road jail', '400011', 'Mumbai'),
+(1487, 'Near Gas Compound', '400012', 'Mumbai'),
+(1488, 'Sant Namdev Path Gokhale Road.', '400602', 'Mumbai'),
+(1489, 'Nr. Bhagwati High school Thane', '400602', 'Mumbai'),
+(1490, 'Sahyog Mandir path Ghantali Colony', '400602', 'Mumbai'),
+(1491, 'Palm Beach Road', '400705', 'Mumbai'),
+(1492, 'Nr.Vasant Oscar Complex ', '400080', 'Mumbai'),
+(1493, 'Near Shivsena Office ', '400084', 'Mumbai'),
+(1494, 'Road No.-6, Nr. Masurashram ', '400063', 'Mumbai'),
+(1495, 'Nr. Maitri Park', '400071', 'Mumbai'),
+(1496, 'Jagannath Patankar Marg', '400012', 'Mumbai'),
+(1497, 'Opp. Gold Gym.', '400071', 'Mumbai'),
+(1498, 'Near Joy Hospital', '400071', 'Mumbai'),
+(1499, 'j.v. cross road', '400086', 'Mumbai'),
+(1500, 'Ghatkopar Bus Depot', '400086', 'Mumbai'),
+(1501, 'Next Building of Natural Ice Cream.', '400068', 'Mumbai'),
+(1503, 'P.K. Road.', '400080', 'Mumbai'),
+(1504, 'Ganesh Gawade Cross Road', '400080', 'Mumbai'),
+(1505, 'Sector No- 46A, Palm Beach Road', '400706', 'Mumbai');
 
 -- --------------------------------------------------------
 
@@ -1832,7 +2113,6 @@ CREATE TABLE IF NOT EXISTS `one_time_service` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en,2-dis',
   PRIMARY KEY (`ots_id`),
-  KEY `cust_id` (`cust_id`,`ac_id`),
   KEY `tech_id` (`ac_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -1846,7 +2126,7 @@ CREATE TABLE IF NOT EXISTS `problem_type` (
   `ac_problem_id` int(11) NOT NULL AUTO_INCREMENT,
   `ac_problem_type` varchar(100) NOT NULL,
   PRIMARY KEY (`ac_problem_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `problem_type`
@@ -1856,7 +2136,27 @@ INSERT INTO `problem_type` (`ac_problem_id`, `ac_problem_type`) VALUES
 (1, 'No Cooling'),
 (2, 'Gas Leakage'),
 (3, 'Not working'),
-(4, 'compressor problem');
+(5, 'Compressor Problem'),
+(6, 'Water Leakage'),
+(7, 'Swing Not Working'),
+(9, 'Swing Motor Problem'),
+(10, 'Remote not working'),
+(11, 'PCB Problem'),
+(12, 'Wiring Problem'),
+(13, 'Fan Capacitor problem'),
+(14, 'Running Capacitor problem'),
+(15, 'Problem with cooling coil sensor'),
+(16, 'Condensor Problem'),
+(17, 'IDU Body Damaged'),
+(18, 'ODU-Fan Motor Problem'),
+(19, 'IDU-Fan Motor Problem'),
+(20, 'Cooling Coil Choked'),
+(21, 'Condensor Coil Choked'),
+(22, 'Electric Supply Problem'),
+(23, 'Magnetic Contactor Problem'),
+(24, 'Flaring Problem'),
+(25, 'Drain Pipe Choked'),
+(26, 'Leak in copper pipe');
 
 -- --------------------------------------------------------
 
@@ -1868,7 +2168,7 @@ CREATE TABLE IF NOT EXISTS `referred_by` (
   `referred_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`referred_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
 -- Dumping data for table `referred_by`
@@ -1879,9 +2179,14 @@ INSERT INTO `referred_by` (`referred_id`, `name`) VALUES
 (6, 'Existing Customer'),
 (7, 'Just Dial'),
 (14, 'Web'),
-(15, 'Teamone Site'),
-(16, 'Other'),
-(17, 'Direct Marketing');
+(17, 'Direct Marketing'),
+(18, 'Teamone Website'),
+(19, 'Matrix'),
+(21, 'Atul Electronics-Mulund'),
+(22, 'Atul Electronics-Bhandup'),
+(23, 'Architect'),
+(24, 'Groupon'),
+(25, 'Mahendra Jadhav-Architect');
 
 -- --------------------------------------------------------
 
@@ -1891,6 +2196,7 @@ INSERT INTO `referred_by` (`referred_id`, `name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `staff` (
   `staff_id` int(11) NOT NULL AUTO_INCREMENT,
+  `isAdmin` enum('y','n') NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -1901,15 +2207,14 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en,',
   PRIMARY KEY (`staff_id`),
   KEY `branch` (`branch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`staff_id`, `first_name`, `last_name`, `email`, `password`, `mobile`, `address`, `branch`, `enabled`) VALUES
-(11, 'Rafique', 'mohammed', 'abc@email.com', '', '6454561456', 'chembur', '2', ''),
-(21, 'Ronak', 'Rathod', 'ronak@gmail.com', '', '9920727321', 'Jogeshwari', '2', '');
+INSERT INTO `staff` (`staff_id`, `isAdmin`, `first_name`, `last_name`, `email`, `password`, `mobile`, `address`, `branch`, `enabled`) VALUES
+(1, 'y', 'Girish', 'Rahumalani', 'admin', 'CRM2015', '', 'Ghatkopar', '2', '');
 
 -- --------------------------------------------------------
 
@@ -1928,19 +2233,17 @@ CREATE TABLE IF NOT EXISTS `technician` (
   `enabled` enum('1','2','3') NOT NULL COMMENT '1-en,2-dis,3-del',
   PRIMARY KEY (`tech_id`),
   KEY `branch` (`branch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
 
 --
 -- Dumping data for table `technician`
 --
 
 INSERT INTO `technician` (`tech_id`, `first_name`, `last_name`, `email`, `mobile`, `branch`, `address`, `enabled`) VALUES
-(17, 'Swapnali', 'Rasam', 'rasam@gmail.com', '9874563210', '3', 'kalwa', '1'),
-(18, 'Rafique', 'Mohammed', 'rafique@gmail.com', '8976451230', '2', 'Chember', '1'),
-(19, 'Roshan', 'Shelaar', 'abc@gmail.com', '9897456321', '1', 'dsfdsfsdf', '1'),
-(21, 'Fahim', 'Ansari', 'fahim@gmail.xcom', '7896523014', '2', 'oshiwaria', '1'),
-(41, 'Ronak', 'Rathod', '', '4864464646', '1', 'dasdasddfddf', '1'),
-(42, 'Krishna', 'Gupta', 'krishna@yahoo.com', '9875646546', '1', 'Panvel', '1');
+(45, 'Niaz', 'Ansari', '', '8655071752', '1', 'Reay Road', '1'),
+(46, 'Naushad', 'Ali', '', '9004447631', '1', 'Nalla Sopara West', '1'),
+(48, 'Hamid', 'Shaikh', '', '9004447633', '1', 'Govandi', '1'),
+(49, 'Mosian', 'Shaikh', '', '9004447632', '1', 'Govandi', '1');
 
 -- --------------------------------------------------------
 
@@ -1981,7 +2284,7 @@ ALTER TABLE `amc_service_date`
 -- Constraints for table `assignment`
 --
 ALTER TABLE `assignment`
-  ADD CONSTRAINT `assignment_ibfk_1` FOREIGN KEY (`cust_id`) REFERENCES `customer` (`cust_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `assignment_ibfk_1` FOREIGN KEY (`assign_for`) REFERENCES `technician` (`tech_id`);
 
 --
 -- Constraints for table `complaint`
@@ -2000,6 +2303,12 @@ ALTER TABLE `customer_ac_details`
 --
 ALTER TABLE `installation`
   ADD CONSTRAINT `installation_ibfk_1` FOREIGN KEY (`ac_id`) REFERENCES `customer_ac_details` (`ac_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `install_service_date`
+--
+ALTER TABLE `install_service_date`
+  ADD CONSTRAINT `install_service_date_ibfk_1` FOREIGN KEY (`install_id`) REFERENCES `installation` (`install_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `one_time_service`

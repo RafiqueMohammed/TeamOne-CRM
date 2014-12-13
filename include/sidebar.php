@@ -91,7 +91,7 @@
 
 
             <li>
-                <a href="#"><i class="clip-exit"></i>
+                <a href="Logout.php"><i class="clip-exit"></i>
                     <span class="title">Logout</span>
                     <span class="selected"></span>
                 </a>

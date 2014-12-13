@@ -399,8 +399,8 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                     <tr>
                         <td>
                             <label class="control-label">Date of Birth</label>
-                            <input class="form-control dob date-picker" data-date-format="dd-mm-yyyy"
-                                   data-date-viewmode="years" type="text" name="dob" id="dob">
+                            <input class="form-control date-picker" data-date-format="dd-mm-yyyy"
+                                   data-date-viewmode="years" type="text" name="dob" value="">
                         </td>
                         <td>
                             <label class="control-label">Remarks</label>

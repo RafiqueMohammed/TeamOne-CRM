@@ -98,7 +98,7 @@ $(document).ready(function () {
                     }
                     $(".referred_by").html(data.reference);
                     $(".referred_by").val(data.reference);
-                    $("input[name='dob']").val(data.dob);
+                    $("input[name=dob]").val(data.dob);
                     $(".dob").html(data.dob);
                     $(".created_on").html(data.date)
                     $(".remarks").val(data.remarks);

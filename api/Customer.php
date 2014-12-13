@@ -1015,7 +1015,7 @@ WHERE  cad.cust_id='$cid'  and cad.`make`=ac_make.`make_id`
             $result = array("status" => "no", "result" => "All AC Added for the installation");
         }
     }else{
-        $result = array("status" => "no", "result" => "Customer has no AC for the installation. Please add AC first");
+        $result = array("status" => "no", "result" => "No AC Available for installation ");
     }
         $app->response->body(json_encode($result));
     }

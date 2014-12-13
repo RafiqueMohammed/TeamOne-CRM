@@ -23,7 +23,7 @@
                 <li class="dropdown current-user">
                     <a >
 
-                        Welcome, <span class="staff_username text-primary">Administrator!</span>
+                        Welcome, <span class="staff_username text-primary"><?php echo $staffInfo['FullName'];?></span>
 
                     </a>
 

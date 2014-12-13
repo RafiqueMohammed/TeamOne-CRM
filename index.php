@@ -42,7 +42,7 @@ require_once("common.php");
 
         <!-- start: PANEL CONFIGURATION MODAL FORM -->
         <?php require_once(VIEW_DIR."ModalCollection.php"); ?>
-        
+
         <!-- end: SPANEL CONFIGURATION MODAL FORM -->
 
         <!-- start: STYLE SELECTOR BOX -->
@@ -74,7 +74,7 @@ if(file_exists($link)){
             ?>
         </div>
 
-        
+
         <!-- end: CONTAINER -->
 
     </div>

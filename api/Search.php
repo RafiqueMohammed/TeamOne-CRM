@@ -4,9 +4,11 @@ require_once("common.php");
 $app->get("/Search/:str", function ($str) use ($app) {
     global $DB;
     $check = trim(str_replace(array(" ", "-", "+"), "", $str));
+    $result=array();
     if (is_numeric($check)) {
 
-        $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "` WHERE `mobile`='$str' "); //OR `alternate_mobile` LIKE '%$str%'
+
+        $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "` WHERE `mobile` LIKE '%$check%' "); //OR `alternate_mobile` LIKE '%$str%'
 
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
@@ -14,7 +16,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..1");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
 
 
@@ -28,7 +30,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..2");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
         //$result = array("status" => "ok", "result" => "place search".$str);
     } else if (preg_match("/company/", $str)) {
@@ -41,7 +43,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..3");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
         //$result = array("status" => "ok", "result" => "company search");
     } else if (preg_match("/name/", $str)) {
@@ -57,7 +59,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..4");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
         }else if(count($names)==1){
             $firstname = $lastname = $names[0];
@@ -68,7 +70,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..4");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
         }else{
             ThrowError("Please enter a valid name");
@@ -77,7 +79,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
         //$result = array("status" => "ok", "result" => "name search");
     } else {
 
-        $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "` WHERE `organisation` LIKE '%$str%' ") or ThrowError($DB->error); //OR `alternate_mobile` LIKE '%$str%'
+        $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "` WHERE `mobile` LIKE '%$check%' ") or ThrowError($DB->error); //OR `alternate_mobile` LIKE '%$str%'
 
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
@@ -85,7 +87,7 @@ $app->get("/Search/:str", function ($str) use ($app) {
                 $result["data"][] = $info;
             }
         } else {
-            $result = array("status" => "no", "result" => "No customer found. Try something else..5");
+            $result = array("status" => "no", "result" => "No customer found. Try something else..");
         }
 
 
