@@ -50,6 +50,11 @@
 <script src="assets/plugins/jquery-cookie/jquery.cookie.js"></script>
 <script src="assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+    jQuery(document).ready(function () {
+        Main.init();
+    });
+</script>
 <script src="assets/js/global.js"></script>
 
 
@@ -64,8 +69,3 @@
 <script type="text/javascript" src="assets/plugins/DataTables/media/js/DT_bootstrap.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 
-<script>
-    jQuery(document).ready(function () {
-        Main.init();
-    });
-</script>

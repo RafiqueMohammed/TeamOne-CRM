@@ -1009,6 +1009,10 @@ WHERE  cad.cust_id='$cid'  and cad.`make`=ac_make.`make_id`
         if ($qry->num_rows > 0) {
             $result = array("status" => "ok");
             while ($info = $qry->fetch_assoc()) {
+             /*   $status_qry=$DB->query("SELECT `install_service_id` FROM `".TAB_INSTALL_SERVICE."` as ins_service INNER JOIN
+                (select `assign_id` FROM `".TAB_ASSIGN."` WHERE `type`='installation' AND `cust_id`='$cid') as assign WHERE ins_service.`cust_id`='$cid'
+                AND assign.`assign_id`=ins_service.`install_service_id`") or ThrowError($DB->error);
+                if($status_qry->num_rows>0)*/
                 $result['data'][] = $info;
             }
         } else {

@@ -30,4 +30,13 @@ $app->response->body(json_encode(array("status"=>"ok","result"=>"Success")));
     }
 });
 
+$app->get("/Stats/Counts",function()use($app){
+    global $DB;
+    $qry=$DB->query("SELECT count(`com_id`) FROM `".TAB_COMPLAINT."` WHERE `email`='$username' AND `password`='$password'");
+    if($qry->num_rows==1) {
+    }
+    });
+
+
+
 $app->run();

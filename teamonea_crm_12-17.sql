@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1
+-- version 4.0.10.6
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 13, 2014 at 04:31 AM
--- Server version: 5.5.40
+-- Generation Time: Dec 17, 2014 at 07:05 AM
+-- Server version: 5.6.21
 -- PHP Version: 5.4.23
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `teamone_crm`
+-- Database: `teamonea_crm`
 --
 
 -- --------------------------------------------------------
@@ -216,7 +216,14 @@ CREATE TABLE IF NOT EXISTS `assignment` (
   PRIMARY KEY (`assign_id`),
   UNIQUE KEY `ticket_id` (`ticket_id`),
   KEY `assign_for` (`assign_for`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
+
+--
+-- Dumping data for table `assignment`
+--
+
+INSERT INTO `assignment` (`assign_id`, `ticket_id`, `cust_id`, `type`, `type_id`, `assign_for`, `assign_date`, `remarks`, `status`, `created_on`) VALUES
+(49, 'INS-69-1418821344', 69, 'installation', 1, 50, '2014-12-18', '', 'p', '2014-12-17 13:02:24');
 
 -- --------------------------------------------------------
 
@@ -257,7 +264,15 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en',
   PRIMARY KEY (`com_id`),
   UNIQUE KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `complaint`
+--
+
+INSERT INTO `complaint` (`com_id`, `ac_id`, `problem_type`, `problem_desc`, `preferred_date`, `cust_id`, `created_on`, `enabled`) VALUES
+(1, 98, 1, '', '2014-12-16', 72, '2014-12-15 07:30:01', '1'),
+(2, 116, 1, 'Ac not cooling properly.', '2014-12-15', 78, '2014-12-15 07:45:30', '1');
 
 -- --------------------------------------------------------
 
@@ -297,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 
 INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
 (69, 'r', 'Ronak', 'Rathod', '', '123', '', '9920727342', '', '', '', '1992-11-21', 'Hindu Friends society', 'Hindu Friends Colony Jogeshwari (East)', 'Jogeshwari', '400060', 'Mumbai', 'm', 'Hello', 'Team one website', '2014-09-23 10:38:12', '1'),
-(72, 'r', 'Girish', 'Rahumalani', 'girish.rahumalani@gmail.com', '123', '', '9987588905', '', '', '02225176172', '0000-00-00', '2A-74, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-09-25 18:07:44', '1'),
+(72, 'r', 'Girish', 'Rahumalani', 'girish.rahumalani@gmail.com', '123', '', '9987588905', '', '', '', '1969-12-31', '2A-74, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-09-25 18:07:44', '1'),
 (73, 'r', 'Nevidita', 'Gulati', ' ', '123', '', '9930399507', '9867026995', '', 'Maharashtra', '1969-12-31', 'C-1407 Oberoi,splendor, JVLR\n', 'Opp Majas Bus Depot', 'andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 06:45:54', '1'),
 (74, 'c', 'Shasha', 'Jhunjhunwala', 'admin@globecot.co.in ', '123', 'Globe Cotyarn Pvt Ltd', '9820733456', '', '', '', '0000-00-00', '1st floor, bldg no 7, mittal industrial estate.', 'Andheri Kurla Road', 'Marol', '400059', 'Mumbai', 'm', '', '', '2014-11-27 07:51:39', '1'),
 (77, 'r', 'C.G.', 'Paithankar', '', '123', '', '9619675782', '', '', '', '0000-00-00', 'B/502, Rajshri Shah Society,', '90 Feet Road', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 11:10:47', '1'),
@@ -521,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `customer_ac_details` (
   `remarks` varchar(200) NOT NULL,
   PRIMARY KEY (`ac_id`),
   KEY `cust_id` (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
 
 --
 -- Dumping data for table `customer_ac_details`
@@ -541,7 +556,23 @@ INSERT INTO `customer_ac_details` (`ac_id`, `cust_id`, `make`, `ac_type`, `capac
 (112, 187, 5, '1', '2', 'RC35PRV16', '0024010', 'FTC35PRV16', '0094425', 15, 'Installation has been done.'),
 (113, 187, 5, '1', '3', '0017342', 'RF50PRV16', '0017236', 'FTF50PRV16', 14, 'Installation has been done by Ajay'),
 (114, 187, 5, '1', '3', 'RF50PRV16', '0017352', 'FTF50PRV16', '0017241', 11, 'Installation has been done by Ajay'),
-(115, 260, 5, '1', '3', '', '', '', '', 7, '');
+(115, 260, 5, '1', '3', '', '', '', '', 7, ''),
+(116, 78, 1, '1', '2', '', '', '', '', 10, 'installation has been done'),
+(120, 164, 9, '1', '3', '', '', '', '', 7, 'Installation done'),
+(121, 164, 9, '1', '3', '', '', '', '', 8, 'Installation done'),
+(122, 164, 9, '1', '3', '', '', '', '', 9, 'Installation done.'),
+(123, 164, 12, '1', '3', '', '', '', '', 10, 'installation done.'),
+(124, 164, 12, '1', '3', '', '', '', '', 10, 'Installation done.'),
+(125, 190, 12, '1', '19', '', '', '', '', 10, 'Installation done.'),
+(126, 190, 12, '1', '19', '', '', '', '', 11, 'Installation done'),
+(127, 190, 12, '1', '19', '', '', '', '', 7, 'Installation done.'),
+(128, 190, 12, '1', '19', '', '', '', '', 8, 'Installation done.'),
+(129, 136, 5, '1', '2', '', 'E009088', '', 'E001200', 9, 'Installation done.'),
+(130, 136, 5, '1', '3', '', 'E061196', '', 'E041265', 10, 'Installation done.'),
+(131, 136, 5, '1', '3', '', 'E065632', '', 'E066889', 10, 'Installation Done.'),
+(132, 136, 5, '1', '3', '', 'E065629', '', 'E066879', 7, 'Installation done.'),
+(133, 136, 5, '1', '3', '', 'E065633', '', 'E066900', 8, 'Installation done.'),
+(134, 69, 1, '1', '5', '', '', '', 'test', 4, 'dummy');
 
 -- --------------------------------------------------------
 
@@ -562,7 +593,14 @@ CREATE TABLE IF NOT EXISTS `installation` (
   PRIMARY KEY (`install_id`),
   KEY `cust_id` (`cust_id`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `installation`
+--
+
+INSERT INTO `installation` (`install_id`, `cust_id`, `ac_id`, `install_type`, `preferred_date`, `no_of_service`, `remarks`, `enabled`, `created_on`) VALUES
+(1, 69, 134, 's', '2014-12-18', 4, 'test install', '1', '2014-12-17 12:16:00');
 
 -- --------------------------------------------------------
 
@@ -579,7 +617,18 @@ CREATE TABLE IF NOT EXISTS `install_service_date` (
   `date` date NOT NULL,
   PRIMARY KEY (`install_service_id`),
   KEY `install_id` (`install_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `install_service_date`
+--
+
+INSERT INTO `install_service_date` (`install_service_id`, `type`, `cust_id`, `install_id`, `remarks`, `date`) VALUES
+(1, 'installation', 69, 1, '', '2014-12-18'),
+(2, 'ins_service', 69, 1, '', '2015-03-19'),
+(3, 'ins_service', 69, 1, '', '2015-06-18'),
+(4, 'ins_service', 69, 1, '', '2015-09-17'),
+(5, 'ins_service', 69, 1, '', '2015-12-17');
 
 -- --------------------------------------------------------
 
@@ -2233,7 +2282,7 @@ CREATE TABLE IF NOT EXISTS `technician` (
   `enabled` enum('1','2','3') NOT NULL COMMENT '1-en,2-dis,3-del',
   PRIMARY KEY (`tech_id`),
   KEY `branch` (`branch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
 
 --
 -- Dumping data for table `technician`
@@ -2243,7 +2292,8 @@ INSERT INTO `technician` (`tech_id`, `first_name`, `last_name`, `email`, `mobile
 (45, 'Niaz', 'Ansari', '', '8655071752', '1', 'Reay Road', '1'),
 (46, 'Naushad', 'Ali', '', '9004447631', '1', 'Nalla Sopara West', '1'),
 (48, 'Hamid', 'Shaikh', '', '9004447633', '1', 'Govandi', '1'),
-(49, 'Mosian', 'Shaikh', '', '9004447632', '1', 'Govandi', '1');
+(49, 'Mosian', 'Shaikh', '', '9004447632', '1', 'Govandi', '1'),
+(50, 'Rafique', 'Mohammed', 'ar.rafiq@live.com', '8976288706', '1', 'k/b/6', '1');
 
 -- --------------------------------------------------------
 

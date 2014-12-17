@@ -11,7 +11,7 @@
             <a class="navbar-brand" href="index.php">
                 <!--CLIP<i class="clip-clip"></i>ONE
                 <img src="assets/images/logo.png" style="height: 40px; margin-top: -10px;" />-->
-                TEAM <i class="clip-users-2"></i> ONE
+                TEAM <i class="clip-switch"></i> ONE
             </a>
             <!-- end: LOGO -->
         </div>

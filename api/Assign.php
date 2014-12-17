@@ -10,10 +10,11 @@ require_once("common.php");
 
 $app->get("/Assign/Customer", function () use ($app) {    global $DB;
     $result = array();
-    $cust_qry = $DB->query("SELECT `cust_id` as user FROM `" . TAB_CUSTOMER . "` as cust  ") or ThrowError($DB->error);
+    $cust_qry = $DB->query("SELECT `cust_id` as user FROM `" . TAB_CUSTOMER . "`") or ThrowError($DB->error);
     if ($cust_qry->num_rows > 0) {
         $data = array();
         $till = date("Y-m-d", strtotime("+1 month"));
+        $cust_holder=array();
         while ($inf = $cust_qry->fetch_assoc()) {
             $isUnAssigned=false;
 
@@ -21,72 +22,74 @@ $app->get("/Assign/Customer", function () use ($app) {    global $DB;
             if($qry->num_rows>0){
                 $com_qry=$DB->query("SELECT * FROM `".TAB_COMPLAINT."` as com INNER JOIN `".TAB_ASSIGN."` as assign WHERE com.com_id=assign.type_id AND assign.type='complaint' AND com.cust_id='{$inf['user']}'") or ThrowError($DB->error);
                 if($com_qry->num_rows<1){
-                    $isUnAssigned=true;
-
+                    $cust_holder[]=$inf['user'];
+                    continue;
                 }
-            }else{
-                $isUnAssigned=false;
             }
 
             $qry=$DB->query("SELECT * FROM `".TAB_OTS."` WHERE `cust_id`={$inf['user']}") or ThrowError($DB->error);
             if($qry->num_rows>0){
                 $ots_qry=$DB->query("SELECT * FROM `".TAB_OTS."` as ots INNER JOIN `".TAB_ASSIGN."` as assign WHERE ots.ots_id=assign.type_id AND assign.type='ots' AND ots.cust_id='{$inf['user']}'") or ThrowError($DB->error);
                 if($ots_qry->num_rows<1){
-                    $isUnAssigned=true;
-
+                    $cust_holder[]=$inf['user'];
+                    continue;
                 }
-            }else{
-                $isUnAssigned=false;
             }
 
             $qry=$DB->query("SELECT * FROM `".TAB_INSTALL_SERVICE."` WHERE `cust_id`='{$inf['user']}' AND `date`<='$till'") or ThrowError($DB->error);
             if($qry->num_rows>0){
+                $e=0;
                 while($info=$qry->fetch_assoc()) {
                     $ins_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` as ins INNER JOIN `" . TAB_ASSIGN . "` as assign
                      WHERE ins.install_service_id='{$info['install_service_id']}' AND assign.type_id='{$info['install_service_id']}' AND (assign.type='installation' OR assign.type='ins_service')
                       AND ins.cust_id='{$inf['user']}' AND ins.`date`<='$till'") or ThrowError($DB->error);
                     if ($ins_qry->num_rows < 1) {
-                        $isUnAssigned = true;
-
+                        $e++;
                     }
                 }
-            }else{
-                $isUnAssigned=false;
+                if($e>0){
+                    $cust_holder[]=$inf['user'];
+                    continue;
+                }
             }
 
             $qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` WHERE `cust_id`='{$inf['user']}'  AND `date`<='$till'") or ThrowError($DB->error);
             if($qry->num_rows>0){
-
+                $e=0;
                 while($info=$qry->fetch_assoc()){
                     $amc_qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` as amc INNER JOIN `".TAB_ASSIGN."` as assign WHERE
                     amc.amc_service_id='{$info['amc_service_id']}' AND assign.type_id='{$info['amc_service_id']}' AND assign.type='amc'
                    AND amc.`date`<='$till'") or ThrowError($DB->error);
                     if($amc_qry->num_rows<1){
-                        $isUnAssigned=true;
-                        $r= $qry->fetch_assoc();
-
+                        $e++;
                     }
                 }
 
-            }else{
-                $isUnAssigned=false;
-
+                if($e>0){
+                    $cust_holder[]=$inf['user'];
+                    continue;
+                }
             }
 
-            if($isUnAssigned){
+
+
+        }
+        if(count($cust_holder)>0){
+
+            foreach($cust_holder as $c_id){
                 $qry=$DB->query("SELECT `cust_id`,account_type,first_name,last_name,email,organisation,mobile,
-                address,landmark,location as customer_location,pincode,city,mode_of_contact FROM `" . TAB_CUSTOMER . "`  WHERE `cust_id`='{$inf['user']}'
+                address,landmark,location as customer_location,pincode,city,mode_of_contact FROM `" . TAB_CUSTOMER . "`  WHERE `cust_id`='$c_id'
                  ") or ThrowError($DB->error);
+
                 $data[]=$qry->fetch_assoc();
             }
 
-        }
+                $result['status'] = "ok";
+                $result['result'] = "Successful $till";
+                $result['data'] = $data;
 
-        if (count($data) > 0) {
-            $result['status'] = "ok";
-            $result['result'] = "Successful $till";
-            $result['data'] = $data;
-        } else {
+        }
+        else {
             $result['status'] = "no";
             $result['result'] = "No data Found $till";
         }
@@ -389,13 +392,14 @@ $app->post("/Assign", function () use ($app) {
         while ($info = $qry->fetch_assoc()) {
             $ticket .= "#" . $info['ticket_id'] . ", ";
         }
-        ThrowError("This Ticket is already assigned to a technician. Check Ticket ID : " . $ticket);
+        ThrowError("This Ticket is already assigned to a technician. Check Ticket ID : #" . $ticket);
     } else {
         $ticket_id = generateTicketID($type, $cust_id);
         $DB->query("INSERT INTO `" . TAB_ASSIGN . "`(`cust_id`,`ticket_id`,`type`,`type_id`,`assign_for`,`assign_date`,`remarks`)
                     VALUES('$cust_id','$ticket_id','$type','$assign_of','$assign_for','$assign_date','$remarks')") or ThrowError($DB->error);
-
+        $assign_id="";
         if ($DB->affected_rows > 0) {
+            $assign_id=$DB->insert_id;
             switch ($type) {
                 case 'installation':
                     $DB->query("UPDATE `" . TAB_INSTALL . "` SET `preferred_date`='$assign_date' WHERE `install_id`='$assign_of'");
@@ -417,16 +421,26 @@ $app->post("/Assign", function () use ($app) {
                     $DB->query("UPDATE `" . TAB_OTS . "` SET `preferred_date`='$assign_date' WHERE `ots_id`='$assign_of'");
                     break;
             }
-            if ($DB->affected_rows > 0) {
+           /* if ($DB->affected_rows > 0) {
                 $result['status'] = "ok";
-                $result['result'] = "Successfully Added";
-            } else {
+                $result['result'] = "Successfully Added.";
+            } else {*/
                 $result['status'] = "ok";
-                $result['result'] = "Successfully Assigned but unable to update preferred date.";
-            }
+                $result['result'] = "Successfully Assigned. Preferred dates unchanged.";
+           // }
 
             $app->status(201);
-            sendSMSNotifictaion($ticket_id, getMobileNumber($cust_id));
+$res=NotifySMS($assign_id);
+               if($res['success']){ //Send SMS notification for both technician and customer
+                   $result['result'].="SMS are sent";
+               } else{
+                   $result['result'].="SMS are not sent due to : \n ";
+                   foreach($res['result'] as $r){
+                       $result['result'].=$r."\n";
+                   }
+               }
+
+
             $app->response->body(json_encode($result));
         } else {
             ThrowError("Unable to create. Error occurred");

@@ -5,6 +5,7 @@ var customer_id;
 var ac_data_count = 0;
 var technician_dropdown;
 var uninstalled_ac = {};
+var technicians = {};
 $(document).ready(function () {
 
     customer_id = $("#customer_id_holder").val();
@@ -98,7 +99,7 @@ $(document).ready(function () {
                     }
                     $(".referred_by").html(data.reference);
                     $(".referred_by").val(data.reference);
-                    $("input[name=dob]").val(data.dob);
+                    $("input[name='dob']").val(data.dob);
                     $(".dob").html(data.dob);
                     $(".created_on").html(data.date)
                     $(".remarks").val(data.remarks);
@@ -775,8 +776,8 @@ $(document).ready(function () {
                         "<td>" + val.preferred_date + "</td>" +
                         "<td class='center'>" + val.no_of_service + "</td>" +
                         "<td>"+ac_remarks+"&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"i_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td>" +
-                        "<td>" + val.created_on + "</td><td><button onclick='ViewAMC(\"install\","+val.install_id+")' class='btn btn-info center'><i class='clip-info-2'> More</i></button></td>" +
-                        "<td><i class='clip-minus-circle-2' onclick='delete_service_type(\"installation\"," + val.install_id + "," + total + ")' style='cursor:pointer;color:red'></i></td></tr>";
+                        "<td>" + val.created_on + "</td><td><span>Technician is not assigned</span> </td>" +
+                        "<td><button onclick='ViewAMC(\"install\","+val.install_id+")' class='btn btn-sm btn-info center'><i class='clip-info-2'></i></button><button onclick='delete_service_type(\"installation\"," + val.install_id + "," + total + ")' class='btn btn-sm btn-danger'><i class='clip-close'></i></button></td></tr>";
                     total++;
                 });
                 $(".installed_product").html(installed_ac);
@@ -953,8 +954,7 @@ $(document).ready(function () {
     
     $("#tab_services_request").on("click", function(){
     var customer_id;
-    var customer_info = {};
-    var technicians = {};
+    var customer_info = {};    
     var technician_dropdown;
     var inst_count = 0;
     var comp_count = 0;
@@ -1842,7 +1842,7 @@ function assign_technician(serial, type, id, date) {
                             if (data.status == "ok") {
                                 $(".i_row_num_c_" + serial).remove();
                                 if ($(".install_assign tr").length == 0) {
-                                    $(".install_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No intsallation assigned</td></tr>")
+                                    $(".install_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No installation assigned</td></tr>")
                                 }
                                 $("#facebox #result").show().html("Successfully Assigned").removeClass().addClass("alert alert-success center");
                                 $("#Ins_count").html(parseInt($("#Ins_count").text()) - 1);

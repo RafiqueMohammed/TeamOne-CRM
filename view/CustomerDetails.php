@@ -474,14 +474,14 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                        <th class="col-md-3">AC Info</th>
-                        <th class="col-md-2">Installation Type</th>
-                        <th class="col-md-1">Install on</th>
-                        <th class="col-md-2">No of Services</th>
-                        <th class="col-md-1">Remarks</th>
-                        <th class="col-md-2">Received on</th>
+                        <th class="center col-md-2">AC Info</th>
+                        <th class="center col-md-2">Installation Type</th>
+                        <th class="center col-md-1">Install on</th>
+                        <th class="center col-md-1">No of Services</th>
+                        <th class="center col-md-1">Remarks</th>
+                        <th class="center col-md-1">Received on</th>
+                        <th class="center col-md-2"><i class='clip-busy'></i> Status</th>
                         <th class="center col-md-1"><i class='clip-wrench-2'></i></th>
-                        <th class="center"><i class='clip-wrench-2'></i></th>
                         </tr>
                         </thead>
                         <tbody class="installed_product">
@@ -577,7 +577,8 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
     </div>
 </div>
 <div id="panel_request" class="tab-pane">
-    <div class="row ">
+
+    <h3 style="margin-bottom:20px">Assign Technicians for services</h3>
         <div class="panel ">
 <div class="tabbable">
 <ul id="myTab" class="nav nav-tabs tab-bricky">
@@ -718,11 +719,9 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 </div>
 
 </div>
-            
-    </div>
+
 </div>
 <?php
-
    $c=curl_init();
     curl_setopt($c,CURLOPT_URL,$_SERVER['HTTP_HOST'].SUB_FOLDER."api/Tickets/Customer/".$_GET['id']);
     curl_setopt($c,CURLOPT_RETURNTRANSFER,true);
@@ -733,13 +732,13 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
 
     }else{
-$json_content=array("status"=>"no","result"=>"Cannot fetch data from the API.Try Again..");
+        $json_content=array("status"=>"no","result"=>"Cannot fetch data from the API.Try Again..");
     }
-$body="";
-$ac_info="";
-$cust_info="";
-$service_info="";
-$i=1;
+        $body="";
+        $ac_info="";
+        $cust_info="";
+        $service_info="";
+        $i=1;
 if($json_content['status']=="ok"){
     foreach($json_content['data'] as $data=>$val){     
         if($val['status']=="p"){
@@ -747,7 +746,7 @@ if($json_content['status']=="ok"){
         }else{
             $val['status']="Closed";
         }
-        ($val['info']['account_type']=="r")?$val['info']['account_type']="Residential":"Commercial";
+        $val['info']['account_type']=($val['info']['account_type']=="r")?"Residential":"Commercial";
         $type=$val['type'];
         switch($type){
             case 'installation':            
@@ -1077,7 +1076,7 @@ if($json_content['status']=="ok"){
 		<script type="text/javascript" src="assets/plugins/select2/select2.min.js"></script>
 		<script type="text/javascript" src="assets/plugins/DataTables/media/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="assets/plugins/DataTables/media/js/DT_bootstrap.js"></script>
-		<script src="assets/js/table-data.js"></script>
+
 		<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 		<script>
 			jQuery(document).ready(function() {
