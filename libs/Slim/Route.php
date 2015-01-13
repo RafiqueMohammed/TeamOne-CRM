@@ -41,25 +41,21 @@ namespace Slim;
 class Route
 {
     /**
+     * @var array Default conditions applied to all route instances
+     */
+    protected static $defaultConditions = array();
+    /**
      * @var string The route pattern (e.g. "/books/:id")
      */
     protected $pattern;
-
     /**
      * @var mixed The route callable
      */
     protected $callable;
-
     /**
      * @var array Conditions for this route's URL parameters
      */
     protected $conditions = array();
-
-    /**
-     * @var array Default conditions applied to all route instances
-     */
-    protected static $defaultConditions = array();
-
     /**
      * @var string The name of this route (optional)
      */
@@ -110,21 +106,21 @@ class Route
     }
 
     /**
-     * Set default route conditions for all instances
-     * @param  array $defaultConditions
-     */
-    public static function setDefaultConditions(array $defaultConditions)
-    {
-        self::$defaultConditions = $defaultConditions;
-    }
-
-    /**
      * Get default route conditions for all instances
      * @return array
      */
     public static function getDefaultConditions()
     {
         return self::$defaultConditions;
+    }
+
+    /**
+     * Set default route conditions for all instances
+     * @param  array $defaultConditions
+     */
+    public static function setDefaultConditions(array $defaultConditions)
+    {
+        self::$defaultConditions = $defaultConditions;
     }
 
     /**
@@ -143,42 +139,6 @@ class Route
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
-    }
-
-    /**
-     * Get route callable
-     * @return mixed
-     */
-    public function getCallable()
-    {
-        return $this->callable;
-    }
-
-    /**
-     * Set route callable
-     * @param  mixed $callable
-     * @throws \InvalidArgumentException If argument is not callable
-     */
-    public function setCallable($callable)
-    {
-        $matches = array();
-        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
-            $class = $matches[1];
-            $method = $matches[2];
-            $callable = function() use ($class, $method) {
-                static $obj = null;
-                if ($obj === null) {
-                    $obj = new $class;
-                }
-                return call_user_func_array(array($obj, $method), func_get_args());
-            };
-        }
-
-        if (!is_callable($callable)) {
-            throw new \InvalidArgumentException('Route callable must be callable');
-        }
-
-        $this->callable = $callable;
     }
 
     /**
@@ -215,24 +175,6 @@ class Route
     public function setName($name)
     {
         $this->name = (string)$name;
-    }
-
-    /**
-     * Get route parameters
-     * @return array
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Set route parameters
-     * @param  array $params
-     */
-    public function setParams($params)
-    {
-        $this->params = $params;
     }
 
     /**
@@ -401,26 +343,6 @@ class Route
     }
 
     /**
-     * Convert a URL parameter (e.g. ":id", ":id+") into a regular expression
-     * @param  array $m URL parameters
-     * @return string       Regular expression for URL parameter
-     */
-    protected function matchesCallback($m)
-    {
-        $this->paramNames[] = $m[1];
-        if (isset($this->conditions[$m[1]])) {
-            return '(?P<' . $m[1] . '>' . $this->conditions[$m[1]] . ')';
-        }
-        if (substr($m[0], -1) === '+') {
-            $this->paramNamesPath[$m[1]] = 1;
-
-            return '(?P<' . $m[1] . '>.+)';
-        }
-
-        return '(?P<' . $m[1] . '>[^/]+)';
-    }
-
-    /**
      * Set route name
      * @param  string $name The name of the route
      * @return \Slim\Route
@@ -461,5 +383,79 @@ class Route
 
         $return = call_user_func_array($this->getCallable(), array_values($this->getParams()));
         return ($return === false) ? false : true;
+    }
+
+    /**
+     * Get route callable
+     * @return mixed
+     */
+    public function getCallable()
+    {
+        return $this->callable;
+    }
+
+    /**
+     * Set route callable
+     * @param  mixed $callable
+     * @throws \InvalidArgumentException If argument is not callable
+     */
+    public function setCallable($callable)
+    {
+        $matches = array();
+        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+            $class = $matches[1];
+            $method = $matches[2];
+            $callable = function () use ($class, $method) {
+                static $obj = null;
+                if ($obj === null) {
+                    $obj = new $class;
+                }
+                return call_user_func_array(array($obj, $method), func_get_args());
+            };
+        }
+
+        if (!is_callable($callable)) {
+            throw new \InvalidArgumentException('Route callable must be callable');
+        }
+
+        $this->callable = $callable;
+    }
+
+    /**
+     * Get route parameters
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set route parameters
+     * @param  array $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * Convert a URL parameter (e.g. ":id", ":id+") into a regular expression
+     * @param  array $m URL parameters
+     * @return string       Regular expression for URL parameter
+     */
+    protected function matchesCallback($m)
+    {
+        $this->paramNames[] = $m[1];
+        if (isset($this->conditions[$m[1]])) {
+            return '(?P<' . $m[1] . '>' . $this->conditions[$m[1]] . ')';
+        }
+        if (substr($m[0], -1) === '+') {
+            $this->paramNamesPath[$m[1]] = 1;
+
+            return '(?P<' . $m[1] . '>.+)';
+        }
+
+        return '(?P<' . $m[1] . '>[^/]+)';
     }
 }

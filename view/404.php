@@ -1,10 +1,12 @@
 <!-- start: PAGE HEADER -->
 <div class="row">
     <div class="col-sm-12">
-<?php require_once(INC_DIR."QuickSearch.php"); ?>
+        <?php require_once(INC_DIR . "QuickSearch.php"); ?>
 
         <div class="page-header">
-            <h1>Error 404 <small>Page Not Found</small></h1>
+            <h1>Error 404
+                <small>Page Not Found</small>
+            </h1>
         </div>
         <!-- end: PAGE TITLE & BREADCRUMB -->
     </div>
@@ -18,6 +20,7 @@
         </div>
         <div class="error-details col-sm-6 col-sm-offset-3">
             <h3>Oops! You are stuck at 404</h3>
+
             <p>
                 Unfortunately the page you were looking for could not be found.
                 <br>
@@ -33,6 +36,7 @@
                 <br>
                 Search for whatever is missing, or take a look around the rest of our site.
             </p>
+
             <form action="#">
                 <div class="input-group">
                     <input type="text" placeholder="keyword..." size="16" class="form-control">

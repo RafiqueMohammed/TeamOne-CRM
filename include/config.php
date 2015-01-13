@@ -15,7 +15,7 @@ define("TAB_AMC", "amc");
 define("TAB_ASSIGN", "assignment");
 define("TAB_AMC_SERVICE", "amc_service_date");
 define("TAB_OTS", "one_time_service");
-define("TAB_INSTALL_SERVICE","install_service_date");
+define("TAB_INSTALL_SERVICE", "install_service_date");
 
 define("TAB_AC_MAKE", "ac_make");
 define("TAB_AC_TYPE", "ac_type");
@@ -40,5 +40,5 @@ define("IMAGES_DIR", ROOT_DIR . SUB_FOLDER . "assets/images/");
 define("SLIM_DIR", ROOT_DIR . SUB_FOLDER . "libs/Slim/");
 
 require_once(CONTROLLER_DIR . "main.php");
-require_once(INC_DIR."functions.php");
+require_once(INC_DIR . "functions.php");
 $DB = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME) or die("Error on launching database connection");

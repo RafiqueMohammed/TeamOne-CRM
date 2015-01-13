@@ -278,9 +278,40 @@ $(function (){
 });
 
 function delete_brand(type,id,parent){
+    console.log(type+parent);
     switch(type){
+        
+         case 'ac_type':
+         var htm = $(parent).find(".actype_popup").html();
+         var data = $(parent).find(".actype").html();
+         $.facebox(htm);
+         $("#facebox .update_ac_type_val").val(data);
+            /*var result = confirm("Are you sure?");
+            if (result == true) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "api/Manage/AC/Type/"+id,
+                    dataType:"JSON",
+                    success: function (data) {
+                        if (data.status == "ok") {
+                            console.log("success");
+                            $(parent).slideUp("slow");
+                        } else {
+                            console.log("failure");
+                        }
+                    }
+                });
+
+
+            }*/
+            break; 
         case 'ton':
-            var result = confirm("Are you sure?");
+        var htm = $(parent).find(".ton_popup").html()
+        var data = $(parent).find(".tonnage").html();
+        $.facebox(htm);
+        $("#facebox .update_tonnage_val").val(data);
+        
+            /*var result = confirm("Are you sure?");
             if (result == true) {
 
                 $.ajax({
@@ -298,10 +329,14 @@ function delete_brand(type,id,parent){
                 });
 
 
-            }
+            }*/
             break;
         case 'location':
-            var result = confirm("Are you sure?");
+        var htm = $(parent).find(".location_popup").html();
+        var data = $(parent).find(".location").html();
+        $.facebox(htm);
+        $("#facebox .update_location_val").val(data);
+            /*var result = confirm("Are you sure?");
             if (result == true) {
                 $.ajax({
                     type: "DELETE",
@@ -317,11 +352,16 @@ function delete_brand(type,id,parent){
                     }
                 });
 
-            }
+            }*/
             ;
             break;
         case 'make':
-            var result = confirm("Are you sure?");
+
+        var htm = $(parent).find(".make_popup").html();
+        var data = $(parent).find(".make").html();
+        $.facebox(htm);
+        $("#facebox .update_make_val").val(data);
+            /*var result = confirm("Are you sure?");
             if (result == true) {
                 $.ajax({
                     type: "DELETE",
@@ -338,11 +378,14 @@ function delete_brand(type,id,parent){
                 });
 
 
-            }
+            }*/
             break;
          case 'reference':
-         console.log(parent);
-            var result = confirm("Are you sure?");
+            var htm = $(parent).find(".reference_popup").html();
+            var data = $(parent).find(".reference").html();
+            $.facebox(htm);
+            $("#facebox .update_refer_val").val(data);
+            /*var result = confirm("Are you sure?");
             if (result == true) {
                 $.ajax({
                     type: "DELETE",
@@ -359,30 +402,14 @@ function delete_brand(type,id,parent){
                 });
 
 
-            }
-            break;
-         case 'ac_type':
-            var result = confirm("Are you sure?");
-            if (result == true) {
-                $.ajax({
-                    type: "DELETE",
-                    url: "api/Manage/AC/Type/"+id,
-                    dataType:"JSON",
-                    success: function (data) {
-                        if (data.status == "ok") {
-                            console.log("success");
-                            $(parent).slideUp("slow");
-                        } else {
-                            console.log("failure");
-                        }
-                    }
-                });
-
-
-            }
-            break;            
+            }*/
+            break;           
          case 'problem_type':
-            var result = confirm("Are you sure?");
+         var htm = $(parent).find(".ptype_popup").html();
+         var data = $(parent).find(".ptype").html();
+         $.facebox(htm);
+         $("#facebox .update_ptype_val").val(data);
+            /*var result = confirm("Are you sure?");
             if (result == true) {
                 $.ajax({
                     type: "DELETE",
@@ -399,10 +426,14 @@ function delete_brand(type,id,parent){
                 });
 
 
-            }
+            }*/
             break; 
          case 'branch':
-            var result = confirm("Are you sure?");
+            var htm = $(parent).find(".branch_popup").html();
+            var data = $(parent).find(".branch").html();
+            $.facebox(htm);
+            $("#facebox .update_branch_val").val(data);
+            /*var result = confirm("Are you sure?");
             if (result == true) {
                 $.ajax({
                     type: "DELETE",
@@ -419,8 +450,220 @@ function delete_brand(type,id,parent){
                 });
 
 
-            }
+            }*/
             break;    
     }
 
+}
+
+function update(type,elem){
+    switch(type){
+        case 'make_table':
+        var data = $("#facebox").find(".update_make_val").val();
+        var id = $("#facebox").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_make_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_make_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            $.ajax({
+                type:'put',
+                url:"api/Manage/AC/Make/"+id,
+                data:{make:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".make").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'actype_table':
+        var data = $("#facebox").find(".update_ac_type_val").val();
+        var id = $("#facebox").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_ac_type_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_ac_type_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            $.ajax({
+                type:'put',
+                url:"api/Manage/ACType/"+id,
+                data:{actype:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".actype").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'tonnage_table':
+        var data = $("#facebox").find(".update_tonnage_val").val();
+        var id = $("#facebox").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_tonnage_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_tonnage_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            $.ajax({
+                type:'put',
+                url:"api/Manage/Tonnage/"+id,
+                data:{tonnage:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".tonnage").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'location_table':
+        var data = $("#facebox").find(".update_location_val").val();
+        var id = $("#facebox ").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_location_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_location_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            $.ajax({
+                type:'put',
+                url:"api/Manage/Location/"+id,
+                data:{location:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".location").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'problem_table':
+        var data = $("#facebox").find(".update_ptype_val").val();
+        var id = $("#facebox ").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_ptype_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_ptype_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            console.log(data);
+            $.ajax({
+                type:'put',
+                url:"api/Manage/ProblemType/"+id,
+                data:{ptype:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".ptype").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'branch_table':
+        var data = $("#facebox").find(".update_branch_val").val();
+        var id = $("#facebox ").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_branch_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_branch_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            console.log(data);
+            $.ajax({
+                type:'put',
+                url:"api/Manage/Branch/"+id,
+                data:{branch:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".branch").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+        case 'reference_table':
+        var data = $("#facebox").find(".update_refer_val").val();
+        var id = $("#facebox").find(".hidden_id").val();
+        if(data=="" || id==""){
+            $("#facebox").find(".update_refer_val").parent().removeClass("has-success").addClass("has-error");
+        }else{
+            $("#facebox").find(".update_refer_val").parent().removeClass("has-error");
+            $("#facebox #result").show().html("Please wait").removeClass().addClass("alert alert-info center");
+            console.log(data);
+            $.ajax({
+                type:'put',
+                url:"api/Manage/Refer/"+id,
+                data:{refer:data},
+                dataType:'json',
+                success:function(response){
+                    if(response.status=="ok"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center");
+                        $("."+elem).find(".reference").html(data);
+                        setTimeout(function(){
+                            jQuery(document).trigger('close.facebox');  
+                        },1000)
+                    }else if(response.status=="no"){
+                        $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center");
+                    }
+                }
+          
+            });
+        }
+        break;
+        
+    }
+    
 }

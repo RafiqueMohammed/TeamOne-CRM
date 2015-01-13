@@ -6,19 +6,16 @@ var ac_data_count = 0;
 var technician_dropdown;
 var uninstalled_ac = {};
 var technicians = {};
+var possible_linked_account={};
 $(document).ready(function () {
 
     customer_id = $("#customer_id_holder").val();
-
-    $('#dob').datepicker({
-        autoclose: true
-    });
-
 
     if (customer_id == -1) {
 
         $(".container .row").eq(1).html("<div class='alert alert-danger center'>Missing Required Parameter. Customer ID is not defined.</div>");
     } else {
+
 
 
         blockThisUI($(".profile"));
@@ -30,25 +27,25 @@ $(document).ready(function () {
             success: function (data) {
                 cust_data = data;
                 if (data.status == 'ok') {
-                    $(".firstname").val(data.first_name);
-                    $(".lastname").val(data.last_name);
-                    $(".username").html(data.first_name + " " + data.last_name);
-                    $(".mobile1").val(data.mobile);
-                    $(".mobile1").html(data.mobile);
-                    $(".mobile2").val(data.alternate_mobile);
-                    $(".mobile2").html(data.alternate_mobile);
-                    $(".email").val(data.email);
-                    $(".email").html(data.email);
-                    $(".landline").val(data.phone);
-                    $(".landline").html(data.phone);
-                    $(".address").val(data.address);
-                    $(".address").html(data.address);
-                    $(".alternate_contacts").val(data.alternate_contact);
-                    $(".alternate_contacts").html(data.alternate_contact);
-                    $(".pincode").val(data.pincode);
-                    $(".pincode").html(data.pincode);
-                    $(".city").val(data.city);
-                    $(".city").html(data.city);
+                    $(".edit_firstname").attr("value",data.first_name);
+                    $(".edit_lastname").attr("value",data.last_name);
+                    $(".display_username").html(data.first_name + " " + data.last_name);
+                    $(".edit_mobile1").attr("value",data.mobile);
+                    $(".display_mobile1").html(data.mobile);
+                    $(".edit_mobile2").attr("value",data.alternate_mobile);
+                    $(".display_mobile2").html(data.alternate_mobile);
+                    $(".edit_email").attr("value",data.email);
+                    $(".display_email").html(data.email);
+                    $(".edit_landline").attr("value",data.phone);
+                    $(".display_landline").html(data.phone);
+                    $(".edit_address").val(data.address);
+                    $(".display_address").html(data.address);
+                    $(".edit_alternate_contacts").attr("value",data.alternate_contact);
+                    $(".display_alternate_contacts").html(data.alternate_contact);
+                    $(".edit_pincode").attr("value",data.pincode);
+                    $(".display_pincode").html(data.pincode);
+                    $(".edit_city").attr("value",data.city);
+                    $(".display_city").html(data.city);
                     var land_opt = "";
                     $.each(data.landmark_info, function (key, val) {
 
@@ -60,7 +57,7 @@ $(document).ready(function () {
 
                     });
                     $("#landmark").html(land_opt);
-                    $(".landmark_info").html(data.landmark);
+                    $(".display_landmark_info").html(data.landmark);
 
 
                     var ac_drop_opt = "";
@@ -71,11 +68,11 @@ $(document).ready(function () {
                         delete data.ac_data.status;
                         $.each(data.ac_data, function (key, type) {
 
-                            ac_drop_opt += "<tr class='num_ac_rows num_ac_rows_" + ac_data_count + "'><td>" + type.ac_type + "</td>\
-                            <td>" + type.make + "</td><td>" + type.tonnage + "</td>" +
+                            ac_drop_opt += "<tr class='num_ac_rows num_ac_rows_" + ac_data_count + "'><td class='center'>" + type.ac_type + "</td>\
+                            <td class='center'>" + type.make + "</td><td class='center'>" + type.tonnage + "</td>" +
                             "<td><b>Model No. : </b>" + type.odu_model_no + " <br/ > <b>Serial No. : </b>" + type.odu_serial_no + "</td><td><b>Model No. : </b>" + type.idu_model_no + " <br/ > <b>Serial No. : </b>" + type.idu_serial_no + "</td>\
-                                <td>" + type.location + "</td>" + "<td><button class='btn btn-primary btn-sm' onclick='display_remarks(\"" + type.remarks + "\")'><i class='clip-info'></i></button></td>\
-                                <td><i style='cursor:pointer;color:red' onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")' class='clip-minus-circle-2'></i></td></tr>";
+                                <td class='center'>" + type.location + "</td>" + "<td class='center'><button class='btn btn-purple' onclick='display_remarks(\"" + type.remarks + "\")'><i class='fa  fa-comment '></i></button></td>\
+                                <td><button onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")' class='btn btn-danger'><i class='fa fa-trash-o'></i></button></td></tr>";
 
                             ac_data_count++; //Total number of AC for later use
 
@@ -87,40 +84,75 @@ $(document).ready(function () {
 
                     $(".customer_product_view").append(ac_drop_opt);
 
-                    $(".location").val(data.location);
-                    $(".location").html(data.location);
+                    $(".edit_location").attr("value",data.location);
+                    $(".display_location").html(data.location);
                     $(".communication option[value='" + data.mode_of_contact + "']").attr("selected", "selected");
                     if (data.communication == "m") {
-                        $(".communication_m").html("Mobile");
+                        $(".display_communication_m").html("Mobile");
                     } else if (data.communication == "e") {
-                        $(".communication_m").html("Email");
+                        $(".display_communication_m").html("Email");
                     } else {
-                        $(".communication_m").html("Mobile & Email");
+                        $(".display_communication_m").html("Mobile & Email");
                     }
-                    $(".referred_by").html(data.reference);
-                    $(".referred_by").val(data.reference);
-                    $("input[name='dob']").val(data.dob);
-                    $(".dob").html(data.dob);
-                    $(".created_on").html(data.date)
-                    $(".remarks").val(data.remarks);
-                    $(".remarks").html(data.remarks);
+                    $(".display_referred_by").html(data.reference);
+                    $(".edit_referred_by").attr("value",data.reference);
+                    $(".display_dob").html(data.dob);
+                    $(".edit_birth_date").attr("value",data.dob);
+                    $(".display_created_on").html(data.date)
+                    $(".edit_remarks").val(data.remarks);
+                    $(".display_remarks").html(data.remarks);
                     if (data.account_type == "r") {
-                        $(".org_type").val("Residential");
-                        $(".org_type").html("Residential");
+                        $(".edit_org_type").attr("value","Residential");
+                        $(".display_org_type").html("Residential");
                         $("#CustomerDetailsTab").removeClass("tab-bricky").addClass("tab-blue");
 
                     } else {
-                        $(".org_type").val("Commercial");
-                        $(".org_type").html("Commercial");
+                        $(".edit_org_type").attr("value","Commercial");
+                        $(".display_org_type").html("Commercial");
                         $("#CustomerDetailsTab").removeClass("tab-blue").addClass("tab-bricky");
                     }
-                    $(".org_name").val(data.organisation);
-                    $(".org_name").html(data.organisation);
+                    $(".edit_org_name").attr("value",data.organisation);
+                    $(".display_org_name").html(data.organisation);
 
                     $.getJSON("api/Manage/Complaints/ProblemType", function (type) {
                         ac_data.problem_type = type;
                     });
+                    /** STARTS: POSSIBLE LINKED ACCOUNT ***/var linked_acc_ref=$("#linked_account");
+                    blockThisUI(linked_acc_ref);
+                    $.ajax({
+                        type:'get',
+                        url:'api/LinkedAccount/'+customer_id,
+                        dataType:'json',
+                        success: function(response){
+                            if(response.status=="ok"){
+                                var output="";
 
+                                $.each(response.data, function (key, type) {
+                                    var li="";
+                                    li+="<li><a href='javascript:void(0)' class='activity'>";
+                                    if(type.account_type=="r"){
+                                        li+="<i class='clip-home-2 circle-icon circle-green'></i>";
+                                        li+="<span class='desc'>"+type.organisation+" | "+type.first_name+" "+type.last_name+" | "+type.mobile+" | "+type.location+" </span>";
+
+                                    }else{
+                                        li+="<i class='fa fa-trello circle-icon circle-bricky'></i>";
+                                        li+="<span class='desc'>"+type.organisation+" | "+type.first_name+" "+type.last_name+" | "+type.mobile+" | "+type.location+" </span>";
+                                    }
+                                    li+="<div class='time'><i class='fa fa-time bigger-110'></i>" +
+                                    "<button class='btn btn-primary' onClick='LoadPage(\"CustomerDetails?id="+type.cust_id+"&ref=CustomerDetails?id="+customer_id+"\")'>View</button></div></a></li>";
+                                    output+=li;
+                                });
+                            }else if(response.status=="no"){
+                                output="<li class='alert alert-warning'><i class='clip-notification-2'></i> No Matching Account</li>";
+                            }
+                            linked_acc_ref.html("<ul class='activities'>"+output+"</ul>");
+                            unblockThisUI(linked_acc_ref);
+                        },error:function(){
+                            unblockThisUI(linked_acc_ref);
+                        }
+                    });
+
+                    /** ENDS: POSSIBLE LINKED ACCOUNT ***/
                 } else if (data.status == "no") {
                     $(".container .row").eq(1).html("<div class='alert alert-danger center'>" + data.result + "</div>");
                 }
@@ -129,6 +161,8 @@ $(document).ready(function () {
         });
 
     }
+
+
 
     $("#update_customer_details").click(function () {
         var mThis = $(this);
@@ -154,9 +188,9 @@ $(document).ready(function () {
             $('input[name=mobile1]').parent().parent().find(".error_span").empty();
 
         }
-
+        
         if (c > 0) {
-            console.log(c);
+            
             $("#error").html("Please fill the required fields").removeClass().addClass("alert alert-danger center");
         } else {
             $("#error").hide();
@@ -168,7 +202,7 @@ $(document).ready(function () {
             var pincode = $("#pincode").val();
             var landmark = $("#landmark").val();
             var communication = $("#communication").val();
-            var dob = $("#dob").val();
+            var dob = $("#edit_get_birth_date").val();
             var landline = $("#landline").val();
             var alt_contacts = $("#alternate_contacts").val();
             var city = $("#city").val();
@@ -200,25 +234,25 @@ $(document).ready(function () {
             success: function (data) {
                 cust_data = data;
                 if (data.status == 'ok') {
-                    $(".firstname").val(data.first_name);
-                    $(".lastname").val(data.last_name);
-                    $(".username").html(data.first_name + " " + data.last_name);
-                    $(".mobile1").val(data.mobile);
-                    $(".mobile1").html(data.mobile);
-                    $(".mobile2").val(data.alternate_mobile);
-                    $(".mobile2").html(data.alternate_mobile);
-                    $(".email").val(data.email);
-                    $(".email").html(data.email);
-                    $(".landline").val(data.phone);
-                    $(".landline").html(data.phone);
-                    $(".address").val(data.address);
-                    $(".address").html(data.address);
-                    $(".alternate_contacts").val(data.alternate_contact);
-                    $(".alternate_contacts").html(data.alternate_contact);
-                    $(".pincode").val(data.pincode);
-                    $(".pincode").html(data.pincode);
-                    $(".city").val(data.city);
-                    $(".city").html(data.city);
+                    $(".edit_firstname").attr("value",data.first_name);
+                    $(".edit_lastname").attr("value",data.last_name);
+                    $(".display_username").html(data.first_name + " " + data.last_name);
+                    $(".edit_mobile1").attr("value",data.mobile);
+                    $(".display_mobile1").html(data.mobile);
+                    $(".edit_mobile2").attr("value",data.alternate_mobile);
+                    $(".display_mobile2").html(data.alternate_mobile);
+                    $(".edit_email").attr("value",data.email);
+                    $(".display_email").html(data.email);
+                    $(".edit_landline").attr("value",data.phone);
+                    $(".display_landline").html(data.phone);
+                    $(".edit_address").val(data.address);
+                    $(".display_address").html(data.address);
+                    $(".edit_alternate_contacts").attr("value",data.alternate_contact);
+                    $(".display_alternate_contacts").html(data.alternate_contact);
+                    $(".edit_pincode").attr("value",data.pincode);
+                    $(".display_pincode").html(data.pincode);
+                    $(".edit_city").attr("value",data.city);
+                    $(".display_city").html(data.city);
                     var land_opt = "";
                     $.each(data.landmark_info, function (key, val) {
 
@@ -245,7 +279,7 @@ $(document).ready(function () {
                             <td>" + type.make + "</td><td>" + type.tonnage + "</td>" +
                             "<td><b>Model No. : </b>" + type.odu_model_no + " <br/ > <b>Serial No. : </b>" + type.odu_serial_no + "</td><td><b>Model No. : </b>" + type.idu_model_no + " <br/ > <b>Serial No. : </b>" + type.idu_serial_no + "</td>\
                                 <td>" + type.location + "</td>" + "<td><button class='btn btn-primary btn-sm' onclick='display_remarks(\"" + type.remarks + "\")'><i class='clip-info'></i></button></td>\
-                                <td><i style='cursor:pointer;color:red' onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")' class='clip-minus-circle-2'></i></td></tr>";
+                                <td><button class='btn btn-danger btn-sm' onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")'> <i class='fa fa-trash-o'></i></button></td></tr>";
 
                             ac_data_count++; //Total number of AC for later use
 
@@ -257,35 +291,35 @@ $(document).ready(function () {
 
                     $(".customer_product_view").append(ac_drop_opt);
 
-                    $(".location").val(data.location);
-                    $(".location").html(data.location);
+                    $(".edit_location").attr("value",data.location);
+                    $(".display_location").html(data.location);
                     $(".communication option[value='" + data.mode_of_contact + "']").attr("selected", "selected");
                     if (data.communication == "m") {
-                        $(".communication_m").html("Mobile");
+                        $(".display_communication_m").html("Mobile");
                     } else if (data.communication == "e") {
-                        $(".communication_m").html("Email");
+                        $(".display_communication_m").html("Email");
                     } else {
-                        $(".communication_m").html("Mobile & Email");
+                        $(".display_communication_m").html("Mobile & Email");
                     }
-                    $(".referred_by").html(data.reference);
-                    $(".referred_by").val(data.reference);
-                    $("input[name='dob']").val(data.dob);
-                    $(".dob").html(data.dob);
-                    $(".created_on").html(data.date)
-                    $(".remarks").val(data.remarks);
-                    $(".remarks").html(data.remarks);
+                    $(".display_referred_by").html(data.reference);
+                    $(".edit_referred_by").attr("value",data.reference);
+                    $("edit_birth_date").attr("value",data.dob);
+                    $(".display_dob").html(data.dob);
+                    $(".display_created_on").html(data.date)
+                    $(".edit_remarks").val(data.remarks);
+                    $(".display_remarks").html(data.remarks);
                     if (data.account_type == "r") {
-                        $(".org_type").val("Residential");
-                        $(".org_type").html("Residential");
+                        $(".edit_org_type").attr("value","Residential");
+                        $(".display_org_type").html("Residential");
                         $("#CustomerDetailsTab").removeClass("tab-bricky").addClass("tab-blue");
 
                     } else {
-                        $(".org_type").val("Commercial");
-                        $(".org_type").html("Commercial");
+                        $(".edit_org_type").attr("value","Commercial");
+                        $(".display_org_type").html("Commercial");
                         $("#CustomerDetailsTab").removeClass("tab-blue").addClass("tab-bricky");
                     }
-                    $(".org_name").val(data.organisation);
-                    $(".org_name").html(data.organisation);
+                    $(".edit_org_name").attr("value",data.organisation);
+                    $(".display_org_name").html(data.organisation);
 
                     $.getJSON("api/Manage/Complaints/ProblemType", function (type) {
                         ac_data.problem_type = type;
@@ -331,8 +365,7 @@ $(document).ready(function () {
 
 
     $("#pincode").keyup(function (e) {
-        /* var code = e.keyCode;
-         console.log("Key code "+code);*/
+
         var pincode = $('#pincode').val();
         if (pincode.length > 3) {
             $.post("controller/GetPincode.php", {type: "pincode", pincode: pincode}, function (data) {
@@ -350,7 +383,7 @@ $(document).ready(function () {
         var title = modal_box.find(".modal-title");
         var modal_body = modal_box.find(".modal-body");
         var modal_footer=modal_box.find(".modal-footer");
-        var ac_dropdown = "<option onClick='onUninstallACSelect(\"-1\")' value='-1'> -- Select AC -- </option>";
+        var ac_dropdown = "<option value='-1'> -- Select AC -- </option>";
 
         $.getJSON("api/Customer/" + customer_id + "/Uninstalled", function (response) {
             if (response.status == "ok") {
@@ -358,9 +391,8 @@ $(document).ready(function () {
                 if (response.data.length > 0) {
 
                     $.each(response.data, function (key, val) {
-                        ac_dropdown += "<option onClick='onUninstallACSelect("+key+")' value='" + key + "'> " + val.brand_name + " (" + val.location + ")  </option>";
+                        ac_dropdown += "<option  value='" + key + "'> " + val.brand_name + " (" + val.location + ")  </option>";
                     });
-                    ac_dropdown += "</select>";
                     modal_body.find(".select_uninstalled_ac").html(ac_dropdown);
                 } else {
                     modal_body.html("<div class='alert alert-danger'>AC Data is corrupt or not retrieved. Please refresh the page</div>");
@@ -373,12 +405,10 @@ $(document).ready(function () {
             }
             unblockThisUI(mThis);
             $.facebox({div: "#installation_modal_box"});
+            $(".date-picker").datepicker({
+                autoclose:true
+            });
         });
-
-
-        $(".date-picker").datepicker({autoclose: true});
-
-
 
 
     });
@@ -417,8 +447,10 @@ $(document).ready(function () {
         }
 
         $.facebox({ div: "#complaints_modal_box" });
-        //modal_box.modal("show");
-        $("#facebox .preffered_date").datepicker({autoclose: true});
+        //$("#facebox .preffered_date").datepicker({autoclose: true});
+        $("#facebox .preffered_date").datepicker({
+            autoclose:true
+        });
     
     $("#facebox .create_btn").on('click', function () {
         var elem = $(this).parent().parent();
@@ -509,11 +541,9 @@ $(document).ready(function () {
             </tr>";
 
             $("#facebox .table_body").html(row);
-
             $('#facebox .amc_datepicker').each(function () {
-                autoclose: true
-                $(this).datepicker();
-            });                
+                $(this).datepicker({autoclose: true});
+            });
             }else{
                 amc_ac_dropdown += "<option value='-1'> - No AC Added Yet - </option>";
             var row = "<tr class='aaa row_" + i + "'><td ><select onchange='amc_ac_change(\"row_" + i + "\")' class='form-control mandotory amc_select_ac'>" + amc_ac_dropdown + "</select>\
@@ -561,9 +591,12 @@ $(document).ready(function () {
             </td></tr>";
 
             $("#facebox .table_body").append(row);
+            /*$("#facebox .preffered_date").datepicker({
+                autoclose:true,
+                startDate: date
+            });*/
             $('#facebox .amc_datepicker').each(function () {
-                autoclose: true
-                $(this).datepicker();
+                $(this).datepicker({autoclose: true});
             });
         });
 
@@ -603,17 +636,17 @@ $(document).ready(function () {
                 var data = "";
 
                 for (var i = 0; i < rows; i++) {
-                    console.log("AC :" + $("#facebox .table_body tr").eq(i).find(".amc_selected_ac").val());
-                    data += "&row[" + i + "][cust_id]=" + $("#facebox .table_body tr").eq(i).find(".Customer_id").val();
-                    data += "&row[" + i + "][ac_id]=" + $("#facebox .table_body tr").eq(i).find(".amc_selected_ac").val();
-                    data += "&row[" + i + "][select_ac]=" + $("#facebox .table_body tr").eq(i).find(".amc_select_ac").val();
-                    data += "&row[" + i + "][service_type]=" + $("#facebox .table_body tr").eq(i).find(".amc_service_type").val();
-                    data += "&row[" + i + "][dry_service]=" + $("#facebox .table_body tr").eq(i).find(".amc_dry").val();
-                    data += "&row[" + i + "][wet_service]=" + $("#facebox .table_body tr").eq(i).find(".amc_wet").val();
-                    data += "&row[" + i + "][amc_datepicker]=" + $("#facebox .table_body tr").eq(i).find(".amc_datepicker").val();
-                    data += "&row[" + i + "][amc_remarks]=" + $("#facebox .table_body tr").eq(i).find(".amc_remarks").val();
+
+                    data += "&row[" + i + "][cust_id]=" + $("#facebox .aaa").eq(i).find(".Customer_id").val();
+                    data += "&row[" + i + "][ac_id]=" + $("#facebox .aaa").eq(i).find(".amc_selected_ac").val();
+                    data += "&row[" + i + "][select_ac]=" + $("#facebox .aaa").eq(i).find(".amc_select_ac").val();
+                    data += "&row[" + i + "][service_type]=" + $("#facebox .aaa").eq(i).find(".amc_service_type").val();
+                    data += "&row[" + i + "][dry_service]=" + $("#facebox .aaa").eq(i).find(".amc_dry").val();
+                    data += "&row[" + i + "][wet_service]=" + $("#facebox .aaa").eq(i).find(".amc_wet").val();
+                    data += "&row[" + i + "][amc_datepicker]=" + $("#facebox .aaa").eq(i).find(".amc_datepicker").val();
+                    data += "&row[" + i + "][amc_remarks]=" + $("#facebox .aaa").eq(i).find(".amc_remarks").val();
                 }
-                console.log(data);
+
                 $("#facebox #result").show().html("Please wait...<i class='clip-buzy'></i>").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'post',
@@ -622,13 +655,13 @@ $(document).ready(function () {
                     dataType: 'json',
                     success: function (response) {
                         if (response.status == "ok") {
-                            console.log("success");
+
                             $("#facebox #result").show().html("Added Successfully").removeClass().addClass("alert alert-success center");
                             setTimeout(function(){
                                     jQuery(document).trigger('close.facebox');
                             },1000);
                         } else if (response.status == "no") {
-                            console.log("error");
+
                             $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                         }
                     }
@@ -667,12 +700,14 @@ $(document).ready(function () {
 
         $.facebox({div: "#ots_modal_box"});
         
-        $("#facebox .preffered_date").datepicker({autoclose: true});
+        //$("#facebox .preffered_date").datepicker({autoclose: true});
+        $("#facebox .preffered_date").datepicker({
+            autoclose:true
+        });
         
         $("#facebox .content .select_ac").on('change', function () {
 
             var val = $(this).val();
-            console.log(val);
             var elem = $(this).parent().parent();
             if (val == -1) {
                 elem.find(".select_ac_id").val("-1");
@@ -758,31 +793,30 @@ $(document).ready(function () {
                     var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>"+val.actype+"</td></tr>\
-                            <tr><td>Make</td><td>" + val.brand_name + "</td></tr>\
-                            <tr><td>Location</td><td>"+val.location+"</td></tr>\
-                            <tr><td>Tonnage / HP</td><td>"+val.tonnage+"</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
-                            <tr><td colspan='2'>"+val.remarks+"</td></tr></table></div></div>";
+                            <tr><th>AC Type</th><td>"+val.actype+"</td></tr>\
+                            <tr><th>Make</th><td>" + val.brand_name + "</td></tr>\
+                            <tr><th>Location</th><td>"+val.location+"</td></tr>\
+                            <tr><th>Tonnage / HP</th><td>"+val.tonnage+"</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
+                            <tr><th>Remarks</th><td>"+val.remarks+"</td></tr></table></div></div>";
                             if(val.install_remarks==""){
                                 remake_remarks="<b class='text-danger'>No remarks added</b>";
                             }else{
                                 remake_remarks=val.install_remarks;
                             }
                     var ac_remarks = "<div class='no-display ac_remark'><div style='background:#fff;padding: 20px;border-radius:5px;width: 400px;'><table class='table table-bordered table-striped'><tr><th class='center'>Remarks</th></tr><tr><td style='text-align:justify'>"+remake_remarks+"</td></tr></table></div></div>";
-                    installed_ac += "<tr class='i_row i_row_" + total + "'><td>" + val.brand_name + "&nbsp;("+val.actype+")"+ac_div+"&nbsp;&nbsp;<i onclick='show_ac_popup(\"i_row_" + total + "\");' style='font-size:1.3em' class='fa fa-eye cursor'></i></td>" +
+                    installed_ac += "<tr class='i_row i_row_" + total + "'><td>" + val.brand_name + "&nbsp;("+val.actype+")"+ac_div+"&nbsp;&nbsp;<i onclick='show_ac_popup(\"i_row_" + total + "\");' style='font-size:1.3em' class='clip-popout cursor'></i></td>" +
                         "<td>" + install_type + "</td>" +
                         "<td>" + val.preferred_date + "</td>" +
                         "<td class='center'>" + val.no_of_service + "</td>" +
-                        "<td>"+ac_remarks+"&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"i_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td>" +
-                        "<td>" + val.created_on + "</td><td><span>Technician is not assigned</span> </td>" +
-                        "<td><button onclick='ViewAMC(\"install\","+val.install_id+")' class='btn btn-sm btn-info center'><i class='clip-info-2'></i></button><button onclick='delete_service_type(\"installation\"," + val.install_id + "," + total + ")' class='btn btn-sm btn-danger'><i class='clip-close'></i></button></td></tr>";
+                        "<td class='center'>"+ac_remarks+"&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"i_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td>" +
+                        "<td class='center'>" + val.created_on + "</td><td  class='center'><span>"+val.assignment_status+"</span> </td>" +
+                        "<td><button onclick='ViewAMC(\"install\","+val.install_id+")' class='btn btn-sm btn-info center'><i class='clip-info-2'></i></button> <button onclick='delete_service_type(\"installation\"," + val.install_id + "," + total + ")' class='btn btn-sm btn-danger'><i class='fa fa-trash-o'></i></button></td></tr>";
                     total++;
                 });
                 $(".installed_product").html(installed_ac);
             } else if (response.status == "no") {
-                console.log("No installation is added yet");
                 installed_ac = "<tr class='empty_row'><td class='alert alert-info center' colspan='7'> <i class='clip-info'></i> No installation is added yet</td></tr>";
                 $(".installed_product").html(installed_ac);
             }
@@ -801,27 +835,27 @@ $(document).ready(function () {
                     var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                    <tr><td>AC Type</td><td>"+val.actype+"</td></tr>\
-                    <tr><td>Make</td><td>" + val.brand_name + "</td></tr>\
-                    <tr><td>Location</td><td>"+val.location+"</td></tr>\
-                    <tr><td>Tonnage / HP</td><td>"+val.tonnage+"</td></tr>\
-                    <tr><td>IDU</td><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
-                    <tr><td>ODU</td><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
-                    <tr><td colspan='2'>"+val.remarks+"</td></tr></table></div></div>";
+                    <tr><th>AC Type</th><td>"+val.actype+"</td></tr>\
+                    <tr><th>Make</th><td>" + val.brand_name + "</td></tr>\
+                    <tr><th>Location</th><td>"+val.location+"</td></tr>\
+                    <tr><th>Tonnage / HP</th><td>"+val.tonnage+"</td></tr>\
+                    <tr><th>IDU</th><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
+                    <tr><th>ODU</th><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
+                    <tr><th>Remarks</th><td>"+val.remarks+"</td></tr></table></div></div>";
                     if(val.problem_desc==""){
                         remake_remarks = "<b class='text-danger'>No remarks added</b>";
                     }else{
                         remake_remarks = val.problem_desc;
                     }
                     var ac_remarks = "<div class='no-display ac_remark'><div style='background:#fff;padding: 20px;border-radius:5px;width: 400px;'><table class='table table-bordered table-striped'><tr><th class='center'>Remarks</th></tr><tr><td style='text-align:justify'>"+remake_remarks+"</td></tr></table></div></div>";
-                    complaint_ac += "<tr class='c_row c_row_" + total + "'><td>" + val.brand_name+"&nbsp;("+val.actype+")&nbsp;" + ac_div+"&nbsp;&nbsp; <i onclick='show_ac_popup(\"c_row_" + total + "\");' style='font-size:1.3em' class='fa fa-eye cursor'></i></td>\
-                    <td>" + val.ac_problem_type + "</td><td>" + ac_remarks + "&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"c_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td><td>" + val.created_on + "</td>\
-                        <td><i class='clip-minus-circle-2' onclick='delete_service_type(\"complaints\"," + val.com_id + "," + total + ")' style='cursor:pointer;color:red'></i></td></tr>";
+                    complaint_ac += "<tr class='c_row c_row_" + total + "'><td>" + val.brand_name+"&nbsp;("+val.actype+")&nbsp;" + ac_div+"&nbsp;&nbsp; <i onclick='show_ac_popup(\"c_row_" + total + "\");' style='font-size:1.3em' class='clip-popout cursor'></i></td>\
+                    <td>" + val.ac_problem_type + "</td><td class='center'>" + ac_remarks + "&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"c_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td>\
+                    <td class='center'>" + val.created_on + "</td><td  class='center'><span>"+val.assignment_status+"</span> </td>\
+                    <td><button class='btn btn-danger'  onclick='delete_service_type(\"complaints\"," + val.com_id + "," + total + ")'><i class='fa fa-trash-o' ></i></button></td></tr>";
                     total++;
                 });
                 $(".complaint_product").html(complaint_ac);
             } else if (response.status == "no") {
-                console.log("No Complaints is added yet");
                 complaint_ac = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No Complaints is added yet</td></tr>";
                 $(".complaint_product").html(complaint_ac);
             }
@@ -839,7 +873,7 @@ $(document).ready(function () {
                     for (var i = 0; i < ac_data_count; i++) {
                         if (ac_data.ac_info[i].ac_id == val.ac_id) {
                             mAC_Info = ac_data.ac_info[i];
-                            console.log(mAC_Info);
+
                         
                     
                     if (val.amc_type == "s") {
@@ -852,30 +886,29 @@ $(document).ready(function () {
                     var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                    <tr><td>AC Type</td><td>"+mAC_Info.ac_type+"</td></tr>\
-                    <tr><td>Make</td><td>" + mAC_Info.make + "</td></tr>\
-                    <tr><td>Location</td><td>"+mAC_Info.location+"</td></tr>\
-                    <tr><td>Tonnage / HP</td><td>"+mAC_Info.tonnage+"</td></tr>\
-                    <tr><td>IDU</td><td>Serial No: "+mAC_Info.idu_serial_no+"<br /> Model No :"+mAC_Info.idu_model_no+"</td></tr>\
-                    <tr><td>ODU</td><td>Serial No: "+mAC_Info.odu_serial_no+"<br /> Model No :"+mAC_Info.odu_model_no+"</td></tr>\
-                    <tr><td colspan='2'>"+mAC_Info.remarks+"</td></tr></table></div></div>";
+                    <tr><th>AC Type</th><td>"+mAC_Info.ac_type+"</td></tr>\
+                    <tr><th>Make</th><td>" + mAC_Info.make + "</td></tr>\
+                    <tr><th>Location</th><td>"+mAC_Info.location+"</td></tr>\
+                    <tr><th>Tonnage / HP</th><td>"+mAC_Info.tonnage+"</td></tr>\
+                    <tr><th>IDU</th><td>Serial No: "+mAC_Info.idu_serial_no+"<br /> Model No :"+mAC_Info.idu_model_no+"</td></tr>\
+                    <tr><th>ODU</th><td>Serial No: "+mAC_Info.odu_serial_no+"<br /> Model No :"+mAC_Info.odu_model_no+"</td></tr>\
+                    <tr><th>Remarks</th><td>"+mAC_Info.remarks+"</td></tr></table></div></div>";
                     if(val.remarks==""){
                         remake_remarks="<b class='text-danger'>No remakrs added</b>";
                     }else{
                         remake_remarks=val.remarks;
                     }
                     var ac_remarks = "<div class='no-display ac_remark'><div style='background:#fff;padding: 20px;border-radius:5px;width: 400px;'><table class='table table-bordered table-striped'><tr><th class='center'>Remarks</th></tr><tr><td style='text-align:justify'>"+remake_remarks+"</td></tr></table></div></div>";                    
-                    amc_ac += "<tr class='a_row a_row_" + total + "'><td> "+mAC_Info.make+" ("+mAC_Info.location+")" +ac_div+ " <i onclick='show_ac_popup(\"a_row_" + total + "\");' style='font-size:1.3em' class='fa fa-eye cursor'></i></td><td>" + val.amc_type + "</td><td>" +
+                    amc_ac += "<tr class='a_row a_row_" + total + "'><td> "+mAC_Info.make+" ("+mAC_Info.location+")" +ac_div+ " <i onclick='show_ac_popup(\"a_row_" + total + "\");' style='font-size:1.3em' class='clip-popout cursor'></i></td><td>" + val.amc_type + "</td><td>" +
                         "<b>Dry: </b>" + val.dry + "<br /><b>Wet: </b>" + val.wet + "</td><td>" + val.activation + "</td><td>" + val.expiration + "</td><td>"+ac_remarks+"&nbsp;&nbsp; <a onclick='show_ac_remark_popup(\"a_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></td>\
                         <td><button onclick='ViewAMC(\"amc\","+val.amc_id+","+val.wet+","+val.dry+")' class='btn btn-info center'><i class='clip-info-2'> More</i></button></td>\
-                        <td><i class='clip-minus-circle-2' onclick='delete_service_type(\"amc\"," + val.amc_id + "," + total + ")' style='cursor:pointer;color:red'></i></td></tr>";
+                        <td><button class='btn btn-danger' onclick='delete_service_type(\"amc\"," + val.amc_id + "," + total + ")'><i class='fa fa-trash-o'></i></button></td></tr>";
                     total++;
                     }
                     }
                 });
                 $(".amc_product").html(amc_ac);
             } else if (response.status == "no") {
-                console.log("No AMC is added yet");
                 amc_ac = "<tr class='empty_row'><td class='alert alert-info center' colspan='7'> <i class='clip-info'></i> No AMC is added yet</td></tr>";
                 $(".amc_product").html(amc_ac);
             }
@@ -893,13 +926,13 @@ $(document).ready(function () {
                     var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                    <tr><td>AC Type</td><td>"+val.actype+"</td></tr>\
-                    <tr><td>Make</td><td>" + val.brand_name + "</td></tr>\
-                    <tr><td>Location</td><td>"+val.location+"</td></tr>\
-                    <tr><td>Tonnage / HP</td><td>"+val.tonnage+"</td></tr>\
-                    <tr><td>IDU</td><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
-                    <tr><td>ODU</td><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
-                    <tr><td colspan='2'>"+val.remarks+"</td></tr></table></div></div>";
+                    <tr><th>AC Type</th><td>"+val.actype+"</td></tr>\
+                    <tr><th>Make</th><td>" + val.brand_name + "</td></tr>\
+                    <tr><th>Location</th><td>"+val.location+"</td></tr>\
+                    <tr><th>Tonnage / HP</th><td>"+val.tonnage+"</td></tr>\
+                    <tr><th>IDU</th><td>Serial No: "+val.idu_serial_no+"<br /> Model No :"+val.idu_model_no+"</td></tr>\
+                    <tr><th>ODU</th><td>Serial No: "+val.odu_serial_no+"<br /> Model No :"+val.odu_model_no+"</td></tr>\
+                    <tr><th>Remarks</th><td>"+val.remarks+"</td></tr></table></div></div>";
                     if(val.description==""){
                         remake_remarks="<b class='text-danger'>No remarks added</b>";
                     }else{
@@ -907,14 +940,13 @@ $(document).ready(function () {
                     }
                     var ac_remarks = "<div class='no-display ac_remark'><div style='background:#fff;padding: 20px;border-radius:5px;width: 400px;'><table class='table table-bordered table-striped'><tr><th class='center'>Remarks</th></tr><tr><td style='text-align:justify'>"+remake_remarks+"</td></tr></table></div></div>";
                      
-                    ots_ac += "<tr class='o_row o_row_" + total + "'><td>"+val.brand_name+"&nbsp;("+ val.actype+")"+ac_div+ "&nbsp;&nbsp;<i onclick='show_ac_popup(\"o_row_" + total + "\");' style='font-size:1.3em' class='fa fa-eye cursor'></i></td>\
-                    <td>" + val.service_type + "</td><td>" + ac_remarks + "&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"o_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td><td>" + val.created_on + "</td>\
-                    <td><i class='clip-minus-circle-2' onclick='delete_service_type(\"ots\"," + val.ots_id + "," + total + ")' style='cursor:pointer;color:red'></i></td></tr>";
+                    ots_ac += "<tr class='o_row o_row_" + total + "'><td>"+val.brand_name+"&nbsp;("+ val.actype+")"+ac_div+ "&nbsp;&nbsp;<i onclick='show_ac_popup(\"o_row_" + total + "\");' style='font-size:1.3em' class='clip-popout cursor'></i></td>\
+                    <td>" + val.service_type + "</td><td>" + ac_remarks + "&nbsp;&nbsp;<a onclick='show_ac_remark_popup(\"o_row_" + total + "\");' class='big_icon btn'><i class='clip-bubble-dots-2'></i></a></td><td>" + val.created_on + "</td><td><span>"+val.assignment_status+"</span></td>\
+                    <td><button class='btn btn-danger' onclick='delete_service_type(\"ots\"," + val.ots_id + "," + total + ")'><i class='fa fa-trash-o'></i></button></td></tr>";
                     total++;
                 });
                 $(".ots_product").html(ots_ac);
             } else if (response.status == "no") {
-                console.log("No OTS Found");
                 ots_ac = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No OTS is added yet</td></tr>";
                 $(".ots_product").html(ots_ac);
             }
@@ -922,36 +954,7 @@ $(document).ready(function () {
         });
     });
     
-    
-    /*$.getJSON("api/Tickets/Customer/"+customer_id, function (response){
-        if(response.status=="ok"){
-            var row = "";
-                $.each(response.data,function(key,val){
-                    switch(val.type){
-                        case 'installation':
-                        console.log("i am installation");
-                        break;
-                        
-                        case 'complaint':
-                        console.log("i am complaint");
-                        break;
-                        
-                        case 'amc':
-                        console.log("i am amc");
-                        break;
-                        
-                        case 'ots':
-                        console.log("i am ots");
-                        break;
-                    }
-                });
-                $(".ticketdt tbody").html(row);
-                                                                    
-        }else if(response.status=="no"){
-            console.log("bye")
-        }
-    });*/
-    
+
     $("#tab_services_request").on("click", function(){
     var customer_id;
     var customer_info = {};    
@@ -965,13 +968,13 @@ $(document).ready(function () {
                     <div class='' style='background:#fff;padding: 20px;'>\
                     <h2 class='center'> AC Informations</h2>\
                     <table class='table table-bordered table-striped'>\
-                    <tr><td>AC Type</td><td>{type}</td></tr>\
-                    <tr><td>Make</td><td>{make}</td></tr>\
-                    <tr><td>Location</td><td>{location}</td></tr>\
-                    <tr><td>Tonnage</td><td>{tonnage}</td></tr>\
-                    <tr><td>IDU</td><td>Serial No: {idu_serial_no}<br /> Model No :{idu_model_no}</td></tr>\
-                    <tr><td>ODU</td><td>Serial No: {odu_serial_no}<br /> Model No :{odu_model_no}</td></tr>\
-                    <tr><td colspan='2'>{remarks}</td></tr></table></div></div>";
+                    <tr><th>AC Type</th><td>{type}</td></tr>\
+                    <tr><th>Make</th><td>{make}</td></tr>\
+                    <tr><th>Location</th><td>{location}</td></tr>\
+                    <tr><th>Tonnage</th><td>{tonnage}</td></tr>\
+                    <tr><th>IDU</th><td>Serial No: {idu_serial_no}<br /> Model No :{idu_model_no}</td></tr>\
+                    <tr><th>ODU</th><td>Serial No: {odu_serial_no}<br /> Model No :{odu_model_no}</td></tr>\
+                    <tr><th>Remarks</th><td>{remarks}</td></tr></table></div></div>";
 
     var technician_dropdown = "<option>-SELECT TECH-</option>";
     
@@ -1034,22 +1037,22 @@ $(document).ready(function () {
                         }
                         $.each(customer_info.installations[key].service_info, function(k,v){
                         if(v.type=="installation"){
-                            if(val.remarks==""){val.remarks="<b>No remarks added"}else{val.remarks=val.remarks}
-                        install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
+                            if(val.install_remarks==""){val.install_remarks="<b class='text-danger'>No remarks added"}else{val.install_remarks=val.install_remarks}
+                        install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
                             "</td><td> Installation </td><td>"+val.install_type+"</td>" +
-                            "<td>" +  val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"installation\"," + v.install_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
+                            "<td>" +  val.install_remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"installation\"," + v.install_service_id + ",\"" + v.date + "\"," + val.ac_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
                         notification++;
                         sr_no++;
                         }else{
-                            if(v.remarks==""){v.remarks="<b>No remarks added"}else{v.remarks=v.remarks}
-                            install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
+                            if(v.remarks==""){v.remarks="<b class='text-danger'>No remarks added"}else{v.remarks=v.remarks}
+                            install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
                             "</td><td> Service </td><td>-</td>" +
-                            "<td>" + v.remarks + "</td><td>" + v.date + "</td><td><button onclick='assign_technician(" + sr_no + ",\"ins_service\"," + v.install_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                            "<td>" + v.remarks + "</td><td>" + v.date + "</td><td><button onclick='assign_technician(" + sr_no + ",\"ins_service\"," + v.install_service_id + ",\"" + v.date + "\"," + val.ac_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         }
                         inst_count = notification;
-                        //console.log(val.install_date);
+
                         
                         });
                     });
@@ -1069,6 +1072,7 @@ $(document).ready(function () {
                 var sr_no = 1;
                 if (customer_info.complaints.empty) {
                     complaint_tab_row = "<tr><td colspan='7' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No Complaint Added Yet</td></tr>";
+                comp_count=0;
                 } else {
                     delete customer_info.complaints.empty;
                     $.each(customer_info.complaints, function (key, val) {
@@ -1076,16 +1080,16 @@ $(document).ready(function () {
                         var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>" + val.ac_type + "</td></tr>\
-                            <tr><td>Make</td><td>" + val.make + "</td></tr>\
-                            <tr><td>Location</td><td>" + val.location + "</td></tr>\
-                            <tr><td>Tonnage</td><td>" + val.tonnage + "</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                            <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
-
-                        complaint_tab_row += "<tr class='c_num_rows c_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp; (" + val.ac_type + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.ac_problem_type + "</td>" +
-                            "<td>" + val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"complaint\"," + val.com_id + ",\"" + val.preferred_date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                            <tr><th>AC Type</th><td>" + val.ac_type + "</td></tr>\
+                            <tr><th>Make</th><td>" + val.make + "</td></tr>\
+                            <tr><th>Location</th><td>" + val.location + "</td></tr>\
+                            <tr><th>Tonnage</th><td>" + val.tonnage + "</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><th>Remarks</th><th>" + val.remarks + "</td></tr></table></div></div>";
+                        (val.problem_desc=="")?val.problem_desc="<b class='text-danger'>No Remarks added</b>":val.problem_desc=val.problem_desc;
+                        complaint_tab_row += "<tr class='c_num_rows c_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp; (" + val.ac_type + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.ac_problem_type + "</td>" +
+                            "<td>" + val.problem_desc + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"complaint\"," + val.com_id + ",\"" + val.preferred_date + "\"," + val.ac_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         comp_count = notification;
@@ -1095,7 +1099,7 @@ $(document).ready(function () {
                     $("#Com_count").html(notification);
                 }
 
-                $("#at_complaint_table tbody").prepend(complaint_tab_row);
+                $("#at_complaint_table tbody").html(complaint_tab_row);
                 $('.complaints_datepicker').datepicker({
                     autoclose: true
                 });
@@ -1107,11 +1111,11 @@ $(document).ready(function () {
                     amc_tab_row = "<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No AMC Added Yet</td></tr>";
                 } else {
                     delete customer_info.amc.empty;
-                    console.log(customer_info.amc);
+
                     $.each(customer_info.amc, function (key, val) {
 
                         $.each(customer_info.amc[key].service_info, function (k, v) {
-                            //console.log(v.date)
+
                             if (val.amc_type == "s") {
                                 val.amc_type = "Standard"
                             } else if (val.amc_type == "n") {
@@ -1123,17 +1127,17 @@ $(document).ready(function () {
                             var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>" + val.ac_type + "</td></tr>\
-                            <tr><td>Make</td><td>" + val.make + "</td></tr>\
-                            <tr><td>Location</td><td>" + val.location + "</td></tr>\
-                            <tr><td>Tonnage</td><td>" + val.tonnage + "</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                            <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
+                            <tr><th>AC Type</th><td>" + val.ac_type + "</td></tr>\
+                            <tr><th>Make</th><td>" + val.make + "</td></tr>\
+                            <tr><th>Location</th><td>" + val.location + "</td></tr>\
+                            <tr><th>Tonnage</th><td>" + val.tonnage + "</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><th>Remarks</th><td>" + val.remarks + "</td></tr></table></div></div>";
 
-                            amc_tab_row += "<tr class='a_num_rows a_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.amc_type + "</td><td><b>Dry : </b>" + val.dry + "<br /><b>Wet : </b>" + val.wet + "</td>\
+                            amc_tab_row += "<tr class='a_num_rows a_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.amc_type + "</td><td><b>Dry : </b>" + val.dry + "<br /><b>Wet : </b>" + val.wet + "</td>\
                         <td>" + val.amc_remarks + "</td><td><b>Activation : </b>" + val.activation + "<br /><b>Expiration : " + val.expiration + "</b></td><td>" + v.date + "</td>\
-                        <td><button onclick='assign_technician(" + sr_no + ",\"amc\"," + v.amc_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                        <td><button onclick='assign_technician(" + sr_no + ",\"amc\"," + v.amc_service_id + ",\"" + v.date + "\"," + val.ac_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                             notification++;
                             sr_no++;
                             amc_count = notification;
@@ -1144,19 +1148,19 @@ $(document).ready(function () {
                     $("#AMC_count").html(notification);
                 }
 
-                $("#at_amc_table tbody").prepend(amc_tab_row);
+                $("#at_amc_table tbody").html(amc_tab_row);
 
 
                 var ots_tab_row;
                 var notification = 0;
                 var sr_no = 1;
                 if (customer_info.ots.empty) {
-                    ots_tab_row = "<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No OTSs Added Yet</td></tr>";
+                    ots_tab_row = "<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No OTS Added Yet</td></tr>";
                 } else {
                     delete customer_info.ots.empty;
                     var notification = 0;
                     var sr_no = 1
-                    console.log(customer_info.ots);
+
                     $.each(customer_info.ots, function (key, val) {
 
                         var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
@@ -1169,10 +1173,10 @@ $(document).ready(function () {
                             <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
                             <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
                             <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
-
-                        ots_tab_row += "<tr class='o_num_rows o_row_num_c_" + sr_no + "'><td>" + val.make + "<br />(" + val.ac_type + "," + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.service_type + "</td><td>" + val.description + "</td>" +
+                        if(val.description==""){val.description="<b class='text-danger'>No Remarks Added</b>";}else{val.description=val.description;}
+                        ots_tab_row += "<tr class='o_num_rows o_row_num_c_" + sr_no + "'><td>" + val.make + "<br />(" + val.ac_type + "," + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.service_type + "</td><td>" + val.description + "</td>" +
                             "<td>" + val.created_on + "</td>" +
-                            "<td><button onclick='assign_technician(" + sr_no + ",\"ots\"," + val.ots_id + ",\"" + val.preferred_date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                            "<td><button onclick='assign_technician(" + sr_no + ",\"ots\"," + val.ots_id + ",\"" + val.preferred_date + "\"," + val.ac_id+")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         ots_count = notification;
@@ -1182,7 +1186,7 @@ $(document).ready(function () {
                     }
                 }
                 $("#at_ots_table tbody").html(ots_tab_row);
-                //console.log(customer_info);
+
             } else if (response.status == "no") {
                 $("#at_install_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No Instalation Assigned Yet</td></tr>");
                 $("#at_complaint_table tbody").html("<tr><td colspan='8' class='alert alert-info center'><i class='clip-info'></i>&nbsp;&nbsp;No Complaint Assigned Yet</td></tr>");
@@ -1195,10 +1199,6 @@ $(document).ready(function () {
     });  
     
     });
-    
-    $("").on("click", function(){
-        
-    })
 
 });
 
@@ -1298,7 +1298,7 @@ function add_new_ac() {
                 $("#facebox .add_cust_ac_ac_type").on("change", function(){
                     var val = $(this).val();
                     if(val.split("|")[0]==5){
-                        console.log("jdfjkdf")
+
                         $("#facebox .add_ac_table tr:first").after("<tr class='empty'><th>Sub AC Type</th><td><select class='form-control imp add_cust_ac_sub_ac_type' name='product_type'>" + type_tmp_opt + "</select></td></tr>");
                     }else{
                         $("#facebox .add_ac_table").find(".empty").remove();
@@ -1358,7 +1358,7 @@ function add_new_ac() {
                             dataType: 'json',
                             success: function (response) {
                                 if (response.status == "ok") {
-                                    console.log("success");
+
                                     $("#facebox #result").html("Added Successfully").removeClass().addClass("alert alert-success center").show();
                                     update_ac_variable();
                                     add_row_in_customer_details(dataval, response.last_id);
@@ -1367,8 +1367,7 @@ function add_new_ac() {
                                 },1000);
                                 
                                 } else if (response.status == "no") {
-                                    console.log("error")
-                                    $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center").show();
+                                             $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center").show();
                                 }
                                 output.hide();
                                 mThis.html(tmp_load_holder);
@@ -1376,6 +1375,7 @@ function add_new_ac() {
                         });
                     }
                 });
+
             }
         }
     });
@@ -1383,13 +1383,17 @@ function add_new_ac() {
 
 function add_row_in_customer_details(qry, id) {
     if ($(".customer_product_view tr").hasClass("empty_row")) {
-        console.log("yes");
+
         $(".empty_row").remove();
     }
     var tot_tr = $(".num_ac_rows").length;
     var total = tot_tr + 1;
-    console.log(tot_tr + " " + total);
-    var new_row = "<tr class='num_ac_rows num_ac_rows_" + total + "'><td>" + qry.ac_type + "</td><td>" + qry.brand + "</td><td>" + qry.ton + "</td><td><b>Serial No.</b>" + qry.odu_sr_no + "<br/><b>Model No.</b>" + qry.odu_model_no + "</td><td>Serial No." + qry.odu_sr_no + "<br/>Model No." + qry.odu_model_no + "</td><td>" + qry.location + "</td><td><button class='btn btn-primary btn-sm' onclick='display_remarks(\""+qry.remarks+"\")'><i class='clip-info'></i></button></td><td><i style='cursor:pointer;color:red' onclick='delete_customer_ac(" + id + "," + total + ")' class='clip-minus-circle-2'></i></td></tr>";
+
+    var new_row = "<tr class='num_ac_rows num_ac_rows_" + total + "'><td class='center'>" + qry.ac_type + "</td>\
+    <td class='center'>" + qry.brand + "</td><td class='center'>" + qry.ton + "</td>\
+    <td><b>Serial No.</b>" + qry.odu_sr_no + "<br/><b>Model No.</b>" + qry.odu_model_no + "</td>\
+    <td>Serial No." + qry.odu_sr_no + "<br/>Model No." + qry.odu_model_no + "</td>\
+    <td class='center'>" + qry.location + "</td><td class='center'><button class='btn btn-purple' onclick='display_remarks(\""+qry.remarks+"\")'><i class='fa fa-comment'></i></button></td><td><button class='btn btn-danger' onclick='delete_customer_ac(" + id + "," + total + ")'><i class='fa fa-trash-o'></i></button></td></tr>";
     $(".customer_product_view").prepend(new_row);
 }
 
@@ -1406,20 +1410,20 @@ function delete_customer_ac(cust_ac_id, row_id) {
                     $("#ac_info_res").show().html("Successfully Deleted").removeClass().addClass("alert alert-success center");
                     setTimeout(function(){
                         $("#ac_info_res").slideUp();
-                    },1000);
-                    if($(".customer_product_view tr").length==1){
+                    },1000);                    
+                    $(".num_ac_rows_" + row_id).slideUp("slow").remove();
+                    if($(".customer_product_view tr").length==0){
                         $(".customer_product_view").html("<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No AC Found</td></tr>")
                     }
-                    $(".num_ac_rows_" + row_id).slideUp("slow");
                     $.getJSON("api/Customer/" + customer_id + "/AC", function (response) {
                         if (response.status == "ok") {
-                            console.log("data updated");
+
                         } else if (response.status == "no") {
-                            console.log("error");
+
                         }
                     });
                 } else if (data.status == "no") {
-                    console.log("error");
+
                     $("#ac_info_res").show().html(data.result).removeClass().addClass("alert alert-danger center")
                 }
             }
@@ -1434,6 +1438,7 @@ function delete_service_type(type, id, row_id) {
 
             var ans = confirm("Are you sure");
             if (ans) {
+                $("#result_install").show().html("Please wait...").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'delete',
                     url: 'api/Customer/' + customer_id + '/Installations/' + id,
@@ -1463,6 +1468,7 @@ function delete_service_type(type, id, row_id) {
 
             var ans = confirm("Are you sure");
             if (ans) {
+                $("#result_complaints").show().html("Please wait...").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'delete',
                     url: 'api/Customer/' + customer_id + '/Complaints/' + id,
@@ -1490,13 +1496,14 @@ function delete_service_type(type, id, row_id) {
 
             var ans = confirm("Are you sure");
             if (ans) {
+                $("#result_amc").show().html("Please wait...").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'delete',
                     url: 'api/Customer/' + customer_id + '/AMC/' + id,
                     dataType: 'json',
                     success: function (data) {
                         if (data.status == "ok") {
-                            $(".a_row_" + row_id).slideUp();
+                            $(".a_row_" + row_id).slideUp().remove();
                             $("#result_amc").show().html("Deleted Successfully").removeClass().addClass("alert alert-success center");
                             if ($(".amc_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='7'> <i class='clip-info'></i> No AMC is added yet</td></tr>";
@@ -1517,13 +1524,14 @@ function delete_service_type(type, id, row_id) {
 
             var ans = confirm("Are you sure");
             if (ans) {
+                $("#result_ots").show().html("Please wait...").removeClass().addClass("alert alert-info center");
                 $.ajax({
                     type: 'delete',
                     url: 'api/Customer/' + customer_id + '/OTS/' + id,
                     dataType: 'json',
                     success: function (data) {
                         if (data.status == "ok") {
-                            $(".o_row_" + row_id).slideUp();
+                            $(".o_row_" + row_id).slideUp().remove();
                             $("#result_ots").show().html("deleted successfully").removeClass().addClass("alert alert-success center");
                             if ($(".ots_product tr").length == 0) {
                                 var row = "<tr class='empty_row'><td class='alert alert-info center' colspan='8'> <i class='clip-info'></i> No OTS is added yet</td></tr>";
@@ -1583,7 +1591,7 @@ function update_ac_variable(){
 
 function display_remarks(val){
         if(val==""){
-            val="<b>No Remark available</b>"
+            val="<b class='text-danger'>No Remark available</b>"
         }else{
             val=val;
         }
@@ -1593,9 +1601,10 @@ function display_remarks(val){
 function ViewAMC(type,id,wet,dry){
     blockThisUI();
     $.getJSON("api/Customer/"+customer_id+"/Service/"+id+"/"+type,function(response){
+        var tmp_row="";
         if(response.status=="ok"){
-            var tmp_row="";
-            var total=response.data.length
+
+            var total=response.data.length;
             if(type=="amc"){
                 $.each(response.data,function(key,val){
                 tmp_row += "<tr class='bbb'><td><input type='hidden' class='amc_service_id' value='"+val.amc_service_id+"'>\
@@ -1619,18 +1628,16 @@ function ViewAMC(type,id,wet,dry){
             });
             }
             $("#service_date_table").html(tmp_row);
-            $(".modal-footer").html("<button id='amc_assign_btn' class='btn btn-primary amc_assign_btn'>Update</button>");
-            $.facebox({ div: "#view_amc_modal" });
-            
+
         }else if(response.status=="no"){
-            console.log("No Service dates found")
+
             for(var i=0;i<wet+dry;i++){
                 tmp_row += "<tr class='bbb'><td><input type='text' class='amc_assign_required select_date form-control datepicker' data-date-format='dd-mm-yyyy' data-date-viewmode='years'></td><td><textarea class='give_remarks form-control amc_assign_required'></textarea></td></tr>";
             }
             $("#service_date_table").html(tmp_row);
-            $(".modal-footer").html("<button id='amc_assign_btn' class='btn btn-primary amc_assign_btn'>Update</button>");
-            $.facebox({ div: "#view_amc_modal" });
+
         }
+        $.facebox({ div: "#view_amc_modal" });
     unblockThisUI();
             
             $('#facebox .datepicker').each(function () {
@@ -1638,10 +1645,10 @@ function ViewAMC(type,id,wet,dry){
                 autoclose: true;
             });
     $("#facebox .amc_assign_btn").on("click", function(){
-        console.log("click");
+
         var c=0;
         var input_length = $("#facebox .amc_assign_required").length;
-        //console.log(input_length);
+
         for(var i=0; i<input_length; i++){
             if($("#facebox .amc_assign_required").eq(i).val()=="" || $("#facebox .amc_assign_required").eq(i).val()==-1){
                 $("#facebox .amc_assign_required").eq(i).parent().removeClass("has-success").addClass("has-error");
@@ -1656,7 +1663,7 @@ function ViewAMC(type,id,wet,dry){
             $("#facebox #error").remove();
         var data = "";
         var asd = $("#facebox .bbb").length;
-        console.log(asd);
+
         
         for(var i = 0; i < asd ; i++){
             data += "&row[" + i + "][date]=" + $("#facebox .select_date").eq(i).val();
@@ -1676,7 +1683,6 @@ function ViewAMC(type,id,wet,dry){
             dataType:'json',
             success: function(response){
                 if(response.status=="ok"){
-                    console.log(response.result);
                     $("#facebox #result").show().html(response.result).removeClass().addClass("alert alert-success center");
                     setTimeout(function(){
                         jQuery(document).trigger('close.facebox');  
@@ -1706,15 +1712,18 @@ function show_ac_remark_popup(elem){
 function addInstallation(){
 
     var elem = $("#facebox .modal-body");
+    
         var selected_ac = elem.find(".select_ac_id").val();
         var ins_type = elem.find(".installation_type").val();
         var no_of_service = elem.find(".no_of_service").val();
         var ins_date = elem.find(".installation_date").val();
         var remarks = elem.find(".add_remarks").val();
         var output = elem.find(".display_output");
+    output.html("").removeClass("alert alert-success alert-danger alert-info center");
         if (selected_ac != -1) {
             if (ins_type != -1 && no_of_service != "" && no_of_service > 0 && ins_date != "") {
-                output.html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
+
+                output.html("Please wait...<i class='clip-busy'></i>").addClass("alert alert-info center");
                 $.ajax({
                     url: "api/Customer/" + customer_id + "/Installations",
                     type: "POST",
@@ -1728,36 +1737,38 @@ function addInstallation(){
                     },
                     success: function (response) {
                         if (response.status == "ok") {
-                            output.html("Successfully Added").removeClass().addClass("alert alert-success center");
+                            output.html("Successfully Added").removeClass("alert-info alert-danger").addClass("alert-success center");
                             setTimeout(function () {
                                 jQuery(document).trigger('close.facebox');
                             }, 1000);
                         } else if (response.status == "no") {
-                            output.html(response.result + "").removeClass().addClass("alert alert-danger center");
+                            output.html(response.result + "").addClass("alert alert-danger center");
                         } else {
-                            output.html("No Response from the server").removeClass().addClass("alert alert-danger center");
+                            output.html("No Response from the server").addClass("alert alert-danger center");
                         }
                     }
                 });
             } else {
-                output.html("Required field missing").removeClass().addClass("alert alert-danger center");
+                output.html("Required field missing").addClass("alert alert-danger center");
             }
 
         } else {
-            output.html("Select AC for the installation").removeClass().addClass("alert alert-danger center");
-            console.log("Required");
+            output.html("Select AC for the installation").addClass("alert alert-danger center");
+
         }
 
 
 }
 
-function onUninstallACSelect(val) {
-console.log(val);
+function onUninstallACSelect() {
+
+    var val='-1';
+    val=$('#facebox .select_uninstalled_ac').val();
+
 
     var elem = $("#facebox .modal-body");
 
     if (val == -1) {
-        console.log("i m -1");
         elem.find(".select_ac_id").val("-1");
         elem.find('.display_ac_info_type').html("--N/A--");
         elem.find('.display_ac_info_make').html("--N/A--");
@@ -1768,9 +1779,8 @@ console.log(val);
         elem.find('.display_ac_info_idu_md').html("--N/A--");
         elem.find('.display_ac_info_odu_md').html("--N/A--");
     } else {
-        console.log("i m in else");
         elem.find(".select_ac_id").val(uninstalled_ac[val].ac_id);
-        elem.find('.display_ac_info .display_ac_info_type').html(uninstalled_ac[val].ac_type);
+        elem.find('.display_ac_info .display_ac_info_type').html(uninstalled_ac[val].actype);
         elem.find('.display_ac_info .display_ac_info_make').html(uninstalled_ac[val].brand_name);
         elem.find('.display_ac_info .display_ac_info_place').html(uninstalled_ac[val].location);
         elem.find('.display_ac_info .display_ac_info_tonnage').html(uninstalled_ac[val].tonnage);
@@ -1782,8 +1792,7 @@ console.log(val);
 
 }
 
-function assign_technician(serial, type, id, date) {
-    console.log(serial + " " + type + " " + id + " " + date)
+function assign_technician(serial, type, id, date,ac_id) {
     if (date == "" || date == null) {
         date = "";
     }
@@ -1806,6 +1815,7 @@ function assign_technician(serial, type, id, date) {
             $("#assign_tech_table").html(row);
             $("#assign_tech_table_footer").html(button);
             $.facebox({ div: "#assign_techncican_modal" });
+
             $("#facebox .datepicker_for_all").datepicker({autoclose: true});
 
             $("#facebox .assign_tech_submit").on("click", function () {
@@ -1829,7 +1839,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id + "&ac_id=" + ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -1851,7 +1861,6 @@ function assign_technician(serial, type, id, date) {
                                 }, 1000);
                             }
                             else if (data.status == "no") {
-                                console.log("error")
                                 $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                             }
                             setTimeout(function () {
@@ -1904,7 +1913,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" + ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -1926,7 +1935,6 @@ function assign_technician(serial, type, id, date) {
                                 }, 1000);
                             }
                             else if (data.status == "no") {
-                                console.log("error")
                                 $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                             }
                             setTimeout(function () {
@@ -1979,7 +1987,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" + ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -1991,7 +1999,6 @@ function assign_technician(serial, type, id, date) {
                         success: function (data) {
                             if (data.status == "ok") {
                                 $(".c_row_num_c_" + serial).remove();
-                                console.log(".c_row_num_c_" + serial);
                                 if ($(".complaint_assign tr").length == 0) {
                                     $(".complaint_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
                                 }
@@ -2053,8 +2060,8 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
-                    console.log(qry);
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" + ac_id;
+
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
                     $.ajax({
                         type: 'post',
@@ -2064,7 +2071,6 @@ function assign_technician(serial, type, id, date) {
                         success: function (data) {
                             if (data.status == "ok") {
                                 $(".a_row_num_c_" + serial).remove();
-                                console.log(".a_row_num_c_" + serial);
                                 if ($(".amc_assign tr").length == 0) {
                                     $(".amc_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No Complaints assigned</td></tr>")
                                 }
@@ -2127,7 +2133,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" + ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -2138,9 +2144,7 @@ function assign_technician(serial, type, id, date) {
                         dataType: 'json',
                         success: function (data) {
                             if (data.status == "ok") {
-                                console.log("success")
                                 $(".o_row_num_c_" + serial).remove();
-                                console.log(".o_row_num_c_" + serial);
                                 if ($(".ots_assign tr").length == 0) {
                                     $(".ots_assign").html("<tr><td colspan='6' class='alert alert-info center'><i class='clip-info'></i> No OTS assigned</td></tr>")
                                 }
@@ -2150,7 +2154,6 @@ function assign_technician(serial, type, id, date) {
                                     jQuery(document).trigger('close.facebox');
                                 }, 1000);
                             } else if (data.status == "no") {
-                                console.log("error")
                                 $("#facebox #result").show().html(data.result).removeClass().addClass("alert alert-danger center");
                             }
                             setTimeout(function () {
@@ -2195,10 +2198,8 @@ function createTextbox(wet, dry) {
     });
 
     $("#facebox .amc_assign_btn").on("click", function () {
-        console.log("click");
         var c = 0;
         var input_length = $("#facebox .amc_assign_required").length;
-        console.log(input_length);
         for (var i = 0; i < input_length; i++) {
             if ($("#facebox .amc_assign_required").eq(i).val() == "" || $("#facebox .amc_assign_required").eq(i).val() == -1) {
                 $("#facebox .amc_assign_required").eq(i).parent().removeClass("has-success").addClass("has-error");

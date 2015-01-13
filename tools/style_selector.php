@@ -9,7 +9,8 @@
         <div class="input-box">
             <div class="input">
                 <select name="layout">
-                    <option value="default">Wide</option><option value="boxed">Boxed</option>
+                    <option value="default">Wide</option>
+                    <option value="boxed">Boxed</option>
                 </select>
             </div>
         </div>
@@ -19,7 +20,8 @@
         <div class="input-box">
             <div class="input">
                 <select name="header">
-                    <option value="fixed">Fixed</option><option value="default">Default</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="default">Default</option>
                 </select>
             </div>
         </div>
@@ -29,7 +31,8 @@
         <div class="input-box">
             <div class="input">
                 <select name="footer">
-                    <option value="default">Default</option><option value="fixed">Fixed</option>
+                    <option value="default">Default</option>
+                    <option value="fixed">Fixed</option>
                 </select>
             </div>
         </div>
@@ -62,8 +65,10 @@
                     Basic
                 </label>
                 <input type="text" value="#ffffff" class="color-base">
+
                 <div class="dropdown">
-                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i style="background-color: #ffffff"></i></a>
+                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i
+                            style="background-color: #ffffff"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <li>
                             <div class="colorpalette"></div>
@@ -76,8 +81,10 @@
                     Text
                 </label>
                 <input type="text" value="#555555" class="color-text">
+
                 <div class="dropdown">
-                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i style="background-color: #555555"></i></a>
+                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i
+                            style="background-color: #555555"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <li>
                             <div class="colorpalette"></div>
@@ -90,8 +97,10 @@
                     Elements
                 </label>
                 <input type="text" value="#007AFF" class="color-badge">
+
                 <div class="dropdown">
-                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i style="background-color: #007AFF"></i></a>
+                    <a class="add-on dropdown-toggle" data-toggle="dropdown"><i
+                            style="background-color: #007AFF"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <li>
                             <div class="colorpalette"></div>

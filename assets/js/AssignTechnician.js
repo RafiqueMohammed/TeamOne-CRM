@@ -12,13 +12,13 @@ $(function () {
     <div class='' style='background:#fff;padding: 20px;'>\
     <h2 class='center'> AC Informations</h2>\
     <table class='table table-bordered table-striped'>\
-                    <tr><td>AC Type</td><td>{type}</td></tr>\
-                    <tr><td>Make</td><td>{make}</td></tr>\
-                    <tr><td>Location</td><td>{location}</td></tr>\
-                    <tr><td>Tonnage</td><td>{tonnage}</td></tr>\
-                    <tr><td>IDU</td><td>Serial No: {idu_serial_no}<br /> Model No :{idu_model_no}</td></tr>\
-                    <tr><td>ODU</td><td>Serial No: {odu_serial_no}<br /> Model No :{odu_model_no}</td></tr>\
-                    <tr><td colspan='2'>{remarks}</td></tr></table></div></div>";
+                    <tr><th>AC Type</th><td>{type}</td></tr>\
+                    <tr><th>Make</th><td>{make}</td></tr>\
+                    <tr><th>Location</th><td>{location}</td></tr>\
+                    <tr><th>Tonnage</th><td>{tonnage}</td></tr>\
+                    <tr><th>IDU</th><td>Serial No: {idu_serial_no}<br /> Model No :{idu_model_no}</td></tr>\
+                    <tr><th>ODU</th><td>Serial No: {odu_serial_no}<br /> Model No :{odu_model_no}</td></tr>\
+                    <tr><th>Remarks</th><td>{remarks}</td></tr></table></div></div>";
 
     var technician_dropdown = "<option>-SELECT TECH-</option>";
     customer_id = $("#customer_id_holder").val();
@@ -81,16 +81,16 @@ $(function () {
                         $.each(customer_info.installations[key].service_info, function(k,v){
                         if(v.type=="installation"){
                             if(val.remarks==""){val.remarks="<b>No remarks added"}else{val.remarks=val.remarks}
-                        install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
+                        install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
                             "</td><td> Installation </td><td>"+val.install_type+"</td>" +
-                            "<td>" +  val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"installation\"," + v.install_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
+                            "<td>" +  val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"installation\"," + v.install_service_id + ",\"" + v.date + ",\""+ val.ac_id + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>"
                         notification++;
                         sr_no++;
                         }else{
                             if(v.remarks==""){v.remarks="<b>No remarks added"}else{v.remarks=v.remarks}
-                            install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
+                            install_tab_row += "<tr class='i_num_rows i_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + tmp_ac_div +
                             "</td><td> Service </td><td>-</td>" +
-                            "<td>" + v.remarks + "</td><td>" + v.date + "</td><td><button onclick='assign_technician(" + sr_no + ",\"ins_service\"," + v.install_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                            "<td>" + v.remarks + "</td><td>" + v.date + "</td><td><button onclick='assign_technician(" + sr_no + ",\"ins_service\"," + v.install_service_id + ",\"" + v.date + ",\""+ val.ac_id + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         }
@@ -122,16 +122,16 @@ $(function () {
                         var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>" + val.ac_type + "</td></tr>\
-                            <tr><td>Make</td><td>" + val.make + "</td></tr>\
-                            <tr><td>Location</td><td>" + val.location + "</td></tr>\
-                            <tr><td>Tonnage</td><td>" + val.tonnage + "</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                            <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
+                            <tr><th>AC Type</th><td>" + val.ac_type + "</td></tr>\
+                            <tr><th>Make</th><td>" + val.make + "</td></tr>\
+                            <tr><th>Location</th><td>" + val.location + "</td></tr>\
+                            <tr><th>Tonnage</th><td>" + val.tonnage + "</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><th>Remarks</th><td>" + val.remarks + "</td></tr></table></div></div>";
 
-                        complaint_tab_row += "<tr class='c_num_rows c_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp; (" + val.ac_type + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.ac_problem_type + "</td>" +
-                            "<td>" + val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"complaint\"," + val.com_id + ",\"" + val.preferred_date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                        complaint_tab_row += "<tr class='c_num_rows c_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp; (" + val.ac_type + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.ac_problem_type + "</td>" +
+                            "<td>" + val.remarks + "</td><td>" + val.created_on + "</td><td><button onclick='assign_technician(" + sr_no + ",\"complaint\"," + val.com_id + ",\"" + val.preferred_date + ",\""+ val.ac_id + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         comp_count = notification;
@@ -169,17 +169,17 @@ $(function () {
                             var ac_div = "<div class='no-display ac_popup'><div class='' style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>" + val.ac_type + "</td></tr>\
-                            <tr><td>Make</td><td>" + val.make + "</td></tr>\
-                            <tr><td>Location</td><td>" + val.location + "</td></tr>\
-                            <tr><td>Tonnage</td><td>" + val.tonnage + "</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                            <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
+                            <tr><th>AC Type</th><td>" + val.ac_type + "</td></tr>\
+                            <tr><th>Make</th><td>" + val.make + "</td></tr>\
+                            <tr><th>Location</th><td>" + val.location + "</td></tr>\
+                            <tr><th>Tonnage</th><td>" + val.tonnage + "</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><th>Remarks</th><td>" + val.remarks + "</td></tr></table></div></div>";
 
-                            amc_tab_row += "<tr class='a_num_rows a_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.amc_type + "</td><td><b>Dry : </b>" + val.dry + "<br /><b>Wet : </b>" + val.wet + "</td>\
+                            amc_tab_row += "<tr class='a_num_rows a_row_num_c_" + sr_no + "'><td>" + val.make + "&nbsp;(" + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.amc_type + "</td><td><b>Dry : </b>" + val.dry + "<br /><b>Wet : </b>" + val.wet + "</td>\
                         <td>" + val.amc_remarks + "</td><td><b>Activation : </b>" + val.activation + "<br /><b>Expiration : " + val.expiration + "</b></td><td>" + v.date + "</td>\
-                        <td><button onclick='assign_technician(" + sr_no + ",\"amc\"," + v.amc_service_id + ",\"" + v.date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                        <td><button onclick='assign_technician(" + sr_no + ",\"amc\"," + v.amc_service_id + ",\"" + v.date + "\",\"" + val.ac_id + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                             notification++;
                             sr_no++;
                             amc_count = notification;
@@ -208,17 +208,17 @@ $(function () {
                         var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>AC Type</td><td>" + val.ac_type + "</td></tr>\
-                            <tr><td>Make</td><td>" + val.make + "</td></tr>\
-                            <tr><td>Location</td><td>" + val.location + "</td></tr>\
-                            <tr><td>Tonnage</td><td>" + val.tonnage + "</td></tr>\
-                            <tr><td>IDU</td><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                            <tr><td colspan='2'>" + val.remarks + "</td></tr></table></div></div>";
+                            <tr><th>AC Type</th><td>" + val.ac_type + "</td></tr>\
+                            <tr><th>Make</th><td>" + val.make + "</td></tr>\
+                            <tr><th>Location</th><td>" + val.location + "</td></tr>\
+                            <tr><th>Tonnage</th><td>" + val.tonnage + "</td></tr>\
+                            <tr><th>IDU</th><td>Serial No: " + val.idu_serial_no + "<br /> Model No :" + val.idu_model_no + "</td></tr>\
+                            <tr><th>ODU</th><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><th>Remarks</th><td>" + val.remarks + "</td></tr></table></div></div>";
 
-                        ots_tab_row += "<tr class='o_num_rows o_row_num_c_" + sr_no + "'><td>" + val.make + "<br />(" + val.ac_type + "," + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.service_type + "</td><td>" + val.description + "</td>" +
+                        ots_tab_row += "<tr class='o_num_rows o_row_num_c_" + sr_no + "'><td>" + val.make + "<br />(" + val.ac_type + "," + val.location + ") <i onclick='view_ac_info(\".ac_popup\")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td><td>" + val.service_type + "</td><td>" + val.description + "</td>" +
                             "<td>" + val.created_on + "</td>" +
-                            "<td><button onclick='assign_technician(" + sr_no + ",\"ots\"," + val.ots_id + ",\"" + val.preferred_date + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
+                            "<td><button onclick='assign_technician(" + sr_no + ",\"ots\"," + val.ots_id + ",\"" + val.preferred_date + ",\""+ val.ac_id + "\")' class='btn btn-primary btn-sm'>Assign</button></td></tr>";
                         notification++;
                         sr_no++;
                         ots_count = notification;
@@ -241,7 +241,7 @@ $(function () {
     });
 });
 
-function assign_technician(serial, type, id, date) {
+function assign_technician(serial, type, id, date, ac_id) {
     console.log(serial + " " + type + " " + id + " " + date)
     if (date == "" || date == null) {
         date = "";
@@ -288,7 +288,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id + "&ac_id=" +ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -363,7 +363,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" +ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -438,7 +438,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" +ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -512,7 +512,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" +ac_id;
                     console.log(qry);
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
                     $.ajax({
@@ -586,7 +586,7 @@ function assign_technician(serial, type, id, date) {
                     var assign_t_id = $("#facebox .select_tech_for_assign").val();
                     var assign_date = $("#facebox .datepicker_for_all").val();
                     var assign_remarks = $("#facebox .remarks_for_assign").val();
-                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id;
+                    var qry = "tech_id=" + assign_t_id + "&assign_date=" + assign_date + "&assign_remarks=" + assign_remarks + "&type=" + type + "&assign_of=" + id + "&cust_id=" + customer_id+ "&ac_id=" +ac_id;
 
                     $("#facebox #result").show().html("Please wait...<i class='clip-busy'></i>").removeClass().addClass("alert alert-info center");
 
@@ -657,7 +657,7 @@ function createTextbox(wet, dry) {
         console.log("click");
         var c = 0;
         var input_length = $("#facebox .amc_assign_required").length;
-        console.log(input_length);
+
         for (var i = 0; i < input_length; i++) {
             if ($("#facebox .amc_assign_required").eq(i).val() == "" || $("#facebox .amc_assign_required").eq(i).val() == -1) {
                 $("#facebox .amc_assign_required").eq(i).parent().removeClass("has-success").addClass("has-error");

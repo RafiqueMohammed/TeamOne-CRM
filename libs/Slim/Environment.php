@@ -51,62 +51,13 @@ namespace Slim;
 class Environment implements \ArrayAccess, \IteratorAggregate
 {
     /**
-     * @var array
-     */
-    protected $properties;
-
-    /**
      * @var \Slim\Environment
      */
     protected static $environment;
-
     /**
-     * Get environment instance (singleton)
-     *
-     * This creates and/or returns an environment instance (singleton)
-     * derived from $_SERVER variables. You may override the global server
-     * variables by using `\Slim\Environment::mock()` instead.
-     *
-     * @param  bool             $refresh Refresh properties using global server variables?
-     * @return \Slim\Environment
+     * @var array
      */
-    public static function getInstance($refresh = false)
-    {
-        if (is_null(self::$environment) || $refresh) {
-            self::$environment = new self();
-        }
-
-        return self::$environment;
-    }
-
-    /**
-     * Get mock environment instance
-     *
-     * @param  array       $userSettings
-     * @return \Slim\Environment
-     */
-    public static function mock($userSettings = array())
-    {
-        $defaults = array(
-            'REQUEST_METHOD' => 'GET',
-            'SCRIPT_NAME' => '',
-            'PATH_INFO' => '',
-            'QUERY_STRING' => '',
-            'SERVER_NAME' => 'localhost',
-            'SERVER_PORT' => 80,
-            'ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'ACCEPT_LANGUAGE' => 'en-US,en;q=0.8',
-            'ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-            'USER_AGENT' => 'Slim Framework',
-            'REMOTE_ADDR' => '127.0.0.1',
-            'slim.url_scheme' => 'http',
-            'slim.input' => '',
-            'slim.errors' => @fopen('php://stderr', 'w')
-        );
-        self::$environment = new self(array_merge($defaults, $userSettings));
-
-        return self::$environment;
-    }
+    protected $properties;
 
     /**
      * Constructor (private access)
@@ -174,6 +125,54 @@ class Environment implements \ArrayAccess, \IteratorAggregate
 
             $this->properties = $env;
         }
+    }
+
+    /**
+     * Get environment instance (singleton)
+     *
+     * This creates and/or returns an environment instance (singleton)
+     * derived from $_SERVER variables. You may override the global server
+     * variables by using `\Slim\Environment::mock()` instead.
+     *
+     * @param  bool $refresh Refresh properties using global server variables?
+     * @return \Slim\Environment
+     */
+    public static function getInstance($refresh = false)
+    {
+        if (is_null(self::$environment) || $refresh) {
+            self::$environment = new self();
+        }
+
+        return self::$environment;
+    }
+
+    /**
+     * Get mock environment instance
+     *
+     * @param  array $userSettings
+     * @return \Slim\Environment
+     */
+    public static function mock($userSettings = array())
+    {
+        $defaults = array(
+            'REQUEST_METHOD' => 'GET',
+            'SCRIPT_NAME' => '',
+            'PATH_INFO' => '',
+            'QUERY_STRING' => '',
+            'SERVER_NAME' => 'localhost',
+            'SERVER_PORT' => 80,
+            'ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'ACCEPT_LANGUAGE' => 'en-US,en;q=0.8',
+            'ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+            'USER_AGENT' => 'Slim Framework',
+            'REMOTE_ADDR' => '127.0.0.1',
+            'slim.url_scheme' => 'http',
+            'slim.input' => '',
+            'slim.errors' => @fopen('php://stderr', 'w')
+        );
+        self::$environment = new self(array_merge($defaults, $userSettings));
+
+        return self::$environment;
     }
 
     /**

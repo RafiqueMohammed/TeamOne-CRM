@@ -48,6 +48,24 @@ class Cookies extends \Slim\Helper\Set
     );
 
     /**
+     * Remove cookie
+     *
+     * Unlike \Slim\Helper\Set, this will actually *set* a cookie with
+     * an expiration date in the past. This expiration date will force
+     * the client-side cache to remove its cookie with the given name
+     * and settings.
+     *
+     * @param  string $key Cookie name
+     * @param  array $settings Optional cookie settings
+     */
+    public function remove($key, $settings = array())
+    {
+        $settings['value'] = '';
+        $settings['expires'] = time() - 86400;
+        $this->set($key, array_replace($this->defaults, $settings));
+    }
+
+    /**
      * Set cookie
      *
      * The second argument may be a single scalar value, in which case
@@ -58,8 +76,8 @@ class Cookies extends \Slim\Helper\Set
      * the keys shown in the default settings above. This array will be
      * merged with the defaults shown above.
      *
-     * @param string $key   Cookie name
-     * @param mixed  $value Cookie settings
+     * @param string $key Cookie name
+     * @param mixed $value Cookie settings
      */
     public function set($key, $value)
     {
@@ -69,23 +87,5 @@ class Cookies extends \Slim\Helper\Set
             $cookieSettings = array_replace($this->defaults, array('value' => $value));
         }
         parent::set($key, $cookieSettings);
-    }
-
-    /**
-     * Remove cookie
-     *
-     * Unlike \Slim\Helper\Set, this will actually *set* a cookie with
-     * an expiration date in the past. This expiration date will force
-     * the client-side cache to remove its cookie with the given name
-     * and settings.
-     *
-     * @param  string $key      Cookie name
-     * @param  array  $settings Optional cookie settings
-     */
-    public function remove($key, $settings = array())
-    {
-        $settings['value'] = '';
-        $settings['expires'] = time() - 86400;
-        $this->set($key, array_replace($this->defaults, $settings));
     }
 }

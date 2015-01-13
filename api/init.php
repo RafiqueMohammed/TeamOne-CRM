@@ -12,12 +12,6 @@ $app->notFound(function () use ($app) {
 });
 
 
-$app->get('/test', function () {
-    $ar = array("health" => array("#FFCCBB", "#55CCBB", "#2211FF"), "relationship" => array("#1FFCBB", "#F9CCBB", "#992BCC"),
-        "finance" => array("#FFCC00", "#559922", "#929b9C"));
-    global $app;
-    $app->response->body(json_encode($ar));
-});
 
 
 $app->hook('slim.before', function () use ($app) {

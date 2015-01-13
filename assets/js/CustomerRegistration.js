@@ -58,6 +58,24 @@ $(document).ready(function () {
 
         }
 
+        if($("input[name=mobile2]").val()!=""){
+            if($("input[name=mobile2]").val().length !=10){
+                $("input[name=mobile2]").parent().removeClass("has-success").addClass("has-error");
+                c++;
+            }else{
+                $("input[name=mobile2]").parent().removeClass("has-error");
+            }
+        }
+
+        if($(".email").val()!=""){
+            if(!checkEmail($(".email").val())){
+                $(".email").parent().removeClass("has-success").addClass("has-error");
+                c++;
+            }else{
+                $(".email").parent().removeClass("has-error");
+            }
+        }
+
         if (c > 0) {
            $("#validation_error").html("please fill the required fields").removeClass().addClass("alert alert-danger");
         } else {
@@ -358,4 +376,14 @@ function isNumber(evt) {
         return false;
     }
     return true;
+}
+
+function checkEmail(email)
+{
+    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+    if (reg.test(email)){
+        return true;
+    }else{
+        return false;
+    }
 }

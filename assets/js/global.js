@@ -9,11 +9,16 @@ $(function () {
 
     $('#QuickSearch').click(function () {
         var str = $("#QuickSearchInput").val();
+        console.log(str);
         if (str.length > 0 && str != "") {
+            str=str.replace(" ","%20");
+            str=str.replace("/","");
+            str=str.replace("\\","");
             var link="Search?keyword=" + str;
             LoadPage(link);
         }
     });
+
 
 
     $('.date-picker').datepicker({
@@ -83,16 +88,19 @@ function blockThisUI(element) {
     });
 }
 function LoadPage(name) {
+    name=name.replace(" ","%20");
+    name=name.replace("/","");
+    name=name.replace("\\","");
     var main = $("#main-content");
     var match=name.indexOf('?');
     console.log("match "+match);
     if (match>=0){
-        console.log("I am inside match "+match);
+
         blockThisUI(main);
         var qry = name.split("?");
         main.find(".container").eq(0).load("view/" + qry[0] + ".php?" + qry[1],function () {
             unblockThisUI(main);
-            var stateObj = {"state": "changed"}
+            var stateObj = {"state": "changed"};
             window.history.pushState(stateObj, name, name);
         }).slideDown();
 
@@ -100,14 +108,14 @@ function LoadPage(name) {
         blockThisUI(main);
         main.find(".container").eq(0).load("view/" + name + ".php",function () {
             unblockThisUI(main);
-            var stateObj = {"state": "changed"}
+            var stateObj = {"state": "changed"};
             window.history.pushState(stateObj, name, name);
         }).slideDown();
     }
 
     return false;
 }
-
+/*
 function LoadPage(name,class_name) {
 
     var main = $("#main-content");
@@ -131,10 +139,10 @@ function LoadPage(name,class_name) {
             window.history.pushState(stateObj, name, name);
         }).slideDown();
     }
-$('.class_name')
+
     return false;
 }
-
+*/
 
 function remove_amc_row(row_id){
     var t=$("#facebox .table_body .row_"+row_id).parent().find("tr").length;

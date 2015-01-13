@@ -8,88 +8,93 @@ require_once("common.php");
 
 /** ***********CUSTOMER ********* */
 
-$app->get("/Assign/Customer", function () use ($app) {    global $DB;
+$app->get("/Assign/Customer", function () use ($app) {
+    global $DB;
     $result = array();
     $cust_qry = $DB->query("SELECT `cust_id` as user FROM `" . TAB_CUSTOMER . "`") or ThrowError($DB->error);
     if ($cust_qry->num_rows > 0) {
         $data = array();
         $till = date("Y-m-d", strtotime("+1 month"));
-        $cust_holder=array();
+        $cust_holder = array();
         while ($inf = $cust_qry->fetch_assoc()) {
-            $isUnAssigned=false;
+            $isUnAssigned = false;
 
-            $qry=$DB->query("SELECT * FROM `".TAB_COMPLAINT."` WHERE `cust_id`={$inf['user']}") or ThrowError($DB->error);
-            if($qry->num_rows>0){
-                $com_qry=$DB->query("SELECT * FROM `".TAB_COMPLAINT."` as com INNER JOIN `".TAB_ASSIGN."` as assign WHERE com.com_id=assign.type_id AND assign.type='complaint' AND com.cust_id='{$inf['user']}'") or ThrowError($DB->error);
-                if($com_qry->num_rows<1){
-                    $cust_holder[]=$inf['user'];
-                    continue;
+            $qry = $DB->query("SELECT * FROM `" . TAB_COMPLAINT . "` WHERE `cust_id`={$inf['user']}") or ThrowError($DB->error);
+            if ($qry->num_rows > 0) {
+                while ($tmp_com = $qry->fetch_assoc()) {
+
+                    $com_qry = $DB->query("SELECT * FROM `" . TAB_ASSIGN . "` as assign WHERE assign.type_id='{$tmp_com['com_id']}' AND assign.type='complaint'") or ThrowError($DB->error);
+                    if ($com_qry->num_rows == 0) {
+                        $cust_holder[] = $inf['user'];
+                        break;
+                    }
                 }
+                continue;
             }
 
-            $qry=$DB->query("SELECT * FROM `".TAB_OTS."` WHERE `cust_id`={$inf['user']}") or ThrowError($DB->error);
-            if($qry->num_rows>0){
-                $ots_qry=$DB->query("SELECT * FROM `".TAB_OTS."` as ots INNER JOIN `".TAB_ASSIGN."` as assign WHERE ots.ots_id=assign.type_id AND assign.type='ots' AND ots.cust_id='{$inf['user']}'") or ThrowError($DB->error);
-                if($ots_qry->num_rows<1){
-                    $cust_holder[]=$inf['user'];
-                    continue;
+            $qry = $DB->query("SELECT * FROM `" . TAB_OTS . "` WHERE `cust_id`={$inf['user']}") or ThrowError($DB->error);
+            if ($qry->num_rows > 0) {
+                while ($tmp_com = $qry->fetch_assoc()) {
+                    $ots_qry = $DB->query("SELECT * FROM `" . TAB_ASSIGN . "` as assign WHERE assign.type_id={$tmp_com['ots_id']} AND assign.type='ots'") or ThrowError($DB->error);
+                    if ($ots_qry->num_rows == 0) {
+                        $cust_holder[] = $inf['user'];
+                        break;
+                    }
                 }
+                continue;
             }
 
-            $qry=$DB->query("SELECT * FROM `".TAB_INSTALL_SERVICE."` WHERE `cust_id`='{$inf['user']}' AND `date`<='$till'") or ThrowError($DB->error);
-            if($qry->num_rows>0){
-                $e=0;
-                while($info=$qry->fetch_assoc()) {
-                    $ins_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` as ins INNER JOIN `" . TAB_ASSIGN . "` as assign
-                     WHERE ins.install_service_id='{$info['install_service_id']}' AND assign.type_id='{$info['install_service_id']}' AND (assign.type='installation' OR assign.type='ins_service')
-                      AND ins.cust_id='{$inf['user']}' AND ins.`date`<='$till'") or ThrowError($DB->error);
+            $qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` WHERE `cust_id`='{$inf['user']}' AND `date`<='$till'") or ThrowError($DB->error);
+            if ($qry->num_rows > 0) {
+                $e = 0;
+                while ($info = $qry->fetch_assoc()) {
+                    $ins_qry = $DB->query("SELECT * FROM `" . TAB_ASSIGN . "` as assign
+                     WHERE assign.type_id='{$info['install_service_id']}' AND (assign.type='installation' OR assign.type='ins_service')
+                       ") or ThrowError($DB->error);
                     if ($ins_qry->num_rows < 1) {
-                        $e++;
+                        $cust_holder[] = $inf['user'];
+                        break;
                     }
                 }
-                if($e>0){
-                    $cust_holder[]=$inf['user'];
-                    continue;
+                if ($e > 0) {
+                    //$cust_holder[]=$inf['user'];
+                    //continue;
                 }
+                continue;
             }
 
-            $qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` WHERE `cust_id`='{$inf['user']}'  AND `date`<='$till'") or ThrowError($DB->error);
-            if($qry->num_rows>0){
-                $e=0;
-                while($info=$qry->fetch_assoc()){
-                    $amc_qry=$DB->query("SELECT * FROM `".TAB_AMC_SERVICE."` as amc INNER JOIN `".TAB_ASSIGN."` as assign WHERE
-                    amc.amc_service_id='{$info['amc_service_id']}' AND assign.type_id='{$info['amc_service_id']}' AND assign.type='amc'
-                   AND amc.`date`<='$till'") or ThrowError($DB->error);
-                    if($amc_qry->num_rows<1){
-                        $e++;
+            $qry = $DB->query("SELECT * FROM `" . TAB_AMC_SERVICE . "` WHERE `cust_id`='{$inf['user']}'  AND `date`<='$till'") or ThrowError($DB->error);
+            if ($qry->num_rows > 0) {
+                $e = 0;
+                while ($info = $qry->fetch_assoc()) {
+                    $amc_qry = $DB->query("SELECT * FROM  `" . TAB_ASSIGN . "` as assign WHERE
+                     assign.type_id='{$info['amc_service_id']}' AND assign.type='amc' ") or ThrowError($DB->error);
+                    if ($amc_qry->num_rows < 1) {
+                        $cust_holder[] = $inf['user'];
+                        break;
                     }
                 }
+                continue;
 
-                if($e>0){
-                    $cust_holder[]=$inf['user'];
-                    continue;
-                }
             }
-
 
 
         }
-        if(count($cust_holder)>0){
+        if (count($cust_holder) > 0) {
 
-            foreach($cust_holder as $c_id){
-                $qry=$DB->query("SELECT `cust_id`,account_type,first_name,last_name,email,organisation,mobile,
+            foreach ($cust_holder as $c_id) {
+                $qry = $DB->query("SELECT `cust_id`,account_type,first_name,last_name,email,organisation,mobile,
                 address,landmark,location as customer_location,pincode,city,mode_of_contact FROM `" . TAB_CUSTOMER . "`  WHERE `cust_id`='$c_id'
                  ") or ThrowError($DB->error);
 
-                $data[]=$qry->fetch_assoc();
+                $data[] = $qry->fetch_assoc();
             }
 
-                $result['status'] = "ok";
-                $result['result'] = "Successful $till";
-                $result['data'] = $data;
+            $result['status'] = "ok";
+            $result['result'] = "Successful $till";
+            $result['data'] = $data;
 
-        }
-        else {
+        } else {
             $result['status'] = "no";
             $result['result'] = "No data Found $till";
         }
@@ -207,18 +212,25 @@ AND `date` < '$till' AND `amc_service_id` NOT IN (SELECT `type_id` FROM `" . TAB
     $install_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL . "` WHERE `cust_id`='$cust_id' ");
 
     if ($install_qry->num_rows > 0) {
-        $c = $d = 0; //$c - total data , $d-total data with service date matched if $d is 0 then thr is no data
+        $d = 0; //$c - total data , $d-total data with service date matched if $d is 0 then thr is no data
         while ($info = $install_qry->fetch_assoc()) {
 
-            $service_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` WHERE `install_id`='{$info['install_id']}'
-AND `date` < '$till' AND `install_service_id` NOT IN (SELECT `type_id` FROM `" . TAB_ASSIGN . "` WHERE (`type`='installation' OR `type`='ins_service') AND `cust_id`='$cust_id') ") or ThrowError($DB->error);
+            $ins_serv_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` WHERE `install_id`='{$info['install_id']}' AND `date`<='$till'") or ThrowError($DB->error);
+            if ($ins_serv_qry->num_rows > 0) {
 
-            if ($service_qry->num_rows > 0) {
                 $service_info["service_info"] = array();
-                while ($get = $service_qry->fetch_assoc()) {
-                    $get["date"] = ConvertToIST($get["date"]);
-                    $service_info["service_info"][] = $get;
+                while ($ins_serv_info = $ins_serv_qry->fetch_assoc()) {
+                    $ins_qry = $DB->query("SELECT * FROM `" . TAB_ASSIGN . "` as assign
+                     WHERE assign.type_id='{$ins_serv_info['install_service_id']}' AND (assign.type='installation' OR assign.type='ins_service')
+                       ") or ThrowError($DB->error);
+                    if ($ins_qry->num_rows < 1) {
+
+                        $ins_serv_info["date"] = ConvertToIST($ins_serv_info["date"]);
+                        $service_info["service_info"][] = $ins_serv_info;
+                        $d++;
+                    }
                 }
+
                 $ac_qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
         `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" . TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
         AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND cust_ac.`ac_id`='{$info['ac_id']}'");
@@ -236,22 +248,52 @@ AND `date` < '$till' AND `install_service_id` NOT IN (SELECT `type_id` FROM `" .
                 $info = array_merge($ac_info_tmp, $service_info);
                 $result['data']['installations'][] = $info;
 
-            } else {
-                $c = $c + 1;
-
             }
+
+         /*   if ($assign_ins_qry->num_rows == 0) {
+                while ($assign_ins_qry_info = $assign_ins_qry->fetch_assoc()) {
+                    $service_qry = $DB->query("SELECT * FROM `" . TAB_INSTALL_SERVICE . "` WHERE `install_id`='{$info['install_id']}'
+AND `date` < '$till' AND `install_service_id`<>'{$assign_ins_qry_info['type_id']}' ") or ThrowError($DB->error);
+
+                    if ($service_qry->num_rows > 0) {
+                        $service_info["service_info"] = array();
+                        while ($get = $service_qry->fetch_assoc()) {
+                            $get["date"] = ConvertToIST($get["date"]);
+                            $service_info["service_info"][] = $get;
+                        }
+                        $ac_qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC . "` as cust_ac INNER JOIN `" . TAB_AC_MAKE . "` as make,
+        `" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_TYPE . "` as type,`" . TAB_AC_LOCATION . "` as loc WHERE cust_ac.`make`=make.`make_id` AND loc.ac_location_id=cust_ac.ac_location
+        AND ton.tonnage_id=cust_ac.capacity AND cust_ac.ac_type=type.ac_type_id AND cust_ac.`ac_id`='{$info['ac_id']}'");
+
+                        $info['created_on'] = ConvertToIST($info['created_on']);
+                        $info['install_remarks'] = $info["remarks"];
+                        unset($info["remarks"]);
+                        $ac_info_tmp = array();
+                        if ($ac_qry->num_rows > 0) {
+
+                            $ac_info = $ac_qry->fetch_assoc();
+                            $d = $d + 1;
+                            $ac_info_tmp = array_merge($info, $ac_info);
+                        }
+                        $info = array_merge($ac_info_tmp, $service_info);
+                        $result['data']['installations'][] = $info;
+
+                    }
+                }
+            }*/
+
 
         }
 
         if ($d == 0) {
             $result['data']['installations']['empty'] = true;
-            $result['data']['installations']['result'] = "No Installations Found $c - $d";
+            $result['data']['installations']['result'] = "No Installations Found $d";
         } else {
             $result['data']['installations']['empty'] = false;
         }
     } else {
         $result['data']['installations']['empty'] = true;
-        $result['data']['installations']['result'] = "No Installations Found 1";
+        $result['data']['installations']['result'] = "No Installations Found";
 
     }
 
@@ -375,16 +417,18 @@ $app->get("/Assign/Customer/:id/Installations", function ($cust_id) use ($app) {
 $app->post("/Assign", function () use ($app) {
     global $DB;
 
-    $type = $app->request->post("type");
-    $assign_of = $app->request->post("assign_of");
-    $assign_for = $app->request->post("tech_id");
-    $assign_date = $app->request->post("assign_date");
-    $remarks = $app->request->post("assign_remarks");
-    $cust_id = $app->request->post("cust_id");
+    $type = $app->request->post("type",false);
+    $assign_of = $app->request->post("assign_of",false);
+    $assign_for = $app->request->post("tech_id",false);
+    $assign_date = $app->request->post("assign_date",false);
+    $remarks = $app->request->post("assign_remarks","");
+    $cust_id = $app->request->post("cust_id",false);
+    $ac_id = $app->request->post("ac_id",false);
     $assign_date = ConvertFromIST($assign_date);
 
-    $type_q = ($type == "ins_service") ? "ins_service" : "installation";
-
+    //$type_q = ($type == "ins_service") ? "ins_service" : "installation";
+if($type!=false&&$assign_of!=false&&$assign_for!=false&&$assign_date!=false&&$cust_id!=false&&$ac_id!=false&&$assign_date!=false)
+{
     $qry = $DB->query("SELECT `ticket_id` FROM `" . TAB_ASSIGN . "` WHERE `type`='$type'
     AND `type_id`='$assign_of' AND `cust_id`='$cust_id' ");
     if ($qry->num_rows > '0') {
@@ -394,12 +438,12 @@ $app->post("/Assign", function () use ($app) {
         }
         ThrowError("This Ticket is already assigned to a technician. Check Ticket ID : #" . $ticket);
     } else {
-        $ticket_id = generateTicketID($type, $cust_id);
-        $DB->query("INSERT INTO `" . TAB_ASSIGN . "`(`cust_id`,`ticket_id`,`type`,`type_id`,`assign_for`,`assign_date`,`remarks`)
-                    VALUES('$cust_id','$ticket_id','$type','$assign_of','$assign_for','$assign_date','$remarks')") or ThrowError($DB->error);
-        $assign_id="";
+        $ticket_id = generateTicketID($type, $cust_id, $assign_of);
+        $DB->query("INSERT INTO `" . TAB_ASSIGN . "`(`cust_id`,`ac_id`,`ticket_id`,`type`,`type_id`,`assign_for`,`assign_date`,`remarks`)
+                    VALUES('$cust_id','$ac_id','$ticket_id','$type','$assign_of','$assign_for','$assign_date','$remarks')") or ThrowError($DB->error);
+        $assign_id = "";
         if ($DB->affected_rows > 0) {
-            $assign_id=$DB->insert_id;
+            $assign_id = $DB->insert_id;
             switch ($type) {
                 case 'installation':
                     $DB->query("UPDATE `" . TAB_INSTALL . "` SET `preferred_date`='$assign_date' WHERE `install_id`='$assign_of'");
@@ -421,24 +465,29 @@ $app->post("/Assign", function () use ($app) {
                     $DB->query("UPDATE `" . TAB_OTS . "` SET `preferred_date`='$assign_date' WHERE `ots_id`='$assign_of'");
                     break;
             }
-           /* if ($DB->affected_rows > 0) {
-                $result['status'] = "ok";
-                $result['result'] = "Successfully Added.";
-            } else {*/
-                $result['status'] = "ok";
-                $result['result'] = "Successfully Assigned. Preferred dates unchanged.";
-           // }
+            /* if ($DB->affected_rows > 0) {
+                 $result['status'] = "ok";
+                 $result['result'] = "Successfully Added.";
+             } else {*/
+            $result['status'] = "ok";
+            $result['result'] = "Successfully Assigned. Preferred dates unchanged.";
+            // }
 
             $app->status(201);
-$res=NotifySMS($assign_id);
-               if($res['success']){ //Send SMS notification for both technician and customer
-                   $result['result'].="SMS are sent";
-               } else{
-                   $result['result'].="SMS are not sent due to : \n ";
-                   foreach($res['result'] as $r){
-                       $result['result'].=$r."\n";
-                   }
-               }
+            if(strtotime($assign_date)>=strtotime(date("Y-m-d"))){
+                $res = NotifySMS($assign_id);
+            }else{
+                $res['success']=false;
+                $res['result'][0]="Assigned date was past not upcoming date";
+            }
+            if ($res['success']) { //Send SMS notification for both technician and customer
+                $result['result'] .= "SMS are sent";
+            } else {
+                $result['result'] .= "SMS are not sent due to : \n ";
+                foreach ($res['result'] as $r) {
+                    $result['result'] .= $r . "\n";
+                }
+            }
 
 
             $app->response->body(json_encode($result));
@@ -446,5 +495,9 @@ $res=NotifySMS($assign_id);
             ThrowError("Unable to create. Error occurred");
         }
     }
+}else{
+    ThrowError("Required Field Missing. Please check the parameter");
+}
+
 
 });

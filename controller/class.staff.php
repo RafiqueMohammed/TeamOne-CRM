@@ -25,21 +25,32 @@ class Staff
         return $_SESSION['Staff'];
     }
 
+    function mustLogin()
+    {
+        if (!$this->isLoggedin()) {
+            $this->redirect(SUB_FOLDER."Login.php");
+        }
+    }
+
     function isLoggedin()
     {
         if (isset($_SESSION['Staff'], $_SESSION['Staff']['Logged'], $_SESSION['Staff']['AuthID']) && $_SESSION['Staff']['Logged'] ==
-            "1" && count($_SESSION['Staff']) >0) {
+            "1" && count($_SESSION['Staff']) > 0
+        ) {
             return true;
         } else {
             return false;
         }
     }
 
-    function mustLogin()
+    function redirect($url, $die = true)
     {
-        if (!$this->isLoggedin()) {
-            $this->redirect("Login.php");
+
+        header("location:$url");
+        if ($die) {
+            exit();
         }
+
     }
 
     function isAdmin()
@@ -64,26 +75,17 @@ class Staff
 
     }
 
-    function redirect($url, $die = true)
+    function setStaff($data)
     {
-
-        header("location:$url");
-        if ($die) {
-            exit();
-        }
-
-    }
-
-    function setStaff($data){
-        if(is_array($data)){
-            $_SESSION['Staff']=array();
-            $_SESSION['Staff']['isAdmin']=($data['isAdmin']=='y')?true:false;
-            $_SESSION['Staff']['AuthID']=$data['AuthID'];
-            $_SESSION['Staff']['Logged']=1;
-            $_SESSION['Staff']['Username']=$data['Username'];
-            $_SESSION['Staff']['FullName']=$data['FullName'];
+        if (is_array($data)) {
+            $_SESSION['Staff'] = array();
+            $_SESSION['Staff']['isAdmin'] = ($data['isAdmin'] == 'y') ? true : false;
+            $_SESSION['Staff']['AuthID'] = $data['AuthID'];
+            $_SESSION['Staff']['Logged'] = 1;
+            $_SESSION['Staff']['Username'] = $data['Username'];
+            $_SESSION['Staff']['FullName'] = $data['FullName'];
             return true;
-        }else{
+        } else {
             return false;
         }
     }

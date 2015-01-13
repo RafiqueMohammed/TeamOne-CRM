@@ -50,6 +50,27 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
+     * Add data to set
+     * @param array $items Key-value array of data to append to this set
+     */
+    public function replace($items)
+    {
+        foreach ($items as $key => $value) {
+            $this->set($key, $value); // Ensure keys are normalized
+        }
+    }
+
+    /**
+     * Set data key to value
+     * @param string $key The data key
+     * @param mixed $value The data value
+     */
+    public function set($key, $value)
+    {
+        $this->data[$this->normalizeKey($key)] = $value;
+    }
+
+    /**
      * Normalize data key
      *
      * Used to transform data key into the necessary
@@ -62,44 +83,6 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
     protected function normalizeKey($key)
     {
         return $key;
-    }
-
-    /**
-     * Set data key to value
-     * @param string $key   The data key
-     * @param mixed  $value The data value
-     */
-    public function set($key, $value)
-    {
-        $this->data[$this->normalizeKey($key)] = $value;
-    }
-
-    /**
-     * Get data value with key
-     * @param  string $key     The data key
-     * @param  mixed  $default The value to return if data key does not exist
-     * @return mixed           The data value, or the default value
-     */
-    public function get($key, $default = null)
-    {
-        if ($this->has($key)) {
-            $isInvokable = is_object($this->data[$this->normalizeKey($key)]) && method_exists($this->data[$this->normalizeKey($key)], '__invoke');
-
-            return $isInvokable ? $this->data[$this->normalizeKey($key)]($this) : $this->data[$this->normalizeKey($key)];
-        }
-
-        return $default;
-    }
-
-    /**
-     * Add data to set
-     * @param array $items Key-value array of data to append to this set
-     */
-    public function replace($items)
-    {
-        foreach ($items as $key => $value) {
-            $this->set($key, $value); // Ensure keys are normalized
-        }
     }
 
     /**
@@ -121,25 +104,6 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Does this set contain a key?
-     * @param  string  $key The data key
-     * @return boolean
-     */
-    public function has($key)
-    {
-        return array_key_exists($this->normalizeKey($key), $this->data);
-    }
-
-    /**
-     * Remove value with key from this set
-     * @param  string $key The data key
-     */
-    public function remove($key)
-    {
-        unset($this->data[$this->normalizeKey($key)]);
-    }
-
-    /**
      * Property Overloading
      */
 
@@ -153,6 +117,33 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
         $this->set($key, $value);
     }
 
+    /**
+     * Get data value with key
+     * @param  string $key The data key
+     * @param  mixed $default The value to return if data key does not exist
+     * @return mixed           The data value, or the default value
+     */
+    public function get($key, $default = null)
+    {
+        if ($this->has($key)) {
+            $isInvokable = is_object($this->data[$this->normalizeKey($key)]) && method_exists($this->data[$this->normalizeKey($key)], '__invoke');
+
+            return $isInvokable ? $this->data[$this->normalizeKey($key)]($this) : $this->data[$this->normalizeKey($key)];
+        }
+
+        return $default;
+    }
+
+    /**
+     * Does this set contain a key?
+     * @param  string $key The data key
+     * @return boolean
+     */
+    public function has($key)
+    {
+        return array_key_exists($this->normalizeKey($key), $this->data);
+    }
+
     public function __isset($key)
     {
         return $this->has($key);
@@ -161,6 +152,15 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
     public function __unset($key)
     {
         return $this->remove($key);
+    }
+
+    /**
+     * Remove value with key from this set
+     * @param  string $key The data key
+     */
+    public function remove($key)
+    {
+        unset($this->data[$this->normalizeKey($key)]);
     }
 
     /**
@@ -215,7 +215,7 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Ensure a value or object will remain globally unique
-     * @param  string  $key   The value or object name
+     * @param  string $key The value or object name
      * @param  Closure        The closure that defines the object
      * @return mixed
      */

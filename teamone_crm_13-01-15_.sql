@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.6
+-- version 4.0.10.7
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 17, 2014 at 07:05 AM
--- Server version: 5.6.21
+-- Generation Time: Jan 13, 2015 at 06:15 AM
+-- Server version: 5.6.22
 -- PHP Version: 5.4.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `ac_location` (
   `ac_location_id` int(11) NOT NULL AUTO_INCREMENT,
   `location` varchar(50) NOT NULL,
   PRIMARY KEY (`ac_location_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
 
 --
 -- Dumping data for table `ac_location`
@@ -52,7 +52,22 @@ INSERT INTO `ac_location` (`ac_location_id`, `location`) VALUES
 (18, 'Powder Room'),
 (19, 'Walk in closet area'),
 (21, 'Kitchen'),
-(22, 'Accounts Department');
+(22, 'Accounts Department'),
+(23, 'Hall'),
+(24, 'Workshop'),
+(25, 'Office'),
+(26, 'Bedroom'),
+(27, 'Study Room'),
+(28, 'Showroom'),
+(29, 'Account Dept.'),
+(30, 'IT Department'),
+(31, 'H.R. Department.'),
+(32, 'Staff Area'),
+(33, 'Boss Cabin'),
+(34, 'Marketing Department'),
+(35, 'Counter Area'),
+(36, 'Opposite Cabin'),
+(37, 'Last Cabin');
 
 -- --------------------------------------------------------
 
@@ -64,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `ac_make` (
   `make_id` int(3) NOT NULL AUTO_INCREMENT,
   `make` varchar(50) NOT NULL,
   PRIMARY KEY (`make_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
 
 --
 -- Dumping data for table `ac_make`
@@ -94,7 +109,12 @@ INSERT INTO `ac_make` (`make_id`, `make`) VALUES
 (23, 'TCL'),
 (24, 'Whirlpool'),
 (25, 'Hyundai'),
-(26, 'Vestar');
+(26, 'Vestar'),
+(27, 'Toshiba'),
+(28, 'Carrier'),
+(29, 'Assemble'),
+(30, 'Kelvinator'),
+(31, 'L.G. Gold');
 
 -- --------------------------------------------------------
 
@@ -142,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `ac_type` (
   `ac_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `ac_type` varchar(20) NOT NULL,
   PRIMARY KEY (`ac_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `ac_type`
@@ -153,7 +173,8 @@ INSERT INTO `ac_type` (`ac_type_id`, `ac_type`) VALUES
 (2, 'Window'),
 (3, 'Ducted'),
 (4, 'VRF'),
-(5, 'Cassette');
+(5, 'Cassette'),
+(6, 'Kelvinator');
 
 -- --------------------------------------------------------
 
@@ -177,7 +198,111 @@ CREATE TABLE IF NOT EXISTS `amc` (
   PRIMARY KEY (`amc_id`),
   KEY `transaction_id` (`transaction_id`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=153 ;
+
+--
+-- Dumping data for table `amc`
+--
+
+INSERT INTO `amc` (`amc_id`, `amc_type`, `cust_id`, `ac_id`, `no_of_service`, `dry`, `wet`, `remarks`, `activation`, `expiration`, `transaction_id`, `created_on`) VALUES
+(14, 'n', 279, 140, 4, 3, 1, '', '2014-12-25', '2015-12-24', 0, '2014-12-25 08:34:41'),
+(15, 'n', 279, 141, 4, 3, 1, '', '2014-12-25', '2015-12-24', 0, '2014-12-25 08:36:05'),
+(16, 'n', 279, 142, 4, 3, 1, '', '2014-12-25', '2015-12-24', 0, '2014-12-25 08:36:25'),
+(18, 'n', 287, 183, 4, 3, 1, 'AMC Customer', '2014-12-31', '2015-12-30', 0, '2015-01-02 10:29:43'),
+(19, 'n', 176, 194, 3, 3, 0, 'Amc done.', '2014-04-01', '2015-03-31', 0, '2015-01-05 09:16:46'),
+(20, 'n', 176, 195, 3, 3, 0, 'amc customer', '2014-04-01', '2015-03-31', 0, '2015-01-05 09:31:50'),
+(21, 'n', 176, 196, 3, 3, 0, 'Amc customer', '2014-04-01', '2015-03-31', 0, '2015-01-05 09:32:36'),
+(22, 'n', 176, 197, 3, 3, 0, 'Amc customer', '2014-04-01', '2015-03-31', 0, '2015-01-05 09:33:21'),
+(23, 'n', 116, 198, 4, 3, 1, 'Amc customer.', '2014-09-20', '2015-09-19', 0, '2015-01-05 09:40:14'),
+(24, 'n', 275, 199, 3, 3, 0, '3 Dry service.', '2014-12-04', '2015-12-03', 0, '2015-01-05 10:10:23'),
+(25, 'n', 275, 200, 3, 3, 0, '3 Dry service.', '2014-12-04', '2015-12-03', 0, '2015-01-05 10:14:17'),
+(26, 'n', 275, 201, 3, 3, 0, '3 Dry service.', '2014-12-04', '2015-12-03', 0, '2015-01-05 10:14:45'),
+(27, 'n', 275, 202, 3, 3, 0, '3 Dry service.', '2014-12-04', '2015-12-03', 0, '2015-01-05 10:15:07'),
+(28, 'n', 275, 203, 3, 3, 0, '3 Dry service.', '2014-12-04', '2015-12-03', 0, '2015-01-05 10:16:13'),
+(29, 'n', 143, 204, 3, 3, 0, '3 Dry service.', '2014-07-11', '2015-07-10', 0, '2015-01-05 10:45:02'),
+(30, 'n', 143, 205, 3, 3, 0, '3 Dry service.\n', '2014-07-11', '2015-07-10', 0, '2015-01-05 10:46:20'),
+(31, 'n', 143, 206, 3, 3, 0, '3 Dry service', '2014-07-11', '2015-07-10', 0, '2015-01-05 10:46:52'),
+(32, 'n', 143, 208, 3, 3, 0, '3 Dry service.', '2014-07-11', '2015-07-10', 0, '2015-01-05 10:52:38'),
+(35, 'n', 249, 226, 3, 3, 0, 'Amc customer.', '2014-10-08', '2015-10-07', 0, '2015-01-07 07:30:30'),
+(45, 's', 72, 232, 7, 5, 2, '', '2015-01-27', '2016-01-26', 0, '2015-01-07 10:05:15'),
+(51, 'n', 193, 147, 3, 3, 0, '3 Dry service.', '2014-08-08', '2015-08-07', 0, '2015-01-07 12:19:59'),
+(52, 'n', 112, 225, 3, 3, 0, '3 Dry services', '2014-07-08', '2015-07-07', 0, '2015-01-07 12:30:25'),
+(53, 'n', 294, 224, 3, 3, 0, 'Dry service done.', '2014-09-22', '2015-09-21', 0, '2015-01-07 12:53:33'),
+(58, 'n', 81, 222, 3, 3, 0, '3 dry services.', '2014-12-31', '2015-12-30', 0, '2015-01-07 13:36:47'),
+(59, 'n', 107, 228, 4, 3, 1, '', '2014-08-16', '2015-08-15', 0, '2015-01-08 06:14:00'),
+(61, 'n', 251, 272, 4, 3, 1, '3 Dry Services.\n1 Wet service.', '2014-07-21', '2015-07-20', 0, '2015-01-08 06:17:37'),
+(62, 'n', 251, 273, 4, 3, 1, '3 dry services.\n1 wet service', '2014-07-21', '2015-07-20', 0, '2015-01-08 06:23:52'),
+(63, 'n', 251, 274, 4, 3, 1, '3 dry services\n1 wet service', '2014-07-21', '2015-07-20', 0, '2015-01-08 06:46:54'),
+(64, 'n', 107, 229, 4, 3, 1, '3 Dry services.\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 07:09:12'),
+(65, 'n', 107, 230, 4, 3, 1, '3 Dry services\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 07:10:21'),
+(67, 'n', 195, 227, 3, 3, 0, '3 dry services', '2014-10-08', '2015-10-07', 0, '2015-01-08 07:21:22'),
+(69, 'n', 90, 233, 3, 3, 0, '3 Dry services', '2014-10-16', '2015-10-15', 0, '2015-01-08 07:25:32'),
+(73, 'n', 205, 234, 4, 3, 1, '3 dry services\n1 wet service', '2014-04-16', '2015-04-15', 0, '2015-01-08 07:33:59'),
+(74, 'n', 205, 235, 4, 3, 1, '3 dry services\n1 wet service', '2014-04-16', '2015-04-15', 0, '2015-01-08 07:34:34'),
+(75, 'n', 205, 236, 4, 3, 1, '3 dry services\n1 wet service', '2014-04-16', '2015-04-15', 0, '2015-01-08 07:35:03'),
+(76, 'n', 194, 237, 3, 3, 0, '3 dry services', '2014-08-06', '2015-08-05', 0, '2015-01-08 07:53:58'),
+(77, 'n', 87, 238, 3, 3, 0, '3 Dry services.', '2014-08-18', '2015-08-17', 0, '2015-01-08 07:57:45'),
+(78, 'n', 270, 240, 4, 3, 1, '3 Dry services\n1 wet service.', '2014-08-23', '2015-08-22', 0, '2015-01-08 08:02:58'),
+(79, 'n', 106, 241, 4, 3, 1, '3 Dry services\n1 Wet service', '2014-07-23', '2015-07-22', 0, '2015-01-08 08:08:02'),
+(80, 'n', 106, 242, 4, 3, 1, '3 Dry services\n1 Wet service', '2014-07-23', '2015-07-22', 0, '2015-01-08 08:08:33'),
+(81, 'n', 106, 243, 4, 3, 1, '3 Dry services\n1 Wet service', '2014-07-23', '2015-07-22', 0, '2015-01-08 08:09:03'),
+(83, 'n', 185, 244, 3, 3, 0, '3 dry services', '2014-08-06', '2015-08-05', 0, '2015-01-08 08:19:30'),
+(85, 'n', 185, 246, 3, 3, 0, '3 dry services', '2014-08-06', '2015-08-05', 0, '2015-01-08 08:20:40'),
+(86, 'n', 111, 247, 4, 3, 1, '3 dry services\n1 wet service', '2014-10-28', '2015-10-27', 0, '2015-01-08 08:31:39'),
+(87, 'n', 111, 249, 4, 3, 1, '3 dry services\n1 wet service', '2014-10-28', '2015-10-27', 0, '2015-01-08 08:32:22'),
+(88, 'n', 111, 250, 4, 3, 1, '3 dry services\n1 wet service', '2014-10-28', '2015-10-27', 0, '2015-01-08 08:32:58'),
+(89, 'n', 111, 251, 4, 3, 1, '3 dry services\n1 wet service', '2014-10-28', '2015-10-27', 0, '2015-01-08 08:33:38'),
+(93, 'n', 196, 275, 4, 3, 1, '3 Dry services\n1 wet service.', '2014-05-08', '2015-05-07', 0, '2015-01-08 09:25:02'),
+(94, 'n', 196, 276, 4, 3, 1, '3 Dry services\n1 Service', '2014-05-08', '2015-05-07', 0, '2015-01-08 09:26:03'),
+(95, 'n', 196, 277, 4, 3, 1, '3 Dry services\n1 Service', '2014-05-08', '2015-05-07', 0, '2015-01-08 09:26:39'),
+(96, 'n', 154, 258, 4, 3, 1, '3 dry services\n1 wet service', '2014-05-20', '2015-05-19', 0, '2015-01-08 09:34:24'),
+(97, 'n', 88, 259, 3, 3, 0, '3 Dry services.', '2014-08-18', '2015-08-17', 0, '2015-01-08 09:39:24'),
+(98, 'n', 150, 260, 4, 3, 1, '3 Dry service\n1 wet service', '2014-05-02', '2015-05-01', 0, '2015-01-08 09:47:54'),
+(99, 'n', 150, 261, 4, 3, 1, '3 Dry service\n1 wet service', '2014-05-02', '2015-05-01', 0, '2015-01-08 09:48:48'),
+(100, 'n', 150, 262, 4, 3, 1, '3 Dry service\n1 wet service', '2014-05-02', '2015-05-01', 0, '2015-01-08 09:49:27'),
+(101, 'n', 150, 263, 4, 3, 1, '3 Dry service\n1 wet service', '2014-05-02', '2015-05-01', 0, '2015-01-08 09:50:33'),
+(102, 'n', 150, 264, 4, 3, 1, '3 Dry service\n1 wet service', '2014-05-02', '2015-05-01', 0, '2015-01-08 09:51:03'),
+(103, 'n', 212, 265, 4, 3, 1, '3 Dry Services\n1 Wet Service', '2014-12-27', '2015-12-26', 0, '2015-01-08 10:50:16'),
+(104, 'n', 109, 266, 4, 3, 1, '3 Dry services\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 10:58:34'),
+(105, 'n', 109, 267, 4, 3, 1, '3 Dry services\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 10:59:11'),
+(106, 'n', 109, 268, 4, 3, 1, '3 Dry services\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 10:59:56'),
+(107, 'n', 109, 269, 4, 3, 1, '3 Dry services\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-08 11:00:35'),
+(108, 'n', 216, 215, 4, 3, 1, '3 Dry service \n1 wet service', '2014-05-31', '2015-05-30', 0, '2015-01-08 11:09:02'),
+(109, 'n', 216, 216, 4, 3, 1, '3 dry service\n1 wet service', '2014-05-31', '2015-05-30', 0, '2015-01-08 11:09:49'),
+(110, 'n', 245, 217, 4, 3, 1, '3 dry services\n1 wet service', '2014-11-17', '2015-11-16', 0, '2015-01-08 11:17:31'),
+(111, 'n', 245, 218, 4, 3, 1, '3 dry services\n1 wet service', '2014-11-17', '2015-11-16', 0, '2015-01-08 11:18:05'),
+(112, 'n', 201, 278, 4, 3, 1, '3 Dry services\n1 Wet service', '2014-03-12', '2015-03-11', 0, '2015-01-08 11:30:51'),
+(114, 'n', 218, 221, 4, 3, 1, '3 dry services\n1 wet service', '2014-08-22', '2015-08-21', 0, '2015-01-08 11:42:47'),
+(115, 'n', 269, 279, 4, 3, 1, '3 dry Services\n1 wet service', '2014-03-21', '2015-03-20', 0, '2015-01-08 12:51:13'),
+(116, 'n', 269, 280, 4, 3, 1, '3 dry Services\n1 wet service', '2014-03-21', '2015-03-20', 0, '2015-01-08 12:51:47'),
+(117, 'n', 269, 281, 4, 3, 1, '3 dry Services\n1 wet service', '2014-03-21', '2015-03-20', 0, '2015-01-08 12:52:14'),
+(121, 'n', 228, 284, 4, 3, 1, '3 dry service\n1 wet service', '2014-09-23', '2015-09-22', 0, '2015-01-08 13:47:30'),
+(122, 'n', 228, 285, 4, 3, 1, '3 dry Service\n1 Wet service', '2014-09-24', '2015-09-23', 0, '2015-01-08 13:49:11'),
+(125, 'n', 222, 288, 4, 3, 1, '3 dry services\n1 wet service', '2014-03-10', '2015-03-09', 0, '2015-01-08 14:04:06'),
+(126, 'n', 222, 289, 4, 3, 1, '3 dry services\n1 wet service', '2014-03-10', '2015-03-09', 0, '2015-01-08 14:04:38'),
+(127, 'n', 185, 293, 3, 3, 0, '3 dry services', '2014-08-06', '2015-08-05', 0, '2015-01-10 09:23:35'),
+(128, 'n', 107, 294, 4, 3, 1, '3 dry service\n1 wet service', '2014-08-16', '2015-08-15', 0, '2015-01-10 09:51:53'),
+(130, 'n', 240, 310, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:31:24'),
+(131, 'n', 240, 309, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:32:40'),
+(132, 'n', 240, 312, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:34:55'),
+(133, 'n', 240, 314, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:36:33'),
+(134, 'n', 240, 315, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:37:02'),
+(135, 'n', 240, 316, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:37:21'),
+(136, 'n', 240, 317, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:37:59'),
+(137, 'n', 240, 318, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:39:07'),
+(138, 'n', 240, 319, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:40:04'),
+(139, 'n', 240, 321, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:40:25'),
+(140, 'n', 240, 311, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:40:46'),
+(141, 'n', 240, 320, 2, 1, 1, '', '2015-01-09', '2016-01-08', 0, '2015-01-10 11:41:09'),
+(142, 'n', 164, 120, 4, 3, 1, '', '2014-12-08', '2015-12-07', 0, '2015-01-10 11:58:17'),
+(143, 'n', 164, 121, 4, 3, 1, '', '2014-12-08', '2015-12-07', 0, '2015-01-10 11:58:46'),
+(144, 'n', 164, 122, 4, 3, 1, '', '2014-12-08', '2015-12-07', 0, '2015-01-10 12:01:08'),
+(145, 'n', 164, 123, 4, 3, 1, '', '2015-01-08', '2016-01-07', 0, '2015-01-10 12:19:15'),
+(146, 'n', 164, 124, 4, 3, 1, '', '2014-12-08', '2015-12-07', 0, '2015-01-10 12:21:02'),
+(147, 'n', 299, 330, 3, 3, 0, '', '2015-01-08', '2016-01-07', 0, '2015-01-12 12:21:14'),
+(148, 'n', 299, 331, 3, 3, 0, '', '2015-01-08', '2016-01-07', 0, '2015-01-12 12:21:44'),
+(149, 'n', 299, 332, 4, 3, 1, '', '2015-01-08', '2016-01-07', 0, '2015-01-12 12:22:04'),
+(151, 'n', 228, 345, 4, 3, 1, '', '2014-09-23', '2015-09-22', 0, '2015-01-13 06:11:18');
 
 -- --------------------------------------------------------
 
@@ -194,7 +319,353 @@ CREATE TABLE IF NOT EXISTS `amc_service_date` (
   PRIMARY KEY (`amc_service_id`),
   KEY `cust_id` (`cust_id`),
   KEY `amc_id` (`amc_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=495 ;
+
+--
+-- Dumping data for table `amc_service_date`
+--
+
+INSERT INTO `amc_service_date` (`amc_service_id`, `cust_id`, `amc_id`, `remarks`, `date`) VALUES
+(46, 279, 14, 'Service Done by Mosin', '2014-12-25'),
+(47, 279, 14, 'Service Done by', '2015-03-26'),
+(48, 279, 14, 'Service Done by', '2015-06-25'),
+(49, 279, 14, 'Service Done by', '2015-09-24'),
+(50, 279, 15, 'Service Done by Mosin', '2014-12-25'),
+(51, 279, 15, 'Service Done by', '2015-03-26'),
+(52, 279, 15, 'Service Done by', '2015-06-25'),
+(53, 279, 15, 'Service Done by', '2015-09-24'),
+(54, 279, 16, 'Service Done by Mosin', '2014-12-25'),
+(55, 279, 16, 'Service Done by', '2015-03-26'),
+(56, 279, 16, 'Service Done by', '2015-06-25'),
+(57, 279, 16, 'Service Done by', '2015-09-24'),
+(61, 287, 18, '', '2014-12-31'),
+(62, 287, 18, '', '2015-04-01'),
+(63, 287, 18, '', '2015-07-01'),
+(64, 287, 18, '', '2015-09-30'),
+(65, 176, 19, 'Dry service done by other Tech.', '2014-04-01'),
+(66, 176, 19, 'Dry service done by mosin', '2014-08-12'),
+(67, 176, 19, 'Dry service done by Faheem', '2014-11-25'),
+(68, 176, 20, 'Dry service done.', '2014-04-01'),
+(69, 176, 20, 'Dry service done by Mosin.', '2014-08-12'),
+(70, 176, 20, 'Dry service done  by Faheem', '2014-11-25'),
+(71, 176, 21, 'Dry service done by Tech.', '2014-04-01'),
+(72, 176, 21, 'Dry service done by mosin', '2014-08-12'),
+(73, 176, 21, 'Dry service done by Faheem.', '2014-11-25'),
+(74, 176, 22, 'Dry service done by Tech.', '2014-04-01'),
+(75, 176, 22, 'Dry service done by Mosin', '2014-08-12'),
+(76, 176, 22, 'Dry service done by Faheem.', '2014-11-25'),
+(77, 116, 23, 'service done by Mosin', '2014-09-20'),
+(78, 116, 23, 'service done by', '2014-12-20'),
+(79, 116, 23, 'service done by', '2015-03-21'),
+(80, 116, 23, 'service done by', '2015-06-20'),
+(81, 275, 24, 'Service done by Niyaz.', '2014-12-04'),
+(82, 275, 24, 'Service done by', '2015-04-05'),
+(83, 275, 24, 'Service done by', '2015-08-05'),
+(84, 275, 25, 'Service done by Niyaz.', '2014-12-04'),
+(85, 275, 25, 'Service done by', '2015-04-05'),
+(86, 275, 25, 'Service done by', '2015-08-05'),
+(87, 275, 26, 'Service done by niyaz.', '2014-12-04'),
+(88, 275, 26, 'Service done by', '2015-04-05'),
+(89, 275, 26, 'Service done by', '2015-08-05'),
+(90, 275, 27, 'Service done by niyaz.', '2014-12-04'),
+(91, 275, 27, 'Service done by', '2015-04-05'),
+(92, 275, 27, 'Service done by', '2015-08-05'),
+(93, 275, 28, 'Service done by niyaz.', '2014-12-04'),
+(94, 275, 28, 'Service done by', '2015-04-05'),
+(95, 275, 28, 'Service done by', '2015-08-05'),
+(96, 143, 29, 'service done by Atish', '2014-10-01'),
+(97, 143, 29, 'service done by Faheem', '2015-01-03'),
+(98, 143, 29, 'service done by ', '2015-03-12'),
+(99, 143, 30, 'service done by Atish', '2014-10-01'),
+(100, 143, 30, 'service done by mosin', '2015-01-03'),
+(101, 143, 30, 'service done by', '2015-03-12'),
+(102, 143, 31, 'service done by Atish', '2014-10-01'),
+(103, 143, 31, 'service done by mosin', '2015-01-03'),
+(104, 143, 31, 'service done by ', '2015-03-12'),
+(105, 143, 32, 'service done by Atish', '2014-10-01'),
+(106, 143, 32, 'service done by mosin', '2015-01-03'),
+(107, 143, 32, 'service done by', '2015-03-12'),
+(121, 72, 45, '', '2015-01-27'),
+(122, 72, 45, '', '2015-03-20'),
+(123, 72, 45, '', '2015-05-11'),
+(124, 72, 45, '', '2015-07-02'),
+(125, 72, 45, '', '2015-08-23'),
+(126, 72, 45, '', '2015-10-14'),
+(127, 72, 45, '', '2015-12-05'),
+(138, 193, 51, 'service done by Mosin.', '2014-08-05'),
+(139, 193, 51, 'service done by Sumit.', '2014-12-25'),
+(140, 193, 51, 'service done by ', '2015-04-09'),
+(141, 112, 52, 'service done by Mosin', '2014-07-23'),
+(142, 112, 52, 'service done by Abed', '2014-10-28'),
+(143, 112, 52, 'service done by Akhilesh', '2015-01-03'),
+(144, 294, 53, 'Installation done by Mosin.', '2014-09-22'),
+(145, 294, 53, 'Installation done by Akhilesh', '2014-12-31'),
+(146, 294, 53, 'Installation done by', '2015-05-24'),
+(162, 81, 58, 'Service done by Mosin.', '2014-12-31'),
+(163, 81, 58, 'Service done by', '2015-05-02'),
+(164, 81, 58, 'Service done by ', '2015-09-01'),
+(165, 107, 59, 'Dry service done by Mosin', '2014-08-16'),
+(166, 107, 59, 'Dry service done by Shafiq', '2014-10-16'),
+(167, 107, 59, 'Dry service done by mosin', '2015-01-07'),
+(168, 107, 59, 'service done by', '2015-05-16'),
+(173, 251, 61, 'Wet service done by Atish', '2014-07-21'),
+(174, 251, 61, 'Dry service done by Lateef.', '2014-10-09'),
+(175, 251, 61, 'Dry service done by', '2015-01-07'),
+(176, 251, 61, 'Dry service done by', '2015-04-20'),
+(177, 251, 62, 'Wet service done by Atish', '2014-07-21'),
+(178, 251, 62, 'Dry service done by Lateef.', '2014-10-09'),
+(179, 251, 62, 'Dry service done by ', '2015-01-07'),
+(180, 251, 62, 'Dry service done by ', '2015-04-20'),
+(181, 251, 63, 'Wet service done by Atish.', '2014-07-21'),
+(182, 251, 63, 'Dry service done by Lateef.', '2014-10-09'),
+(183, 251, 63, 'Dry service done by ', '2015-01-07'),
+(184, 251, 63, 'Dry service done by ', '2015-04-20'),
+(185, 107, 64, 'Dry service done by Mosin', '2014-08-16'),
+(186, 107, 64, 'Dry service done by shafiq', '2014-10-16'),
+(187, 107, 64, 'Dry service done by Mosin', '2015-01-07'),
+(188, 107, 64, ' service done by ', '2015-05-16'),
+(189, 107, 65, 'Dry service done by Mosin.', '2014-08-16'),
+(190, 107, 65, 'Dry service done by shafiq', '2014-10-16'),
+(191, 107, 65, 'Dry service done by Mosin.', '2015-01-07'),
+(192, 107, 65, ' service done by ', '2015-05-16'),
+(197, 195, 67, 'Dry service done by Nizam', '2014-10-08'),
+(198, 195, 67, 'Dry service done by Mosin', '2015-01-06'),
+(199, 195, 67, 'Dry service done by', '2015-06-09'),
+(204, 90, 69, 'Dry service done by Abid', '2014-10-16'),
+(205, 90, 69, 'Dry service done by Mosin', '2015-01-07'),
+(206, 90, 69, 'Dry service done by ', '2015-06-17'),
+(216, 205, 73, 'Dry service done by Naushad', '2014-04-16'),
+(217, 205, 73, 'Dry service done by Gautam', '2014-08-18'),
+(218, 205, 73, 'Dry service done by Mosin', '2015-01-07'),
+(219, 205, 73, 'Dry service done by', '2015-01-14'),
+(220, 205, 74, 'Service done by Naushad', '2014-04-16'),
+(221, 205, 74, 'Service done by Gautam', '2014-08-18'),
+(222, 205, 74, 'Service done by Mosin', '2015-01-07'),
+(223, 205, 74, 'Service done by ', '2015-01-14'),
+(224, 205, 75, 'Service done by Naushad', '2014-04-16'),
+(225, 205, 75, 'Service done by Gautam', '2014-08-18'),
+(226, 205, 75, 'Service done by Mosin', '2015-01-07'),
+(227, 205, 75, 'Service done by ', '2015-01-14'),
+(228, 194, 76, 'Service done by mosin', '2014-08-06'),
+(229, 194, 76, 'Service done by mosin', '2015-01-06'),
+(230, 194, 76, 'Service done by ', '2015-04-07'),
+(231, 87, 77, 'Dry service done by Nizam', '2014-08-18'),
+(232, 87, 77, 'Dry service done by mosin', '2015-01-06'),
+(233, 87, 77, 'Dry service done by', '2015-04-19'),
+(234, 270, 78, 'service done by Nizam.', '2014-08-23'),
+(235, 270, 78, 'service done by ', '2014-11-22'),
+(236, 270, 78, 'service done by ', '2015-02-21'),
+(237, 270, 78, 'service done by', '2015-05-23'),
+(238, 106, 79, 'service done by Abid', '2014-07-23'),
+(239, 106, 79, 'service done by Mosin', '2014-12-26'),
+(240, 106, 79, 'service done by ', '2015-01-21'),
+(241, 106, 79, 'service done by ', '2015-04-22'),
+(242, 106, 80, 'service done by Abid', '2014-07-23'),
+(243, 106, 80, 'service done by mosin', '2014-12-26'),
+(244, 106, 80, 'service done by', '2015-01-21'),
+(245, 106, 80, 'service done by ', '2015-04-22'),
+(246, 106, 81, 'service done by Abid', '2014-07-23'),
+(247, 106, 81, 'service done by Mosin', '2014-12-26'),
+(248, 106, 81, 'service done by ', '2015-01-21'),
+(249, 106, 81, 'service done by ', '2015-04-22'),
+(254, 185, 83, 'service done by Mosin', '2014-08-06'),
+(255, 185, 83, 'service done by sumit', '2014-12-26'),
+(256, 185, 83, 'service done by ', '2015-04-07'),
+(260, 185, 85, 'service done by Mosin', '2014-08-06'),
+(261, 185, 85, 'service done by sumit', '2014-12-26'),
+(262, 185, 85, 'service done by ', '2015-04-07'),
+(263, 111, 86, 'Service done by Akhmal', '2014-10-28'),
+(264, 111, 86, 'Service done by mosin', '2014-12-26'),
+(265, 111, 86, 'Service done by ', '2015-04-28'),
+(266, 111, 86, 'Service done by ', '2015-07-28'),
+(267, 111, 87, 'Service done by Akhmal', '2014-10-28'),
+(268, 111, 87, 'Service done by mosin', '2014-12-26'),
+(269, 111, 87, 'Service done by ', '2015-04-28'),
+(270, 111, 87, 'Service done by ', '2015-07-28'),
+(271, 111, 88, 'Service done by Akhmal', '2014-10-28'),
+(272, 111, 88, 'Service done by Mosin', '2014-12-26'),
+(273, 111, 88, 'Service done by ', '2015-04-28'),
+(274, 111, 88, 'Service done by', '2015-07-28'),
+(275, 111, 89, 'Service done by Akhmal', '2014-10-28'),
+(276, 111, 89, 'Service done by mosin', '2014-12-26'),
+(277, 111, 89, 'Service done by ', '2015-04-28'),
+(278, 111, 89, 'Service done by ', '2015-07-28'),
+(291, 196, 93, 'Service done by Wasim', '2014-05-08'),
+(292, 196, 93, 'Service done by mosin', '2014-08-06'),
+(293, 196, 93, 'Service done by sumit', '2014-12-25'),
+(294, 196, 93, 'Service done by', '2015-02-05'),
+(295, 196, 94, 'Service done by Wasim', '2014-05-08'),
+(296, 196, 94, 'Service done by mosin', '2014-08-06'),
+(297, 196, 94, 'Service done by sumit', '2014-12-25'),
+(298, 196, 94, 'Service done by ', '2015-02-05'),
+(299, 196, 95, 'Service done by Wasim', '2014-05-08'),
+(300, 196, 95, 'Service done by Mosin', '2014-08-06'),
+(301, 196, 95, 'Service done by Sumit', '2014-12-25'),
+(302, 196, 95, 'Service done by ', '2015-02-05'),
+(303, 154, 96, 'Dry service done by ibrahim', '2014-05-20'),
+(304, 154, 96, 'Dry service done by mosin', '2014-09-20'),
+(305, 154, 96, 'Dry service done by sumit', '2014-12-30'),
+(306, 154, 96, 'Dry service done by ', '2015-02-17'),
+(307, 88, 97, 'service done by Mosin', '2014-08-18'),
+(308, 88, 97, 'Service done by Akhilesh', '2014-12-30'),
+(309, 88, 97, 'Dry service done by ', '2015-04-19'),
+(310, 150, 98, 'wet service done by naushad', '2014-05-02'),
+(311, 150, 98, 'Dry service done by mosin', '2014-09-18'),
+(312, 150, 98, 'Dry service done by mosin', '2014-11-29'),
+(313, 150, 98, ' service done by', '2015-01-30'),
+(314, 150, 99, 'wet service done by naushad', '2014-05-02'),
+(315, 150, 99, 'Dry service done by mosin', '2014-09-18'),
+(316, 150, 99, 'Dry service done by mosin', '2014-11-29'),
+(317, 150, 99, ' service done by ', '2015-01-30'),
+(318, 150, 100, 'Wet service done by naushad', '2014-05-02'),
+(319, 150, 100, 'Dry service done by Mosin', '2014-09-18'),
+(320, 150, 100, 'Dry service done by mosin', '2014-11-29'),
+(321, 150, 100, 'service done by ', '2015-01-30'),
+(322, 150, 101, 'Wet service done by naushad', '2014-05-02'),
+(323, 150, 101, 'Dry service done by mosin', '2014-09-18'),
+(324, 150, 101, 'Dry service done by Mosin', '2014-11-29'),
+(325, 150, 101, ' service done by ', '2015-01-30'),
+(326, 150, 102, 'Wet service done by Naushad.', '2014-05-02'),
+(327, 150, 102, 'Dry service done by mosin', '2014-09-18'),
+(328, 150, 102, 'Dry service done by mosin', '2014-11-29'),
+(329, 150, 102, ' service done by', '2015-01-30'),
+(330, 212, 103, 'Dry Service done by Mosin', '2014-12-27'),
+(331, 212, 103, ' Service done by', '2015-03-28'),
+(332, 212, 103, 'Service done by', '2015-06-27'),
+(333, 212, 103, 'Service done by ', '2015-09-26'),
+(334, 109, 104, 'Dry service done by Mosin', '2014-08-16'),
+(335, 109, 104, 'Dry service done by sumit', '2014-12-27'),
+(336, 109, 104, 'Dry service done by', '2015-02-14'),
+(337, 109, 104, 'Dry service done by', '2015-05-16'),
+(338, 109, 105, 'Dry service done by Mosin', '2014-08-16'),
+(339, 109, 105, 'Dry service done by sumit', '2014-12-27'),
+(340, 109, 105, 'Dry service done by', '2015-02-14'),
+(341, 109, 105, 'Dry service done by ', '2015-05-16'),
+(342, 109, 106, 'Dry service done by Mosin', '2014-08-16'),
+(343, 109, 106, 'Dry service done by sumit', '2014-12-27'),
+(344, 109, 106, 'Dry service done by ', '2015-02-14'),
+(345, 109, 106, 'Dry service done by', '2015-05-16'),
+(346, 109, 107, 'Dry service done by Mosin', '2014-08-16'),
+(347, 109, 107, 'Dry service done by sumit', '2014-12-27'),
+(348, 109, 107, 'service done by ', '2015-02-14'),
+(349, 109, 107, 'service done by ', '2015-05-16'),
+(350, 216, 108, 'Service done by Nizam', '2014-05-31'),
+(351, 216, 108, 'Service done by Abed', '2014-09-29'),
+(352, 216, 108, 'Service done by Mosin', '2015-01-03'),
+(353, 216, 108, 'Service done by ', '2015-02-28'),
+(354, 216, 109, 'Service done by Abed', '2014-05-31'),
+(355, 216, 109, 'Service done by Nizam', '2014-09-29'),
+(356, 216, 109, 'Service done by Mosin', '2015-01-03'),
+(357, 216, 109, 'Service done by ', '2015-02-28'),
+(358, 245, 110, 'service done by Noor', '2014-11-17'),
+(359, 245, 110, 'service done by ', '2015-02-16'),
+(360, 245, 110, 'service done by ', '2015-05-18'),
+(361, 245, 110, 'service done by ', '2015-08-17'),
+(362, 245, 111, 'service done by Noor', '2014-11-17'),
+(363, 245, 111, 'service done by ', '2015-02-16'),
+(364, 245, 111, 'service done by ', '2015-05-18'),
+(365, 245, 111, 'service done by ', '2015-08-17'),
+(366, 201, 112, 'Service done by Niaz', '2014-03-12'),
+(367, 201, 112, 'Service done by mosin', '2014-08-20'),
+(368, 201, 112, 'Service done by sumit', '2015-01-05'),
+(369, 201, 112, 'Service done by', '2014-12-10'),
+(374, 218, 114, 'service done by mosin', '2014-08-22'),
+(375, 218, 114, 'service done by Abed', '2015-01-03'),
+(376, 218, 114, 'service done by ', '2015-02-20'),
+(377, 218, 114, 'service done by ', '2015-05-22'),
+(378, 269, 115, 'service done by Lateef', '2015-01-06'),
+(379, 269, 115, 'service done by', '2014-06-20'),
+(380, 269, 115, 'service done by', '2014-09-19'),
+(381, 269, 115, 'service done by', '2014-12-19'),
+(382, 269, 116, 'service done by lateef', '2015-01-06'),
+(383, 269, 116, 'service done by', '2014-06-20'),
+(384, 269, 116, 'service done by', '2014-09-19'),
+(385, 269, 116, 'service done by', '2014-12-19'),
+(386, 269, 117, 'Service done by Lateef.', '2015-01-06'),
+(387, 269, 117, 'Service done by ', '2014-06-20'),
+(388, 269, 117, 'Service done by ', '2014-09-19'),
+(389, 269, 117, 'Service done by ', '2014-12-19'),
+(399, 228, 121, 'service done by mosin', '2014-09-23'),
+(400, 228, 121, 'service done by Faheem', '2015-01-07'),
+(401, 228, 121, 'service done by ', '2015-03-24'),
+(402, 228, 121, 'service done by ', '2015-06-23'),
+(403, 228, 122, 'service done by mosin', '2014-09-24'),
+(404, 228, 122, 'service done by Faheem', '2015-01-07'),
+(405, 228, 122, 'service done by', '2015-03-25'),
+(406, 228, 122, 'service done by', '2015-06-24'),
+(415, 222, 125, 'wet service done by nizam', '2014-03-10'),
+(416, 222, 125, 'dry service done by latif', '2015-01-08'),
+(417, 222, 125, 'dry service done by ', '2014-09-08'),
+(418, 222, 125, 'dry service done by ', '2014-12-08'),
+(419, 222, 126, 'wet service done by nizam', '2014-03-10'),
+(420, 222, 126, 'dry service done by lateef', '2015-01-08'),
+(421, 222, 126, 'dry service done by ', '2014-09-08'),
+(422, 222, 126, 'dry service done by ', '2014-12-08'),
+(423, 185, 127, 'service done by mosin', '2014-08-06'),
+(424, 185, 127, 'service done by sumit', '2014-12-26'),
+(425, 185, 127, 'service done by', '2015-04-07'),
+(426, 107, 128, 'Dry service done by Mosin', '2014-08-16'),
+(427, 107, 128, 'Dry service done by shafiqe', '2014-10-16'),
+(428, 107, 128, 'Dry service done by Mosin', '2015-01-07'),
+(429, 107, 128, 'Dry service done by ', '2015-05-16'),
+(431, 240, 130, 'Dry service done by mosin', '2015-01-09'),
+(432, 240, 130, 'service done by ', '2015-07-11'),
+(433, 240, 131, 'Dry service done by mosin', '2015-01-09'),
+(434, 240, 131, ' service done by', '2015-07-11'),
+(435, 240, 132, 'Dry service done by mosin', '2015-01-09'),
+(436, 240, 132, ' service done by ', '2015-07-11'),
+(437, 240, 133, 'Dry service done by mosin', '2015-01-09'),
+(438, 240, 133, 'service done by ', '2015-07-11'),
+(439, 240, 134, 'Dry service done by mosin', '2015-01-09'),
+(440, 240, 134, ' service done by ', '2015-07-11'),
+(441, 240, 135, 'Dry service done by mosin', '2015-01-09'),
+(442, 240, 135, 'service done by ', '2015-07-11'),
+(443, 240, 136, 'Dry service done by mosin', '2015-01-09'),
+(444, 240, 136, 'service done by ', '2015-07-11'),
+(445, 240, 137, 'Dry service done by mosin', '2015-01-09'),
+(446, 240, 137, ' service done by', '2015-07-11'),
+(447, 240, 138, 'Dry service done by mosin', '2015-01-09'),
+(448, 240, 138, 'service done by ', '2015-07-11'),
+(449, 240, 139, 'Dry service done by mosin', '2015-01-09'),
+(450, 240, 139, 'service done by ', '2015-07-11'),
+(451, 240, 140, 'Dry service done by mosin', '2015-01-09'),
+(452, 240, 140, ' service done by', '2015-07-11'),
+(453, 240, 141, 'Dry service done by mosin', '2015-01-09'),
+(454, 240, 141, ' service done by', '2015-07-11'),
+(455, 164, 142, '', '2014-12-08'),
+(456, 164, 142, '', '2015-03-09'),
+(457, 164, 142, '', '2015-06-08'),
+(458, 164, 142, '', '2015-09-07'),
+(459, 164, 143, '', '2014-12-08'),
+(460, 164, 143, '', '2015-03-09'),
+(461, 164, 143, '', '2015-06-08'),
+(462, 164, 143, '', '2015-09-07'),
+(463, 164, 144, '', '2014-12-08'),
+(464, 164, 144, '', '2015-03-09'),
+(465, 164, 144, '', '2015-06-08'),
+(466, 164, 144, '', '2015-09-07'),
+(467, 164, 145, '', '2015-01-08'),
+(468, 164, 145, '', '2015-04-09'),
+(469, 164, 145, '', '2015-07-09'),
+(470, 164, 145, '', '2015-10-08'),
+(471, 164, 146, '', '2014-12-08'),
+(472, 164, 146, '', '2015-03-09'),
+(473, 164, 146, '', '2015-06-08'),
+(474, 164, 146, '', '2015-09-07'),
+(475, 299, 147, '', '2015-01-08'),
+(476, 299, 147, '', '2015-05-10'),
+(477, 299, 147, '', '2015-09-09'),
+(478, 299, 148, '', '2015-01-08'),
+(479, 299, 148, '', '2015-05-10'),
+(480, 299, 148, '', '2015-09-09'),
+(481, 299, 149, '', '2015-01-08'),
+(482, 299, 149, '', '2015-04-09'),
+(483, 299, 149, '', '2015-07-09'),
+(484, 299, 149, '', '2015-10-08'),
+(489, 228, 151, '', '2014-09-23'),
+(490, 228, 151, '', '2014-12-23'),
+(491, 228, 151, '', '2015-03-24'),
+(492, 228, 151, '', '2015-06-23');
 
 -- --------------------------------------------------------
 
@@ -206,6 +677,7 @@ CREATE TABLE IF NOT EXISTS `assignment` (
   `assign_id` int(11) NOT NULL AUTO_INCREMENT,
   `ticket_id` varchar(50) NOT NULL,
   `cust_id` int(11) NOT NULL,
+  `ac_id` int(11) NOT NULL,
   `type` enum('amc','ots','installation','complaint','ins_service') NOT NULL,
   `type_id` int(11) NOT NULL COMMENT '{type} id which need to be assigned',
   `assign_for` int(11) NOT NULL COMMENT 'technician id who need to be assigned',
@@ -215,15 +687,17 @@ CREATE TABLE IF NOT EXISTS `assignment` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`assign_id`),
   UNIQUE KEY `ticket_id` (`ticket_id`),
-  KEY `assign_for` (`assign_for`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
+  KEY `ac_id` (`ac_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
 
 --
 -- Dumping data for table `assignment`
 --
 
-INSERT INTO `assignment` (`assign_id`, `ticket_id`, `cust_id`, `type`, `type_id`, `assign_for`, `assign_date`, `remarks`, `status`, `created_on`) VALUES
-(49, 'INS-69-1418821344', 69, 'installation', 1, 50, '2014-12-18', '', 'p', '2014-12-17 13:02:24');
+INSERT INTO `assignment` (`assign_id`, `ticket_id`, `cust_id`, `ac_id`, `type`, `type_id`, `assign_for`, `assign_date`, `remarks`, `status`, `created_on`) VALUES
+(56, 'COM-295-1501098', 295, 290, 'complaint', 8, 49, '2015-01-08', 'water leakage...', 'c', '2015-01-09 11:54:15'),
+(57, 'COM-296-1501099', 296, 291, 'complaint', 9, 49, '2015-01-08', 'AC Service request.', 'c', '2015-01-09 12:16:35'),
+(58, 'COM-297-15010910', 297, 292, 'complaint', 10, 49, '2015-01-08', 'AC Service request.', 'c', '2015-01-09 13:11:37');
 
 -- --------------------------------------------------------
 
@@ -263,16 +737,21 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en',
   PRIMARY KEY (`com_id`),
-  UNIQUE KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+  KEY `ac_id` (`ac_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `complaint`
 --
 
 INSERT INTO `complaint` (`com_id`, `ac_id`, `problem_type`, `problem_desc`, `preferred_date`, `cust_id`, `created_on`, `enabled`) VALUES
-(1, 98, 1, '', '2014-12-16', 72, '2014-12-15 07:30:01', '1'),
-(2, 116, 1, 'Ac not cooling properly.', '2014-12-15', 78, '2014-12-15 07:45:30', '1');
+(2, 116, 1, 'Ac not cooling properly.', '2014-12-15', 78, '2014-12-15 07:45:30', '1'),
+(4, 164, 1, 'not cooling', '2014-12-27', 281, '2014-12-29 10:39:49', '1'),
+(5, 98, 6, '', '2015-01-03', 72, '2015-01-02 15:16:09', '1'),
+(6, 98, 5, '', '2015-01-20', 72, '2015-01-07 08:59:43', '1'),
+(8, 290, 6, 'water likadge ', '2015-01-08', 295, '2015-01-09 11:12:04', '1'),
+(9, 291, 30, 'Ac service request.', '2015-01-08', 296, '2015-01-09 12:14:35', '1'),
+(10, 292, 30, 'AC Service request.', '2015-01-08', 297, '2015-01-09 12:59:02', '1');
 
 -- --------------------------------------------------------
 
@@ -304,15 +783,15 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `enabled` enum('1','2') NOT NULL COMMENT '1-en,',
   PRIMARY KEY (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=277 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=303 ;
 
 --
 -- Dumping data for table `customer`
 --
 
 INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
-(69, 'r', 'Ronak', 'Rathod', '', '123', '', '9920727342', '', '', '', '1992-11-21', 'Hindu Friends society', 'Hindu Friends Colony Jogeshwari (East)', 'Jogeshwari', '400060', 'Mumbai', 'm', 'Hello', 'Team one website', '2014-09-23 10:38:12', '1'),
-(72, 'r', 'Girish', 'Rahumalani', 'girish.rahumalani@gmail.com', '123', '', '9987588905', '', '', '', '1969-12-31', '2A-74, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-09-25 18:07:44', '1'),
+(69, 'c', 'Ronak', 'Rathod', '', '123', 'Ronak Enterprises', '9920727342', '9920727342', '', '', '1992-11-21', 'Hindu Friends society', 'Hindu Friends Colony Jogeshwari (East)', 'Jogeshwari', '400060', 'Mumbai', 'm', 'Hello', 'Team one website', '2014-09-23 10:38:12', '1'),
+(72, 'r', 'Girish', 'Rahumalani', 'girish.rahumalani@gmail.com', '123', '', '9004444818', '', '', '', '0000-00-00', '2A-74, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-09-25 18:07:44', '1'),
 (73, 'r', 'Nevidita', 'Gulati', ' ', '123', '', '9930399507', '9867026995', '', 'Maharashtra', '1969-12-31', 'C-1407 Oberoi,splendor, JVLR\n', 'Opp Majas Bus Depot', 'andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 06:45:54', '1'),
 (74, 'c', 'Shasha', 'Jhunjhunwala', 'admin@globecot.co.in ', '123', 'Globe Cotyarn Pvt Ltd', '9820733456', '', '', '', '0000-00-00', '1st floor, bldg no 7, mittal industrial estate.', 'Andheri Kurla Road', 'Marol', '400059', 'Mumbai', 'm', '', '', '2014-11-27 07:51:39', '1'),
 (77, 'r', 'C.G.', 'Paithankar', '', '123', '', '9619675782', '', '', '', '0000-00-00', 'B/502, Rajshri Shah Society,', '90 Feet Road', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-27 11:10:47', '1'),
@@ -327,7 +806,7 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (87, 'r', 'Bhushan', 'Gokhale', '', '123', '', '8080929551', '', '', '2225636303', '0000-00-00', 'A-401, Akashdeep Chs.\n', 'Mulund colony', 'mulund east', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:09:56', '1'),
 (88, 'r', 'Chandra Govind', 'Taksali', '', '123', '', '9819696891', '', '', '2225966312', '0000-00-00', '408,Bewitching Apts, Nr. Pimpleshwar Mandir,\n', 'Bhandup (W) , Near Station', 'Bhandup west', '400078', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:13:11', '1'),
 (89, 'r', 'Meghna', 'Manek', '', '123', '', '9821275335', '', '', '', '1969-12-31', 'D-2406, Oberoi Splendor, JVLR\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:17:24', '1'),
-(90, 'r', 'Pooja ', 'Ashley', '', '123', '', '9769621515', '', '', '', '0000-00-00', '2A-151 Kalpataru Aura, LBS Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:20:01', '1'),
+(90, 'r', 'Pooja ', 'Ashley', 'pooja@ashleys.com', '123', '', '9769621515', '', '', '', '0000-00-00', '2A-151 Kalpataru Aura, LBS Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:20:01', '1'),
 (91, 'r', 'Shailesh ', 'Panchal', '', '123', '', '9320771027', '', '', '', '0000-00-00', 'R3/14, Kalpataru Aura.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:23:04', '1'),
 (92, 'r', 'Sunil', 'Makhijani', '', '123', '', '9272546898', '', '', '', '1969-12-31', '3F/11 Kalptaru Aura,LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:24:55', '1'),
 (93, 'r', 'Ashwin', 'Kothari', '', '123', '', '9930963640', '', '', '', '0000-00-00', '3H /141 Kalptaru Aura LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-28 11:29:44', '1'),
@@ -343,12 +822,12 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (103, 'r', 'Dilip', 'Dalal', '', '123', '', '9821420552', '9324258860', '', '', '0000-00-00', '3G-33-34, Kalpataru Aura, LBS.Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:03:38', '1'),
 (104, 'r', 'Asit', 'Shah', 'i', '123', '', '9820427639', '', '', '2223442400', '0000-00-00', '1D-24 kalptaru Aura.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:16:33', '1'),
 (105, 'r', 'Ketan ', 'Lodha', '', '123', '', '9220001344', '', '', '', '0000-00-00', ' 11 Tirupati Apts.  Opp Mulund west bus depot\n', 'Devidayal RoadÂ ', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:24:42', '1'),
-(106, 'r', 'Suman ', 'Azad', '', '123', '', '9930983502', '', '', '', '0000-00-00', 'E-1008,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:30:05', '1'),
+(106, 'r', 'Suman ', 'Azad', 'suman.a@yahoo.com', '123', '', '9930983502', '', '', '', '0000-00-00', 'E-1008,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:30:05', '1'),
 (107, 'r', 'Vikrant', 'Gandhi', 'vikrant.gandhi@gmail.com', '123', '', '9821526892', '', '', '', '1969-12-31', '1F/53 Kalpataru Aura, L.B.S. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:32:11', '1'),
 (108, 'r', 'Mitesh', 'Thakkar', '', '123', '', '9821082770', '', '', '', '0000-00-00', 'B/702, Vinayak Ashish,\n', 'Madan MohanÂ Malviya Rd.', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:42:14', '1'),
 (109, 'r', 'Rohit ', 'Garg', 'ro.2014.garg@gmail.com', '123', '', '9833801193', '', '', '', '1969-12-31', '2B-111, kalptaru Aura, L.B.S. Marg.\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:45:08', '1'),
 (110, 'r', 'Krishna', 'Kachhela', '', '123', '', '9820002703', '', '', '', '0000-00-00', 'A1-12, kalptaru Aura, LBS. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:47:54', '1'),
-(111, 'r', 'Pradeep', 'Kedia', '', '123', '', '9820056704', '', '', '', '0000-00-00', 'D-1001, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:52:17', '1'),
+(111, 'r', 'Pradeep', 'Kedia', '1) pkedia@vsnl.net     2) pkediaca@gmail.com', '123', '', '9820056704', '9987036704', '', '', '0000-00-00', 'D-1001, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:52:17', '1'),
 (112, 'r', 'Tejas ', 'Shah', '', '123', '', '9892155240', '', '', '2225645839', '0000-00-00', 'D8/601,Munisurat Bldg.\n', 'Sarvodaya Nagar', 'mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:54:55', '1'),
 (113, 'r', 'Vishwas', 'Bhadsavle', '', '123', '', '9820950363', '', '', '2225176213', '0000-00-00', '1B-33, kalptaru Aura, L.B.S. Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 06:57:20', '1'),
 (114, 'r', 'Saifuddin', 'Kapasi', '', '123', '', '9820018172', '9820052786', '', '', '0000-00-00', '3rd Flr. Kapadiya Mansion Line 2142,  Modi Street\n', 'Opp Khaitan Chembers', 'Fort', '400001', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 07:14:33', '1'),
@@ -381,7 +860,7 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (141, 'r', 'Rajesh', 'Krishanamurti', '', '123', '', '9820365436', '', '', '022266712841', '0000-00-00', 'G - 2101, Oberoi Splendor, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:02:20', '1'),
 (142, 'r', 'Rajeev', 'Kheror', '', '123', '', '9920913162', '9920254838', '', '', '0000-00-00', 'L 2 A/704, Bakland Park, Yamuna Nagar', 'Lokhandwala Andheri West', 'Andheri west', '400053', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:13:03', '1'),
 (143, 'r', 'Rahul', 'Mahipal', '', '123', '', '9820119468', '', '', '', '0000-00-00', 'F-1106,Oberoi Splendor, JVLR Rd.\n', 'AGARKAR CHOCK', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:17:42', '1'),
-(144, 'r', 'Prakash', 'Gododia', '', '123', '', '9821046379', '', '', '', '0000-00-00', ' G-2605-06, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:24:29', '1'),
+(144, 'r', 'Prakash', 'Gorodia', 'pkgarodia@gmail.com', '123', '', '9821046379', '', '', '', '0000-00-00', ' G-2605-06, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:24:29', '1'),
 (145, 'r', 'Nilamba', 'Shyam', '', '123', '', '9820622984', '', '', '', '0000-00-00', '904 Eldeco Residency \n', 'Hill Road BANDRA(WEST)', 'Bandra West', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:32:00', '1'),
 (146, 'r', 'N. S.', 'Verma', '', '123', '', '9820346284', '', '', '', '1969-12-31', '101 B Link Apartments, Hira Nagar\n', 'Near Mulund Goregaon Link Road', 'Mulund West', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-11-29 11:45:23', '1'),
 (147, 'r', 'Devinder singh', 'Morwah', '', '123', '', '9820095683', '9036559853', '', '', '1969-12-31', 'G-2404 Oberoi Splendor, JVLR Rd.', 'Opp', 'Andheri east', '400093', 'Mumbai', 'b', '', 'Team one website', '2014-11-29 11:51:35', '1'),
@@ -398,10 +877,10 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (158, 'c', 'Jasmin', 'Bhanushali', '', '123', 'OFFICIAL', '9869038884', '9967178548', '', '', '0000-00-00', '605, Swastik Disha Corporate Park.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:11:02', '1'),
 (159, 'r', 'J. K.', 'Gupta', '', '123', '', '9769560607', '', '', '', '0000-00-00', 'B-2402,Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:12:55', '1'),
 (160, 'r', 'Siddharth', 'Singh', '', '123', '', '9594525175', '', '', '', '0000-00-00', 'E-1807,Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:21:33', '1'),
-(161, 'r', 'Kapil', 'Sanghavi', '', '123', '', '9892711444', '9702011444', '', '', '0000-00-00', '2A-71, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:24:14', '1'),
+(161, 'r', 'Kapil', 'Sanghavi', '', '123', '', '9702011444', '9702011444', '', '', '0000-00-00', '2A-71, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:24:14', '1'),
 (162, 'r', 'Miss', 'Varsha', '', '123', '', '9820069715', '', '', '', '0000-00-00', 'B-1806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:28:46', '1'),
 (163, 'r', 'Miss', 'Varsha', '', '123', '', '9820069715', '', '', '', '0000-00-00', 'B-1806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:28:46', '1'),
-(164, 'r', 'Nikhil', 'Banerjee', '', '123', '', '9820409247', '7506053760', '', '', '0000-00-00', 'G-103, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:31:56', '1'),
+(164, 'r', 'Nikhil', 'Banerjee', 'nikhil_b@yahoo.com', '123', '', '9820409247', '7506053760', 'mentioned 2 mobile no. is Tenant Abhishek.', '', '0000-00-00', 'G-103, Oberoi Splendor, JVLR Rd\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:31:56', '1'),
 (165, 'r', 'Mrs.', 'Pawa', '', '123', '', '9324737566', '', '', '', '0000-00-00', 'Vijay Bldg. Flat No.182, Ground Floor.\n', 'Fine Arts Cultural Centre', 'Chembur', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 08:45:31', '1'),
 (166, 'c', 'D', 'Murali', '', '123', 'Asian Tiger Lines India Pvt. Ltd.', '9321027340', '', '', '022242951415 ', '0000-00-00', '209 Bhaweshwar Arket A wing  2nd Floor ', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 09:02:09', '1'),
 (167, 'r', 'Satish', 'Shenoy', '', '123', '', '9967011825', '9967655673', '', '02225176244', '0000-00-00', '2A-22, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 09:06:47', '1'),
@@ -413,7 +892,7 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (173, 'r', 'Anand', 'Ayer', '', '123', '', '9869406373', '9869424406', '', '', '0000-00-00', '54, 3rd Floor. Juhu Khadi Nivas', 'Gulmohar Road, opp. Axis Bank', 'Vileparle west', '400049', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:22:41', '1'),
 (174, 'c', 'Mayur', 'Mehta', '', '123', 'OFFICIAL', '9870094514', '', '', '2223092150', '0000-00-00', 'Gala No. 27, Deen Bldg. Compound, Opp Pragati Ind. Estate, Delied Rd.\n', 'N.M JOSHI MARG LOWER PAREL', 'Lower parel', '400013', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:26:33', '1'),
 (175, 'r', 'Vikas ', 'Shivaraman', '', '123', '', '9819428266', '', '', '', '0000-00-00', 'G-1204,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:40:41', '1'),
-(176, 'r', 'Cedric', 'Crasto', '', '123', '', '9869489640', '', '', '', '0000-00-00', 'G-1002,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:46:00', '1'),
+(176, 'r', 'Cedric', 'Crasto', 'cedriccrasto3@hotmail.com', '123', '', '9869489640', '', '', '', '0000-00-00', 'G-1002,Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:46:00', '1'),
 (177, 'r', 'Subhash ', 'Jhalla', '', '123', '', '9322223025', '', '', '02225218429', '1969-12-31', '1B-51,52, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 11:55:57', '1'),
 (178, 'r', 'Mahender', 'Shah', '', '123', '', '9323020528', '2221635640', '', '', '0000-00-00', '11 F 302, Neelam Nagar, Phase II\n', 'Opp. Kirit Somaya', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 12:06:52', '1'),
 (179, 'c', 'Mahindra Holidays 	', '', '', '123', 'OFFICIAL', '9869404977', '', '', '', '0000-00-00', 'Vashi Navi Mumbai\n', 'BSEL Tech Park Navi Mumbai', 'Vashi', '400705', 'Mumbai', 'm', '', 'Team one website', '2014-12-01 12:18:31', '1'),
@@ -422,7 +901,7 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (182, 'r', 'Chandrashekhar', 'Sakpal', 'sakpal@gmail.com', '123', '', '9819092719', '', '', '', '0000-00-00', '1C-172, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghtakopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:18:19', '1'),
 (183, 'c', 'Lalit', 'Gunani', '', '123', 'La- Kaira', '9867133115', '', '', '', '0000-00-00', 'Silver Apt, Ground Floor, Shop No.2, ', 'Picko Road Bandra West', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:28:12', '1'),
 (184, 'r', 'Shikha', 'Gupta', '', '123', '', '9819824299', '', '', '', '0000-00-00', 'A- 1401, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 06:36:29', '1'),
-(185, 'r', 'Ashok', 'Chhabriya', '', '123', '', '9870033114', '', '', '', '0000-00-00', '1602, polaries, LBS Road.\n', 'Johanson and johanson', 'Mulund West', '400082', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 07:06:05', '1'),
+(185, 'r', 'Ankush', 'Chhabriya', '', '123', '', '9870033114', '', '', '', '0000-00-00', '1602, polaries, LBS Road.\n', 'Johanson and johanson', 'Mulund West', '400082', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 07:06:05', '1'),
 (186, 'r', 'Mr.', ' Ravikant', '', '123', '', '9167059418', '', '', '02228632727', '0000-00-00', 'Hydrabad Estate, Flat No.A/2, Napansi Road, Nest to SRP Camp.', 'Mahananda Dairy Goregaon East', 'Goregaon east', '400065', 'Mumbai', 'm', '', 'Team one website', '2014-12-02 08:15:20', '1'),
 (187, 'c', 'Shvetal', 'Desai', 'shvetal@nividous.com', '123', 'Nividous Software Solutions Pvt Ltd', '9322251928', '', '', '', '1969-12-31', '201, Embassy Chambers, 3rd Road', 'Near Khar West Railway Station', 'Khar West', '400052', 'Mumbai', 'b', '', 'Pallavi gaggar', '2014-12-05 06:33:50', '1'),
 (188, 'r', 'Mr.', 'Chandu', '', '123', '', '8879207050', '', '', '', '0000-00-00', 'Bldg 03/7  2nd floo, Dhanji Estate, Zaveri Bazar\n', 'Abddul Rehman Street', 'Mumbai', '400003', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 08:55:05', '1'),
@@ -430,32 +909,32 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (190, 'r', 'Nagma', 'Morarji', '', '123', '', '9820010551', '', '', '', '0000-00-00', 'Plot No.401, Arjuna tower.\n', 'Mount Mary Road BANDRA(WEST)', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:18:06', '1'),
 (191, 'r', 'Nagma', 'Morarji', '', '123', '', '9820010551', '', '', '', '0000-00-00', 'Plot No.401, Arjuna tower.\n', 'Mount Mary Road BANDRA(WEST)', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:18:06', '1'),
 (192, 'c', 'Pradeep Kumar Singh', 'Associates', '', '123', 'OFFICIAL', '9594646696', '', '', '', '0000-00-00', '315, Kala Bhavan.', 'Mathew Rd, Opera House, Girgaon.', 'Girgaon', '400004', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:29:48', '1'),
-(193, 'r', 'Jaswant', 'Sanghani', '', '123', '', '9967232733', '8652358419', '', '', '0000-00-00', '15 Kothari Estate.Gulshan Galli.', 'M. G. Road Mulund West', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:39:36', '1'),
-(194, 'r', 'Paresh', 'Giridhar', '', '123', '', '9987068773', '9892169756', '', '', '0000-00-00', 'A-1 Sunil Tulsirm Society\n', 'Mulund  Colony, Opp. Chheda Petrol Pump, LBS Marg', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:55:23', '1'),
+(193, 'r', 'Jaswant', 'Sanghani', 'divyasangani807@gmail.com', '123', '', '9967232733', '8652358419', '', '', '0000-00-00', '15 Kothari Estate.Gulshan Galli.', 'Ambajidham', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:39:36', '1'),
+(194, 'r', 'Paresh', 'Giridhar', 'tonaggirdhar_tpg@gmail.com', '123', '', '9987068773', '9892169756', '', '259176601', '0000-00-00', 'A-1 Sunil Tulsirm Society\n', 'Mulund  Colony, Opp. Chheda Petrol Pump, LBS Marg', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 09:55:23', '1'),
 (195, 'r', 'Pioneer', 'Pharma', '', '123', 'OFFICIAL', '9867380503', '', '', '', '0000-00-00', '80 New Unique industrial Estate, LBS Marg.\n', 'Dr. R. P. Road, Mulund west', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:03:12', '1'),
 (196, 'c', 'Chandrakant ', 'Kapadia', '', '123', 'OFFICIAL', '9892530980', '2225694766', '', '', '0000-00-00', '301, Bhilleshwer Tower.\n', 'Panch Rasta Mulund (w)', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:20:19', '1'),
 (197, 'r', 'Ravi ', 'Kukreja', '', '123', '', '9821031168', '', '', '222839339', '0000-00-00', 'E-2502, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri east', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:24:57', '1'),
 (198, 'r', 'Mitesh ', 'Zaveri', '', '123', '', '9004235110', '', '', '', '0000-00-00', '502,Shantaram Bldg. ', 'Tiny Tots School, Bhai Thakkar Rd.', 'Vileparle East', '400057', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 10:39:57', '1'),
 (199, 'r', 'Ravi', 'Kukreja', '', '123', 'OFFICIAL', '9821031163', '', '', '0226850910', '0000-00-00', 'Studio 150, New Satguru Nanak Ind. Estate. Plot  No.498', 'Standard Chartered Towers,Western Express Highway.', 'Goregaon East', '400063', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 11:28:34', '1'),
 (200, 'c', 'Dr.', 'Patil', '', '123', 'Ashwini Homeopathic Clinic.', '9820571571', '', '', '', '1969-12-31', 'Ashwini Homeopathic Clinic, B/29/03', 'Sector 15, Opp. Vijaya bank', 'Vashi', '400703', 'Navi Mumabai', 'm', '', 'Team one website', '2014-12-05 11:38:01', '1'),
-(201, 'r', 'Imtiyaz', 'Roshan', '', '123', '', '9820020686', '', '', '', '0000-00-00', 'Bostan Apt.2/A, 3rd Floor, Flat No. 33\n', ' Bellasis road, Opp. Bus Depot,Mumbai central', 'Mumbai Central', '400008', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 12:45:32', '1'),
+(201, 'r', 'Imtiyaz', 'Roshan', 'imtiyazroshan@yahoo.co.in', '123', '', '9820020686', '', '', '', '0000-00-00', 'Bostan Apt.2/A, 3rd Floor, Flat No. 33\n', ' Bellasis road, Opp. Bus Depot,Mumbai central', 'Mumbai Central', '400008', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 12:45:32', '1'),
 (202, 'r', 'Guruvinder', 'Kaur', '', '123', '', '9920925108', '', '', '', '0000-00-00', 'Hno- 3 Gururnanak Nagar,\n', 'Opp. Gurudwara, Gurunanak Nagar.', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 12:59:16', '1'),
 (203, 'r', 'Nimish', 'Ashar', '', '123', '', '9819446853', '', '', '', '0000-00-00', '1D-182,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-05 13:00:28', '1'),
 (204, 'r', 'Gaurav', 'Madan', '', '123', '', '9819730403', '', '', '', '0000-00-00', 'C -14, 3rd floor, Shivkrishnadham Chs. LBS Road.\n', 'Shloka Restaurants, Veena Nagar', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 05:42:08', '1'),
-(205, 'r', 'Nimesh', 'Shah', '', '123', '', '9820271217', '', '', '', '0000-00-00', '3E-131,Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 05:46:54', '1'),
+(205, 'r', 'Nimesh', 'Shah', 'njshah_1977@yahoo.com', '123', '', '9820271217', '', '', '', '0000-00-00', '3E-131,Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 05:46:54', '1'),
 (206, 'r', 'Mr.', 'Gandhi', '', '123', 'Official', '9820033950', '9321017766', '', '02225019000', '0000-00-00', '101 B Kailash Plaza, above ICICI Bank.\n', 'Nr.Odeon Theater, V.B. Lane.', 'Ghatkopar East', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:00:12', '1'),
 (207, 'r', 'Mr.', 'Gandhi', '', '123', '', '9820033950', '9321017766', '', '02225019000', '1969-12-31', '101 B Kailash Plaza, above ICICI Bank.\n', 'Odean Cinema Hall.', 'Ghatkopar East', '400077', 'Mumbai', 'b', '', 'Team one website', '2014-12-06 06:00:12', '1'),
 (208, 'c', 'Mr.', 'Gandhi', '', '123', '(Gandhi ', '9820033950', '932107766', '', '', '0000-00-00', '201, Shantinath Tower.\n', 'Sudha Park Ghatkopar (E)', 'Ghatkopar East', '400077', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:17:02', '1'),
 (209, 'r', 'Damodar', 'Sahu', '', '123', '', '7303102337', '9324053334', '', '', '0000-00-00', '1A-171 ,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar west', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:23:02', '1'),
 (210, 'r', 'Santosh', 'Jha', '', '123', '', '9820029746', '', '', '', '0000-00-00', '3-C / 43, Kalpataru Aura, LBS Marg\n', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:26:09', '1'),
 (211, 'r', 'Meghna ', 'Kishor', '', '123', '', '9930612234', '', '', '', '0000-00-00', 'C- 1301, Ashoka Tower.\n', 'Opp. Bharatmata Cinema Hall.', 'Parel East', '400012', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:33:38', '1'),
-(212, 'r', 'Hamidulla', 'Khan', '', '123', '', '9892754865', '', '', '', '0000-00-00', 'Noor Manjil. B-22, 2nd Floor, Nr. Skyway Hotel.\n', 'Next to Sheetal Cinema', 'Kurla West', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:40:53', '1'),
+(212, 'r', 'Hamidulla', 'Khan', 'rahmankhan237@gmail.com', '123', '', '9892754865', '9833588689', '', '', '0000-00-00', 'Noor Manjil. B-22, 2nd Floor, Nr. Skyway Hotel.\n', 'Next to Sheetal Cinema', 'Kurla West', '400070', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:40:53', '1'),
 (213, 'r', 'Manpreet singh', 'Duggal', 'msduggal01@gmail.com', '123', '', '9004927970', '', '', '2225176970', '0000-00-00', '3B-184,  Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 06:45:47', '1'),
 (214, 'r', 'Vijayshree', 'BalasubramaniamÂ ', '', '123', '', '9820291502', '', '', '', '0000-00-00', 'A - 303, Savitri Apts, Plot No.105B,', 'Nerul', 'Nerul', '400706', 'Navi Mumbai', 'm', '', 'Team one website', '2014-12-06 06:59:33', '1'),
 (215, 'r', 'Ravi', 'Vishwakarma', '', '123', '', '9820178977', '', '', '', '0000-00-00', 'Vishwakarma Compound, S.N.Dubey Rd.', 'Rawalpada', 'Dahisar East', '400068', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:07:45', '1'),
 (216, 'r', 'Vinod', 'Luthria', '', '123', '', '9987035275', '', '', '', '0000-00-00', 'Flat No. 1o4, Namshivay Bldg.\n', 'Above Trupati Farsan Chembur', 'Chembur East', '400071', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:17:37', '1'),
 (217, 'r', 'Techno', 'Export', '', '123', '', '9820271217', '', '', '', '0000-00-00', '11-B, 2nd, Ghanshyam Industrial Estate\n', 'ANDHERI WEST', 'Andheri west', '400053', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:32:41', '1'),
-(218, 'c', 'M/S', 'DJF', '', '123', 'Official', '9820271217', '', '', '', '0000-00-00', '14 Samrat Mill Compound.', 'Godrej Petrol Pump', 'Vikhroli west', '400079', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:45:03', '1'),
+(218, 'c', 'M/S', 'DJF', 'karuna@djf.co.in', '123', '', '9820271217', '', '', '', '0000-00-00', '14 Samrat Mill Compound.', 'Godrej Petrol Pump', 'Vikhroli west', '400079', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:45:03', '1'),
 (219, 'r', 'Glen ', 'Sequeira', '', '123', '', '9920522658', '', '', '2228340965', '0000-00-00', 'B-806, Oberoi Splendor, JVLR Rd.\n', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 07:57:22', '1'),
 (220, 'r', 'Shankar', 'Amberkar', '', '123', '', '9819585941', '', '', '', '0000-00-00', 'Muktal Bldg. 102/1st floor, Bavala Compound. Dr. Dattaram Lad Marg.', 'Behind Ganesh Talkies', 'Chinchpokli East', '400012', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 08:09:08', '1'),
 (221, 'r', 'Mr.', 'Vinay', '', '123', '', '9769990510', '', '', '', '0000-00-00', 'Orchard Residency, Flat  No.1102, Tower No.10\n', 'Behind R- CITY Mall.', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 08:17:21', '1'),
@@ -477,7 +956,7 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (237, 'r', 'K.B.', 'Mehta', '', '123', '', '9821907570', '', '', '', '0000-00-00', 'Bldg.No. 45, Room No.1345, Pantnagar', 'Near Post Office Ghatkopar (E)', 'Ghatkopar East', '400075', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:42:08', '1'),
 (238, 'r', 'Shirish', 'Pulaskar', '', '123', '', '9867604464', '', '', '', '0000-00-00', 'A/11, Devikrupa, Behind Chandrganga Hospital, v.b.phadke Road.', 'Neelam Nagar,Mulund(E)', 'Mulund East', '400081', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 12:55:34', '1'),
 (239, 'r', 'S.L.', 'Mondkar', '', '123', '', '9821110191', '', '', '', '0000-00-00', 'Willow Tower, Swapna Nagari', 'Veena Nagar', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-06 13:06:44', '1'),
-(240, 'c', 'My ', 'Task', 'sohil.viradhia@tratagroup.com', '123', 'Trata E System', '9820676996', '', '', '', '0000-00-00', '309-317, Jhalawar, Patnwala Compound,LBS Marg.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 06:46:16', '1'),
+(240, 'c', 'My ', 'Task', 'sohil.viradia@tratagroup.com', '123', '', '9820676996', '', '', '', '0000-00-00', '309-317, Jhalawar, Patnwala Compound,LBS Marg.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 06:46:16', '1'),
 (241, 'r', 'Prachi', 'Gaggar', '', '123', '', '9820777092', '', '', '26046054', '0000-00-00', '51, Premal Building, 14 Sarojini Naidu Road,', 'Behind Arya Samaj Mandir', 'Santacruz West', '400054', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 06:59:37', '1'),
 (242, 'r', 'Mr.', 'Milind', '', '123', '', '9920203284', '', '', '', '1969-12-31', '110 Muncipal Trenatment, 8/6 B.G. Mahajani Road', 'Near Fatima Church', 'Sewree', '400015', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 07:11:11', '1'),
 (243, 'r', 'M/S', 'Pharma Agency', 'ppc-vora22@yahoo.co.in', '123', 'Official', '9820058041', '', '', '25006446', '1969-12-31', 'D- 402, Kailash Esplands, LBS Road,', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-08 07:18:32', '1'),
@@ -506,15 +985,41 @@ INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `e
 (266, 'r', 'Diraj', 'Gada', '', '123', '', '9820271217', '', '', '', '0000-00-00', '1C-181-182, Kalpataru Aura, LBS Marg\n', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 12:59:26', '1'),
 (267, 'r', 'Growthwell', 'Consultancy', '', '123', '', '9820271217', '', '', '', '0000-00-00', 'B-705/ 706, Kanara Business, Centre\n', 'Ghatkopar Bus Depot', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-09 13:06:22', '1'),
 (268, 'r', 'Parag', 'Joshi', '', '123', '', '9820365246', '', '', '', '0000-00-00', 'A- 205,Malikarjun kandarpada, New link Rd, Opp.\nMacdonald.', 'Next Building of Natural Ice Cream.', 'Dahisar West', '400068', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 09:40:44', '1'),
-(269, 'c', 'Shwet Ratan', 'Impex', '', '123', 'Official', '9820271217', '', '', '02223447121', '0000-00-00', '39, Shyam Seth Street, 2nd Floor,', 'Zaveri Bazar', 'Mumbai', '400002', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 09:47:25', '1'),
-(270, 'r', 'Karansingh', 'Sodi', 'karan.sodi@gmail.com', '123', '', '8879656605', '', '', '022265600232', '1969-12-31', 'Aster Apartment, ''C'' Wing. Flat No.912, Antop hill Durgah.', 'DOSTI ACRESS WADALA', 'Wadala East', '400037', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:12:28', '1');
+(269, 'c', 'Shwet Ratan', 'Impex', '', '123', 'Official', '9820271217', '', '', '02223447121', '0000-00-00', '39, Shyam Seth Street, 2nd Floor,', 'Zaveri Bazar', 'Mumbai', '400002', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 09:47:25', '1');
 INSERT INTO `customer` (`cust_id`, `account_type`, `first_name`, `last_name`, `email`, `password`, `organisation`, `mobile`, `alternate_mobile`, `alternate_contact`, `phone`, `dob`, `address`, `landmark`, `location`, `pincode`, `city`, `mode_of_contact`, `remarks`, `reference`, `created_on`, `enabled`) VALUES
+(270, 'r', 'Karansingh', 'Sodi', 'karan.sodi@gmail.com', '123', '', '8879656605', '', '', '022265600232', '1969-12-31', 'Aster Apartment, ''C'' Wing. Flat No.912, Antop hill Durgah.', 'DOSTI ACRESS WADALA', 'Wadala East', '400037', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:12:28', '1'),
 (271, 'r', 'Tanuja', 'Gupta', '', '123', '', '9820271217', '', '', '', '0000-00-00', 'F/ 1602, Oberoi Splendor, JVLR Rd', 'Opp Majas Bus Depot', 'Andheri East', '400093', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:24:17', '1'),
 (272, 'r', 'Nikshit', 'Morakhiya', '', '123', '', '9930242537', '', '', '', '0000-00-00', '2nd Floor, 26/28, Tejniketan Bldg.', 'Babulnath shiv Mandir', 'Girgaon', '400007', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:36:03', '1'),
 (273, 'r', 'Tarun', 'Ghosh', '', '123', '', '9322604216', '9892134418', '', '', '0000-00-00', '602, Zenith Apartments.', 'P.K. Road.', 'Mulund West', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 10:50:00', '1'),
 (274, 'r', 'Satish', 'Nair', 'psatishnair@yahoo.com', '123', '', '9819669566', '', '', '02221636051', '0000-00-00', '402, Horizon Pearloop, Vijaya Bank,', 'Ganesh Gawade Cross Road', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:11:02', '1'),
-(275, 'c', 'Vipul', 'Mehta', '', '123', 'Centre of Recognition ', '9920403535', '', '', '', '0000-00-00', '203, jhalawar Building, Patanwala Compound.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:45:30', '1'),
-(276, 'r', 'Ashish', 'Bhansali', 'nabarts74@gmail.com', '123', '', '9930098847', '', '', '', '0000-00-00', 'C-204, Shreeji Heights, Plot No.1A, B.C.', 'Sector No- 46A, Palm Beach Road', 'Seawood', '400706', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:58:01', '1');
+(275, 'c', 'Vipul', 'Mehta', '', '123', 'Centre of Excellence ', '9920403535', '', '', '', '0000-00-00', '203, jhalawar Building, Patanwala Compound.', 'OPP. Shreyas Cinema', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:45:30', '1'),
+(276, 'r', 'Ashish', 'Bhansali', 'nabarts74@gmail.com', '123', '', '9930098847', '', '', '', '0000-00-00', 'C-204, Shreeji Heights, Plot No.1A, B.C.', 'Sector No- 46A, Palm Beach Road', 'Seawood', '400706', 'Mumbai', 'm', '', 'Team one website', '2014-12-11 11:58:01', '1'),
+(277, 'r', 'tgrrtrtrt', 'rtyrty', '', '123', '', '5654554645', '', '', '', '0000-00-00', 'hjyjtjty', 'Opp Mumbai Samachar  Press', 'tyjtyjtyj', '400001', 'Mumbai', 'm', '', 'Direct Marketing', '2014-12-20 06:53:54', '1'),
+(278, 'c', 'Ronak', 'Rathod', 'ronak@growthwell.com', '123', 'RONAK PVT LTD', '9920727342', '', '', '', '0000-00-00', 'Andheri', '4 Bunglow Andheri West', 'Andheri', '400058', 'Mumbai', 'm', '', 'Web', '2014-12-23 07:48:35', '1'),
+(279, 'r', 'Aneesh ', 'Sivakumar', 'aneesh16@gmail.com', '123', '', '9930070507', '', '', '', '0000-00-00', '3B-101, Kalpataru Aura, LBS Road', 'Opp R-city Mall', 'Ghatkopar West', '400086', 'Mumbai', 'm', '', 'Girish Rahumalani', '2014-12-25 08:03:27', '1'),
+(280, 'r', 'Varun ', 'Mundra', '', '123', '', '9004005520', '', '', '', '0000-00-00', '6 Krishna Chawl, Nr. BMC School, Sant Rohidas Marg.', 'Kala Killa, Dharavi (w)', 'Dharavi west', '400017', 'Mumbai', 'm', '', 'Team one website', '2014-12-26 09:42:23', '1'),
+(281, 'r', 'Rohim ', 'Shaikh', '', '123', '', '9820646653', '', '\n\n\n\n\n\n', '', '0000-00-00', 'B-11, Noor Manzil, ', 'Skyway Hotel', 'Kurla west', '400070', 'Mumbai', 'b', '', 'Team one website', '2014-12-27 12:14:30', '1'),
+(282, 'r', 'Sayed', 'Fayez', '', '123', '', '9930776413', '', '', '', '0000-00-00', '327, Almas Manzil,4th Floor,Room No.29/32.', 'Abddul Rehman Street', 'Crowfoot Market', '400003', 'Mumbai', 'm', '', 'Team one website', '2014-12-29 12:25:16', '1'),
+(283, 'r', 'Shailesh', 'Kareliya', '', '123', '', '8879222329', '', '', '', '0000-00-00', '3/2, B ', 'Opp.Godrej Planet', 'Byculla', '400027', 'Mumbai', 'm', '', 'Team one website', '2014-12-29 12:46:12', '1'),
+(284, 'r', 'Mitesh', 'Shah', '', '123', '', '9820213535', '', '', '', '0000-00-00', '502, Shatrunjay Apartment. M.G. Road.', 'Nr. Valkeshwar Mandir.', 'Vileparle west', '400049', 'Mumbai', 'm', '', 'Team one website', '2014-12-30 06:28:24', '1'),
+(285, 'c', 'Pravin', 'Sawala', '', '123', 'J.P printers', '9821048882', '', '', '', '0000-00-00', 'Gala No.9, Chunilala Mehta Compound.', 'Nr.Retiwala industries Estate', 'Byculla ', '400027', 'Mumbai', 'm', '', 'Team one website', '2014-12-30 07:25:37', '1'),
+(286, 'r', 'Jayesh', 'Zaveri', '', '123', '', '9920730568', '', '', '', '0000-00-00', '501, Satynarayan Bhavan, Road No-7', 'Daulat Nagar', 'Borivali East', '400066', 'Mumbai', 'm', '', 'Team one website', '2014-12-30 07:52:01', '1'),
+(287, 'r', 'Kunal', 'Kothari', '', '123', '', '9892704501', '', '', '', '0000-00-00', 'G.K. jain Temple Trust Room No.7, Vrushabh Tower.', 'Nr. Nanavati School.', 'juhu', '400049', 'Mumbai', 'm', '', 'Team one website', '2015-01-02 09:42:15', '1'),
+(288, 'r', 'Hitesh', 'Gurunani', '', '123', '', '9820271217', '', '', '', '0000-00-00', '401, Coste Bella, perry x road.', 'Near Otters Club, Bandra West', 'Bandra west', '400050', 'Mumbai', 'm', '', 'Team one website', '2015-01-02 13:17:16', '1'),
+(289, 'r', 'Mr.', 'Paramanand.', '', '123', '', '9320014855', '', '', '', '0000-00-00', 'Shop No. 13,siddharth nagar, Sai Tirth Tower, Nr. Sarswat bank.', 'Opp. 12 Bunglow, kopari', 'Thane East', '400603', 'Mumbai', 'm', '', 'Team one website', '2015-01-03 08:54:05', '1'),
+(290, 'r', 'Parimal', 'Vipani', '', '123', '', '9167588142', '', '', '', '0000-00-00', 'Oberoi Woods,A wing Flat No.3203.\n\n', 'Nr. Oberoi Mall', 'Goregaon east', '400063', 'Mumbai', 'm', '', 'Team one website', '2015-01-03 11:13:39', '1'),
+(291, 'c', 'Mahendra', 'Jadhav.', '', '123', 'Official', '9820703362', '', '', '', '0000-00-00', 'Office No. 401, Great Eastern Galleria.', 'Sec- 4,Nr. rajiv Gandhi Flyover', 'Nerul', '400706', 'Navi Mumbai', 'm', '', 'Team one website', '2015-01-05 12:18:51', '1'),
+(292, 'c', 'Kerala ', 'Jewellers.', '', '123', 'Official', '9820271217', '', '', '', '0000-00-00', '10,Bhairav Kripa Bldg. Laxmi Nagar\n', 'N G Acharya Marg.', 'Chembur east', '400071', 'Mumbai', 'm', '', 'Team one website', '2015-01-05 12:53:21', '1'),
+(293, 'r', 'Nevil', 'Joshi', '', '123', '', '9769648586', '', '', '', '0000-00-00', '61,Alayaz Apt.Dr. peter dias Road.\n', 'Nr. Mehboob Studio', 'Bandra West.', '400050', 'Mumbai', 'm', 'A-1 Electronics, Opera House.', 'Team one website', '2015-01-05 13:11:14', '1'),
+(294, 'r', 'Fancy', 'Lights', '', '123', '', '9819634655', '', '', '25610626', '0000-00-00', '617 Eknath Apartments. M.G.Road.', 'opp. Kirti Mahal Hotel, M.G. Road. ', 'Mulund west', '400080', 'Mumbai', 'm', '', 'Team one website', '2015-01-06 13:12:30', '1'),
+(295, 'r', 'Matrix ', 'Distributer', '', '123', '', '8108500055', '', '', '', '0000-00-00', '\n16, Anand Estate, 189-A, \n', 'Sane Guruji Marg', 'chinchpokali', '400011', 'Mumbai', 'm', '', 'Team one website', '2015-01-09 10:55:56', '1'),
+(296, 'r', 'N.H.', 'Solanki', '', '123', '', '9821004007', '', '', '', '0000-00-00', '303, b wing, Anupam building, Nr. Gundecha Garden', 'Near Gas Compound', 'chinchpokali', '400012', 'Mumbai', 'm', 'Matrix call No.MAT14121903/C', 'Team one website', '2015-01-09 12:05:32', '1'),
+(297, 'r', 'Ajit', 'pai', '', '123', '', '9987556482', '', '', '', '0000-00-00', 'C3, Chetana Apartments.', 'Jangal managal road, Nr. Abhudya Bank', 'Bhandup West', '400078', 'Mumbai', 'm', '', 'Team one website', '2015-01-09 12:46:39', '1'),
+(298, 'r', 'Mahesh', 'Bajaj', '', '123', '', '9821125850', '', '', '', '0000-00-00', '17-3-a skyscraper beach candy', 'Next to American Consulate', 'Mahalaxmi', '400026', 'Mumbai', 'm', '', 'Team one website', '2015-01-12 09:18:36', '1'),
+(299, 'r', 'Rajesh', 'Dodia', '', '123', '', '9821462134', '', '', '', '0000-00-00', 'B-402, Rajkamal,Nr. Junction of M.G. Road, \n', 'S.V.Road', 'Kandivali west', '400067', 'Mumbai', 'm', '', 'Team one website', '2015-01-12 12:11:06', '1'),
+(300, 'r', 'Mr.', 'Jeetu', '', '123', '', '9820151414', '9619308755', '', '', '0000-00-00', 'Momence Fashion,Ashish Industrial Estate,', 'Gokhale Road', 'Dadar west', '400028', 'Mumbai', 'm', '', 'Team one website', '2015-01-12 12:27:44', '1'),
+(301, 'r', 'Mr.', 'Jeetu', '', '123', '', '9820151414', '9619308755', '', '', '0000-00-00', 'Momence Fashion,Ashish Industrial Estate,', 'Gokhale Road', 'Dadar west', '400028', 'Mumbai', 'm', '', 'Team one website', '2015-01-12 12:27:45', '1'),
+(302, 'c', 'M/S', 'PMI India.', 'mary.fernandes@pmi.org', '123', 'Office', '9820898759', '', '', '240700325', '0000-00-00', 'PMI Organization Center private Limited. Plot No.c-3,E, III Floor,Balaram', 'Behind Family Court', 'Bandra east', '400051', 'Mumbai', 'm', '', 'Team one website', '2015-01-12 13:12:14', '1');
 
 -- --------------------------------------------------------
 
@@ -536,7 +1041,7 @@ CREATE TABLE IF NOT EXISTS `customer_ac_details` (
   `remarks` varchar(200) NOT NULL,
   PRIMARY KEY (`ac_id`),
   KEY `cust_id` (`cust_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=351 ;
 
 --
 -- Dumping data for table `customer_ac_details`
@@ -572,7 +1077,140 @@ INSERT INTO `customer_ac_details` (`ac_id`, `cust_id`, `make`, `ac_type`, `capac
 (131, 136, 5, '1', '3', '', 'E065632', '', 'E066889', 10, 'Installation Done.'),
 (132, 136, 5, '1', '3', '', 'E065629', '', 'E066879', 7, 'Installation done.'),
 (133, 136, 5, '1', '3', '', 'E065633', '', 'E066900', 8, 'Installation done.'),
-(134, 69, 1, '1', '5', '', '', '', 'test', 4, 'dummy');
+(135, 278, 1, '1', '2', '', '', '', '', 4, 'AC'),
+(140, 279, 27, '1', '3', 'RAS-18N3AX', '22600232', 'RAS-18N3KPX', '22600294', 7, ''),
+(141, 279, 27, '1', '2', 'RAS-13N3AX', '22601261', 'RAS-13N3KPX', '22600606', 8, ''),
+(142, 279, 27, '1', '19', 'RAS-25N3AX', '22600374', 'RAS-25N3KPX', '22000410', 10, ''),
+(145, 187, 5, '1', '2', 'FTC35PRV16', '0020910', 'FTC35PRV16 ', '00194111', 4, 'Only outdoor machine replaced with new one by  mosin.'),
+(147, 193, 5, '1', '13', 'RE60NRV16', '0020481', 'FTE60NRV16', '0016980', 23, 'AMC Customer'),
+(160, 280, 5, '1', '2', 'RC35PRV16', '0020867', 'FTC35PRV16', '0026128', 10, ''),
+(164, 281, 5, '1', '2', 'SRC18CL6', '6394BE', 'SRK18CL6', '6447BE', 10, 'Installation done by gautam'),
+(166, 282, 8, '1', '2', 'SRC13CLV6', '474717731BE', 'SRK13CLV6', '435917309BE', 10, 'Installation done by Niyaz'),
+(167, 282, 8, '1', '2', 'SRC25K56', '560500500BE', 'SRK25CKS6', '530600528BE', 23, 'Installation done by Niyaz'),
+(168, 283, 5, '1', '2', 'RC35PRV16', '0021886', 'FTC35PRV16', '0024191', 10, 'Installation done by Niyaz'),
+(169, 272, 5, '1', '2', 'RC50PRV16', '0104008', 'FTC50PRV16', '0101490', 10, 'Installation done by Niyaz.'),
+(170, 284, 8, '1', '3', 'SRC20CLS-6', '0397BE', 'SRK20CLS-6', '0335BE', 10, 'Installation done by Hamid.'),
+(176, 286, 8, '1', '11', 'SRC13CLV16', '568200477BE', 'SRK13CLV16', '530400953BE', 4, 'Installation done by Naushad.'),
+(177, 286, 8, '1', '11', 'SRC13CLV16', '568200379BE', 'SRK13CLV16', '530400946BE', 6, 'Installation done by Naushad.'),
+(180, 285, 8, '1', '3', 'SRC18CL-6', '474109029BE', 'SRK18CL-6', '450603618BE', 4, 'Installation done by Mr. Sarvjeet.'),
+(181, 285, 8, '1', '3', 'SRC18CL-6', '474109103BE', 'SRK18CL-6', '450603511BE', 6, 'Installation done by Sarvjeet.'),
+(182, 225, 8, '1', '3', 'SRK20CLS', '568400194BEJ', 'SRC20CLS', '530500337BE8', 25, 'Installation done by Mr. Hameed.'),
+(183, 287, 5, '1', '13', 'FTEL60PRV16', '27937200018949', 'REL60PRV1', '27936500042689', 10, 'Installation done by Mr. sarvjeet.'),
+(189, 288, 11, '1', '3', 'AOG18FTTAO', 'T011871', 'ASG18FTTAL', 'T010930', 10, 'Installation done by Ajay Kumar.'),
+(190, 288, 11, '1', '3', 'AOG18FTTAO', 'T011871', 'ASG18FTTAL', 'T010930', 10, 'Installation done by Ajay Kumar.'),
+(191, 289, 11, '1', '2', 'ASG12BMTA', 'T005016', 'ASG12BMTA', 'T003557', 23, 'Installation done by hameed.'),
+(192, 289, 11, '1', '2', 'ASG12BMTA', 'T005156', 'ASG12BMTA', 'T004218', 7, 'Installation done by Hamid.'),
+(194, 176, 5, '1', '3', '', '', '', '', 7, 'installation done'),
+(195, 176, 5, '1', '2', '', '', '', '', 8, 'installation done.'),
+(196, 176, 5, '1', '2', '', '', '', '', 9, 'installation done'),
+(197, 176, 5, '1', '13', '', '', '', '', 10, 'installation done.'),
+(198, 116, 5, '1', '3', 'R50GV1G6', 'E033770', 'FT50V1G6', 'E043249', 10, 'Amc customer.'),
+(199, 275, 28, '1', '3', 'Superia Plus Inverte', '4275', 'Superia Plus Inverte', '4291', 6, 'Installation done by Niyaz.'),
+(200, 275, 28, '1', '3', 'Superia Plus Inverte', '4325', 'Superia Plus Inverte', '4302', 4, 'installation done by niyaz.'),
+(201, 275, 28, '1', '3', 'Superia Plus Inverte', '4313', 'Superia Plus Inverte', '4290', 14, 'installation done by niyaz.'),
+(202, 275, 28, '1', '3', 'Superia Plus Inverte', '4526', 'Superia Plus Inverte', '4289', 25, 'installation done by niyaz.'),
+(203, 275, 28, '1', '2', 'Superia Plus Inverte', '2299', 'Superia Plus Inverte', '2183', 16, 'installation done by niyaz.'),
+(204, 143, 5, '1', '3', '', '', '', '', 7, 'Amc Customer.'),
+(205, 143, 5, '1', '2', '', '', '', '', 8, 'Amc customer.'),
+(206, 143, 5, '1', '2', '', '', '', '', 9, 'Amc Customer.'),
+(208, 143, 5, '1', '13', '', '', '', '', 10, 'Amc Customer.'),
+(209, 291, 8, '1', '19', 'SRK25CKS-6', '568500258BE', 'SRK25CKS-6', '530600390BE', 25, 'Installation done by Deepak.'),
+(210, 291, 8, '1', '2', 'SRK10CLV-6', '474503336BE', 'SRK10CLV-6', '435703328BE', 6, 'Installation done by Deepak.'),
+(211, 292, 8, '1', '19', 'SRK25CKS-6', '568500897BE', 'SRK25CKS-6', '530600517BE', 25, 'Installation done by Deepak.'),
+(212, 293, 5, '1', '2', 'RC60PRV16', '0007678', 'FTC35PRV16', '0014024', 10, 'Installation done by Deepak.'),
+(213, 293, 5, '1', '2', 'RC60PRV16', '0007678', 'FTC35PRV16', '0014024', 10, 'Installation done by Deepak.'),
+(214, 293, 5, '1', '2', 'RC35PRV16', '0021798', 'FTC60PRV16', '0008156', 23, 'Installation done by Deepak.'),
+(215, 216, 6, '1', '2', '', '', '', '', 7, 'AMC Customer.'),
+(216, 216, 29, '1', '3', '', '', '', '', 10, 'AMC Customer.'),
+(217, 245, 5, '1', '2', 'RE35MV16', 'E016120', 'FTE35MV16', 'E016625', 26, 'AMC Customer.'),
+(218, 245, 5, '1', '2', 'RE35MV16', 'E015896', 'FTE35MV16', 'E015583', 10, 'AMC Cuctomer.'),
+(221, 218, 5, '1', '2', 'R50GV16', '6008625', 'FTE50GV16', '6007151', 10, 'AMC Customer.'),
+(222, 81, 1, '1', '2', '', '', '', '', 26, 'AMC Customer.'),
+(224, 294, 12, '1', '19', '', '', '', '', 10, 'AMC Customer.'),
+(225, 112, 8, '1', '2', 'SRC12CM-6', '476300368BE', 'SRK12CM-6', '437500S10BE', 26, 'AMC Customer.'),
+(226, 249, 5, '1', '2', '', '', 'FTC35PRV16', '0008547', 26, 'AMC Customer.'),
+(227, 195, 23, '1', '19', '', '', '', '', 25, 'AMC Customer.'),
+(228, 107, 5, '1', '19', '', '', '', '', 23, 'AMC Customer.'),
+(229, 107, 5, '1', '2', '', '', '', '', 26, 'AMC Customer.'),
+(230, 107, 5, '1', '2', '', '', '', '', 8, 'Amc Customer.'),
+(232, 72, 3, '3', '8', '', '', '', '', 9, '1st'),
+(233, 90, 7, '1', '3', '', '', '', '', 7, 'Amc Customer.'),
+(234, 205, 27, '1', '3', '', '', '', '', 26, 'Amc Customer.'),
+(235, 205, 27, '1', '19', '', '', '', '', 23, 'Amc customer.'),
+(236, 205, 27, '1', '2', '', '', '', '', 10, 'Amc customer.'),
+(237, 194, 1, '1', '2', '', '', '', '', 26, 'Amc customer.'),
+(238, 87, 12, '1', '3', '', '', '', '', 26, 'Amc customer'),
+(239, 72, 2, '2', '3', '', '', '', '', 4, '3'),
+(240, 270, 25, '1', '3', '', '', '', '', 10, 'amc customer'),
+(241, 106, 3, '1', '19', '', '', '', '', 23, 'Amc customer'),
+(242, 106, 3, '1', '3', '', '', '', '', 7, 'Amc customer.'),
+(243, 106, 3, '1', '2', '', '', '', '', 26, 'Amc customer.'),
+(244, 185, 5, '1', '3', '', '', 'FTE50NRV16', '0084177', 7, 'Amc customer.'),
+(246, 185, 5, '1', '13', '', '', 'FTE60NRV16', '0017655', 23, 'Amc Customer.'),
+(247, 111, 5, '1', '19', '', '', '', '', 23, 'Amc customer'),
+(249, 111, 5, '1', '2', '', '', '', '', 10, 'Amc customer'),
+(250, 111, 5, '1', '2', '', '', '', '', 7, 'Amc customer.'),
+(251, 111, 5, '1', '2', '', '', '', '', 26, 'Amc customer'),
+(258, 154, 17, '1', '3', 'SB53CDEICR', '63229921225', 'SB53CDEI-CR', '63229921225', 23, 'Amc customer.'),
+(259, 88, 10, '1', '2', '', '', '', '', 23, 'Amc customer.'),
+(260, 150, 11, '1', '19', '', '', '', '', 23, 'Amc customer.'),
+(261, 150, 11, '1', '3', '', '', '', '', 7, 'Amc customer.'),
+(262, 150, 11, '1', '3', '', '', '', '', 26, 'Amc customer.'),
+(263, 150, 11, '1', '19', '', '', '', '', 23, 'Amc customer.'),
+(264, 150, 11, '1', '2', '', '', '', '', 8, 'Amc customer.'),
+(265, 212, 5, '1', '2', 'R35MV16', 'E028959', 'FTE35MV16', 'E028947', 26, 'Amc customer.'),
+(266, 109, 28, '1', '2', '', '', '', '', 26, 'Amc customer.'),
+(267, 109, 28, '1', '2', '', '', '', '', 7, 'Amc Customer'),
+(268, 109, 28, '1', '2', '', '', '', '', 27, 'Amc customer.'),
+(269, 109, 28, '1', '2', '', '', '', '', 23, 'Amc customer.'),
+(272, 251, 15, '1', '2', '', '', '', '', 26, 'Amc customer.'),
+(273, 251, 15, '1', '2', '', '', '', '', 7, 'Amc customer.'),
+(274, 251, 15, '1', '3', '', '', '', '', 23, 'Amc customer.'),
+(275, 196, 12, '1', '2', '', '', '', '', 7, 'Amc customer'),
+(276, 196, 31, '2', '2', '', '', '', '', 8, 'Amc customer.'),
+(277, 196, 28, '2', '2', '', '', '', '', 23, 'Amc customer'),
+(278, 201, 10, '2', '3', '', '', '', '', 10, 'Amc customer'),
+(279, 269, 15, '1', '3', '', '', '', '', 4, 'amc customer'),
+(280, 269, 15, '1', '19', '', '', '', '', 25, 'Amc customer'),
+(281, 269, 15, '1', '19', '', '', '', '', 28, 'Amc customer.'),
+(284, 228, 11, '1', '2', '', '', '', '', 23, 'Amc Customer.'),
+(285, 228, 11, '1', '19', '', '', '', '', 7, 'Amc Customer.'),
+(288, 222, 1, '1', '3', '', '', '', '', 26, 'amc customer'),
+(289, 222, 1, '2', '2', '', '', '', '', 23, 'Amc customer'),
+(290, 295, 7, '1', '19', '', '', 'SRK25CKS-6', '324804830RE', 25, 'Matrix complaint'),
+(291, 296, 5, '1', '3', 'REL50NRV16', '0027405', 'FTEL50NRV16', '0025791', 10, 'Service.'),
+(292, 297, 5, '1', '2', 'KRE3SGV1', 'E083038', 'FTKE35GV1', 'E083434', 10, 'MATRIX Call\nBOM150100795'),
+(293, 185, 5, '1', '3', '', '', 'FTE50NRV16', '0080454', 10, 'Amc customer.'),
+(294, 107, 5, '1', '2', '', '', '', '', 7, 'Amc customer'),
+(309, 240, 15, '1', '3', '', '', '', '', 29, 'Amc Customer'),
+(310, 240, 12, '1', '2', '', '', '', '', 6, 'Amc Customer'),
+(311, 240, 6, '2', '3', '', '', '', '', 11, 'Amc Customer'),
+(312, 240, 15, '1', '3', '', '', '', '', 34, 'Amc Customer'),
+(314, 240, 10, '1', '2', '', '', '', '', 37, 'Amc Customer'),
+(315, 240, 12, '1', '2', '', '', '', '', 35, 'Amc Customer'),
+(316, 240, 4, '1', '19', '', '', '', '', 33, 'Amc Customer'),
+(317, 240, 6, '1', '19', '', '', '', '', 32, 'Amc Customer'),
+(318, 240, 6, '1', '19', '', '', '', '', 31, 'Amc Customer'),
+(319, 240, 6, '1', '19', '', '', '', '', 30, 'Amc Customer'),
+(320, 240, 6, '2', '2', '', '', '', '', 25, 'Amc Customer'),
+(321, 240, 6, '1', '3', '', '', '', '', 37, 'Amc Customer'),
+(322, 120, 5, '1', '3', 'RE50KV16', 'E029893', 'FTE50LV16', 'EO63715', 25, 'Amc Customer'),
+(323, 120, 5, '1', '3', 'RC60LV169', 'E025572', 'FTE50LV16', 'E014360', 6, 'Amc Customer.'),
+(324, 120, 1, '1', '3', '', '006367', '', '004322', 11, 'Amc Customer.'),
+(325, 120, 5, '1', '3', 'REL50LV16', 'E028571', 'FTE50LV16', '14355', 33, 'AMC CUSTOMER'),
+(327, 298, 5, '1', '2', 'RQ35PRV16', '006954', 'FTQ35PRV16', '0011540', 10, 'Ac installation done by Niyaz'),
+(328, 298, 5, '1', '3', 'REL50PRV16', '0013327', 'FTEL50PRV16', '0024021', 23, 'Ac installation done by Niyaz.'),
+(330, 299, 5, '1', '13', 'RKD60BVM', 'E045389', 'FTKD60FVM', 'E049022', 7, 'Installation done by Niyaz'),
+(331, 299, 5, '1', '3', 'RKD50BVM', 'E104515', 'FTKD50FVM', 'E120241', 10, 'Installation done by Niyaz'),
+(332, 299, 5, '1', '3', 'RKD50BVM', 'E104512', 'FTKD50FVM', 'E131182', 23, 'Installation done by Niyaz.'),
+(339, 302, 9, '1', '2', 'RAU223HUD', 'SE140E30520', 'RAU223HUD', 'SE140E30520', 4, ''),
+(340, 302, 9, '1', '2', 'RAU223HUD', '5E140F30214', 'RAU2234UD', '5E140E30214', 6, 'AMC Customer'),
+(341, 302, 9, '1', '2', 'RAU518HUD', '5E140E16960', 'RAU318HUD', '5E140E16960', 25, 'Amc Customer'),
+(342, 302, 9, '1', '2', 'RAUSI8HUD', '', 'RAS223HUD', '', 14, 'AMC Customer'),
+(343, 302, 9, '1', '2', 'RAC312HUD', 'SE140E32059', 'RAU312HUD', 'SE140F32059', 16, 'Amc customer.'),
+(344, 302, 11, '1', '3', '', '', '', '', 17, 'Amc Customer'),
+(345, 228, 11, '1', '2', '', '', '', '', 8, 'AMC Customer'),
+(346, 228, 11, '1', '2', '', '', '', '', 10, 'Amc Customer');
 
 -- --------------------------------------------------------
 
@@ -593,14 +1231,25 @@ CREATE TABLE IF NOT EXISTS `installation` (
   PRIMARY KEY (`install_id`),
   KEY `cust_id` (`cust_id`),
   KEY `ac_id` (`ac_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `installation`
 --
 
 INSERT INTO `installation` (`install_id`, `cust_id`, `ac_id`, `install_type`, `preferred_date`, `no_of_service`, `remarks`, `enabled`, `created_on`) VALUES
-(1, 69, 134, 's', '2014-12-18', 4, 'test install', '1', '2014-12-17 12:16:00');
+(4, 280, 160, 'n', '2014-12-11', 3, 'Installation done by Naushad', '1', '2014-12-29 10:12:39'),
+(5, 281, 164, 'n', '2014-12-03', 3, 'Installation done by gautam.', '1', '2014-12-29 12:06:44'),
+(6, 272, 169, 'n', '2014-12-03', 3, 'Installation done by Niyaz.', '1', '2014-12-30 05:52:11'),
+(7, 285, 180, 'n', '2014-12-29', 3, 'installation done by sarvjeet', '1', '2014-12-31 06:05:07'),
+(8, 285, 181, 'n', '2014-12-29', 3, 'Installation done by Mr. Sarvjeet.', '1', '2014-12-31 06:06:23'),
+(9, 225, 182, 'n', '2014-12-12', 3, 'installation done by hameed', '1', '2014-12-31 06:55:39'),
+(10, 287, 183, 'n', '2014-12-31', 4, 'installation done by Mr. Sarvjeet.', '1', '2015-01-02 10:01:33'),
+(11, 289, 191, 'n', '2014-12-23', 3, 'Installation done by Hamid.', '1', '2015-01-03 09:16:48'),
+(12, 289, 192, 'n', '2014-12-23', 3, 'Installation done by Hamid.', '1', '2015-01-03 09:17:57'),
+(13, 283, 168, 'n', '2014-12-07', 3, 'installation done by Niyaz.', '1', '2015-01-03 10:46:30'),
+(15, 72, 232, 's', '2015-01-31', 1, 'ins test', '1', '2015-01-07 11:05:36'),
+(17, 72, 98, 'f', '2015-01-08', 1, '', '1', '2015-01-07 11:12:23');
 
 -- --------------------------------------------------------
 
@@ -617,18 +1266,58 @@ CREATE TABLE IF NOT EXISTS `install_service_date` (
   `date` date NOT NULL,
   PRIMARY KEY (`install_service_id`),
   KEY `install_id` (`install_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=74 ;
 
 --
 -- Dumping data for table `install_service_date`
 --
 
 INSERT INTO `install_service_date` (`install_service_id`, `type`, `cust_id`, `install_id`, `remarks`, `date`) VALUES
-(1, 'installation', 69, 1, '', '2014-12-18'),
-(2, 'ins_service', 69, 1, '', '2015-03-19'),
-(3, 'ins_service', 69, 1, '', '2015-06-18'),
-(4, 'ins_service', 69, 1, '', '2015-09-17'),
-(5, 'ins_service', 69, 1, '', '2015-12-17');
+(15, 'installation', 280, 4, '', '2014-12-11'),
+(16, 'ins_service', 280, 4, '', '2015-04-12'),
+(17, 'ins_service', 280, 4, '', '2015-08-12'),
+(18, 'ins_service', 280, 4, '', '2015-12-12'),
+(19, 'installation', 281, 5, '', '2014-12-03'),
+(20, 'ins_service', 281, 5, '', '2015-04-04'),
+(21, 'ins_service', 281, 5, '', '2015-08-04'),
+(22, 'ins_service', 281, 5, '', '2015-12-04'),
+(23, 'installation', 272, 6, '', '2014-12-03'),
+(24, 'ins_service', 272, 6, '', '2015-04-04'),
+(25, 'ins_service', 272, 6, '', '2015-08-04'),
+(26, 'ins_service', 272, 6, '', '2015-12-04'),
+(27, 'installation', 285, 7, '', '2014-12-29'),
+(28, 'ins_service', 285, 7, '', '2015-04-30'),
+(29, 'ins_service', 285, 7, '', '2015-08-30'),
+(30, 'ins_service', 285, 7, '', '2015-12-30'),
+(31, 'installation', 285, 8, '', '2014-12-29'),
+(32, 'ins_service', 285, 8, '', '2015-04-30'),
+(33, 'ins_service', 285, 8, '', '2015-08-30'),
+(34, 'ins_service', 285, 8, '', '2015-12-30'),
+(35, 'installation', 225, 9, '', '2014-12-12'),
+(36, 'ins_service', 225, 9, '', '2015-04-13'),
+(37, 'ins_service', 225, 9, '', '2015-08-13'),
+(38, 'ins_service', 225, 9, '', '2015-12-13'),
+(39, 'installation', 287, 10, '', '2014-12-31'),
+(40, 'ins_service', 287, 10, '', '2015-04-01'),
+(41, 'ins_service', 287, 10, '', '2015-07-01'),
+(42, 'ins_service', 287, 10, '', '2015-09-30'),
+(43, 'ins_service', 287, 10, '', '2015-12-30'),
+(44, 'installation', 289, 11, '', '2014-12-23'),
+(45, 'ins_service', 289, 11, '', '2015-04-24'),
+(46, 'ins_service', 289, 11, '', '2015-08-24'),
+(47, 'ins_service', 289, 11, '', '2015-12-24'),
+(48, 'installation', 289, 12, '', '2014-12-23'),
+(49, 'ins_service', 289, 12, '', '2015-04-24'),
+(50, 'ins_service', 289, 12, '', '2015-08-24'),
+(51, 'ins_service', 289, 12, '', '2015-12-24'),
+(52, 'installation', 283, 13, '', '2014-12-07'),
+(53, 'ins_service', 283, 13, '', '2015-04-08'),
+(54, 'ins_service', 283, 13, '', '2015-08-08'),
+(55, 'ins_service', 283, 13, '', '2015-12-08'),
+(58, 'installation', 72, 15, '', '2015-01-31'),
+(59, 'ins_service', 72, 15, '', '2016-01-31'),
+(62, 'installation', 72, 17, '', '2015-01-08'),
+(63, 'ins_service', 72, 17, '', '2016-01-08');
 
 -- --------------------------------------------------------
 
@@ -642,7 +1331,7 @@ CREATE TABLE IF NOT EXISTS `locality` (
   `pincode` varchar(15) NOT NULL,
   `city` varchar(50) NOT NULL DEFAULT 'Mumbai',
   PRIMARY KEY (`locality_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1506 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Pincode master' AUTO_INCREMENT=1527 ;
 
 --
 -- Dumping data for table `locality`
@@ -2144,7 +2833,25 @@ INSERT INTO `locality` (`locality_id`, `locality_name`, `pincode`, `city`) VALUE
 (1501, 'Next Building of Natural Ice Cream.', '400068', 'Mumbai'),
 (1503, 'P.K. Road.', '400080', 'Mumbai'),
 (1504, 'Ganesh Gawade Cross Road', '400080', 'Mumbai'),
-(1505, 'Sector No- 46A, Palm Beach Road', '400706', 'Mumbai');
+(1505, 'Sector No- 46A, Palm Beach Road', '400706', 'Mumbai'),
+(1506, 'Ambajidham', '400080', 'Mumbai'),
+(1508, 'Kala Killa, Dharavi (w)', '400017', 'Mumbai'),
+(1509, 'Skyway Hotel', '400070', 'Mumbai'),
+(1512, 'Nr. Valkeshwar Mandir.', '400049', 'Mumbai'),
+(1511, 'Opp.Godrej Planet', '400027', 'Mumbai'),
+(1513, 'Nr.Retiwala industries Estate', '400027', 'Mumbai'),
+(1514, 'Nr. Nanavati School.', '400049', 'Mumbai'),
+(1515, 'Opp. 12 Bunglow, kopari', '400603', 'Mumbai'),
+(1516, 'Nr. Oberoi Mall', '400063', 'Mumbai'),
+(1517, 'Sec- 4,Nr. rajiv Gandhi Flyover', '400706', 'Mumbai'),
+(1518, 'N G Acharya Marg.', '400071', 'Mumbai'),
+(1519, 'Nr. Mehboob Studio', '400050', 'Mumbai'),
+(1520, 'Nr. Abhudaya Bank ', '400078', 'Mumbai'),
+(1521, 'Jangal managal road, Nr. Abhudya Bank', '400078', 'Mumbai'),
+(1522, 'Next to American Consulate', '400026', 'Mumbai'),
+(1525, 'Gokhale Road', '400028', 'Mumbai'),
+(1524, 'S.V.Road', '400067', 'Mumbai'),
+(1526, 'Behind Family Court', '400051', 'Mumbai');
 
 -- --------------------------------------------------------
 
@@ -2163,7 +2870,7 @@ CREATE TABLE IF NOT EXISTS `one_time_service` (
   `enabled` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1-en,2-dis',
   PRIMARY KEY (`ots_id`),
   KEY `tech_id` (`ac_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -2175,7 +2882,7 @@ CREATE TABLE IF NOT EXISTS `problem_type` (
   `ac_problem_id` int(11) NOT NULL AUTO_INCREMENT,
   `ac_problem_type` varchar(100) NOT NULL,
   PRIMARY KEY (`ac_problem_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
 --
 -- Dumping data for table `problem_type`
@@ -2205,7 +2912,11 @@ INSERT INTO `problem_type` (`ac_problem_id`, `ac_problem_type`) VALUES
 (23, 'Magnetic Contactor Problem'),
 (24, 'Flaring Problem'),
 (25, 'Drain Pipe Choked'),
-(26, 'Leak in copper pipe');
+(26, 'Leak in copper pipe'),
+(27, 'Dry service request'),
+(28, 'Wet service request.'),
+(29, 'Wet & Dry service Request'),
+(30, 'AC Service request');
 
 -- --------------------------------------------------------
 
@@ -2217,7 +2928,7 @@ CREATE TABLE IF NOT EXISTS `referred_by` (
   `referred_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`referred_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `referred_by`
@@ -2235,7 +2946,8 @@ INSERT INTO `referred_by` (`referred_id`, `name`) VALUES
 (22, 'Atul Electronics-Bhandup'),
 (23, 'Architect'),
 (24, 'Groupon'),
-(25, 'Mahendra Jadhav-Architect');
+(25, 'Mahendra Jadhav-Architect'),
+(26, 'Girish Rahumalani');
 
 -- --------------------------------------------------------
 
@@ -2282,7 +2994,7 @@ CREATE TABLE IF NOT EXISTS `technician` (
   `enabled` enum('1','2','3') NOT NULL COMMENT '1-en,2-dis,3-del',
   PRIMARY KEY (`tech_id`),
   KEY `branch` (`branch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
 
 --
 -- Dumping data for table `technician`
@@ -2293,7 +3005,9 @@ INSERT INTO `technician` (`tech_id`, `first_name`, `last_name`, `email`, `mobile
 (46, 'Naushad', 'Ali', '', '9004447631', '1', 'Nalla Sopara West', '1'),
 (48, 'Hamid', 'Shaikh', '', '9004447633', '1', 'Govandi', '1'),
 (49, 'Mosian', 'Shaikh', '', '9004447632', '1', 'Govandi', '1'),
-(50, 'Rafique', 'Mohammed', 'ar.rafiq@live.com', '8976288706', '1', 'k/b/6', '1');
+(50, 'Rafique', 'Mohammed', 'ar.rafiq@live.com', '8976288706', '1', 'k/b/6', '3'),
+(51, 'Girish', 'Rahumalani', '', '9702011555', '1', 'Ghatkopar', '1'),
+(52, 'Rafique', 'Mohammed', '', '7506409005', '1', 'Chembur', '1');
 
 -- --------------------------------------------------------
 
@@ -2334,7 +3048,7 @@ ALTER TABLE `amc_service_date`
 -- Constraints for table `assignment`
 --
 ALTER TABLE `assignment`
-  ADD CONSTRAINT `assignment_ibfk_1` FOREIGN KEY (`assign_for`) REFERENCES `technician` (`tech_id`);
+  ADD CONSTRAINT `assignment_ibfk_2` FOREIGN KEY (`ac_id`) REFERENCES `customer_ac_details` (`ac_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `complaint`

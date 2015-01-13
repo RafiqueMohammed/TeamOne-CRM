@@ -85,6 +85,26 @@ $app->delete("/Manage/Branch/:id", function ($id) use ($app) {
     }
     $app->response->body(json_encode($result));
 });
+
+
+$app->put("/Manage/Branch/:id", function($id) use ($app){
+    $req = $app->request;
+    if ($req->put("branch") && !empty($id)) {
+        $name = $req->put("branch");
+        global $DB;
+        $DB->query("UPDATE `" . TAB_BRANCH . "` SET `branch_name`='$name' WHERE `branch_id`='$id' ");
+        if ($DB->affected_rows > 0) {
+            $result = array("status" => "ok", "result" => "Successfully Updated");
+            $app->response->body(json_encode($result));
+        } else {
+            ThrowError("Unable to update into database");
+        }
+
+    } else {
+        ThrowMissing();
+    }
+});
+
 /** End Add Branch **/
 
 
@@ -149,6 +169,25 @@ $app->delete("/Manage/Complaints/ProblemType/:id", function ($id) use ($app) {
     $app->response->body(json_encode($result));
 });
 
+
+$app->put("/Manage/ProblemType/:id", function($id) use ($app){
+    $req = $app->request;
+    if ($req->put("ptype") && !empty($id)) {
+        $name = $req->put("ptype");
+        global $DB;
+        $DB->query("UPDATE `" . TAB_PROBLEM_TYPE . "` SET `ac_problem_type`='$name' WHERE `ac_problem_id`='$id' ");
+        if ($DB->affected_rows > 0) {
+            $result = array("status" => "ok", "result" => "Successfully Updated");
+            $app->response->body(json_encode($result));
+        } else {
+            ThrowError("Unable to update into database");
+        }
+
+    } else {
+        ThrowMissing();
+    }
+});
+
 /** ------------- AC TYPE ------------- **/
 
 $app->post("/Manage/AC/Type", function () use ($app) {
@@ -188,6 +227,26 @@ $app->delete("/Manage/AC/Type/:id", function ($id) use ($app) {
 
     }
     $app->response->body(json_encode($result));
+});
+
+$app->put("/Manage/ACType/:id", function($id) use ($app){
+    global $DB;
+    $req = $app->request;
+    if ($req->put("actype") && !empty($id)) {
+        $name = $req->put("actype");
+        $name = $DB->real_escape_string($name);
+        
+        $DB->query("UPDATE `" . TAB_AC_TYPE . "` SET `ac_type`='$name' WHERE `ac_type_id`='$id' ") or ThrowError($DB->error);
+        if ($DB->affected_rows > 0) {
+            $result = array("status" => "ok", "result" => "Successfully Updated");
+            $app->response->body(json_encode($result));
+        } else {
+            ThrowError("Unable to update into database");
+        }
+
+    } else {
+        ThrowMissing();
+    }
 });
 
 /** ------------- REFERENCE ------------- **/
@@ -246,6 +305,25 @@ $app->delete("/Manage/Customer/Reference/:id", function ($id) use ($app) {
     }
     $app->response->body(json_encode($result));
 });
+
+$app->put("/Manage/Refer/:id", function($id) use ($app){
+    $req = $app->request;
+    if ($req->put("refer") && !empty($id)) {
+        $name = $req->put("refer");
+        global $DB;
+        $DB->query("UPDATE `" . TAB_REFERRED_BY . "` SET `name`='$name' WHERE `referred_id`='$id' ");
+        if ($DB->affected_rows > 0) {
+            $result = array("status" => "ok", "result" => "Successfully Updated");
+            $app->response->body(json_encode($result));
+        } else {
+            ThrowError("Unable to update into database");
+        }
+
+    } else {
+        ThrowMissing();
+    }
+});
+
 
 /** ------------- AC LOCATION --------------- */
 
@@ -317,6 +395,25 @@ $app->delete("/Manage/AC/location/:id", function ($id) use ($app) {
     $app->response->body(json_encode($result));
 });
 
+$app->put("/Manage/Location/:id", function($id) use ($app){
+    $req = $app->request;
+    if ($req->put("location") && !empty($id)) {
+        $name = $req->put("location");
+        global $DB;
+        $DB->query("UPDATE `" . TAB_AC_LOCATION . "` SET `location`='$name' WHERE `ac_location_id`='$id' ");
+        if ($DB->affected_rows > 0) {
+            $result = array("status" => "ok", "result" => "Successfully Updated");
+            $app->response->body(json_encode($result));
+        } else {
+            ThrowError("Unable to update into database");
+        }
+
+    } else {
+        ThrowMissing();
+    }
+});
+
+
 /** ------------- TONNAGE --------------- */
 
 $app->post("/Manage/AC/Tonnage", function () use ($app) {
@@ -349,19 +446,19 @@ $app->post("/Manage/AC/Tonnage", function () use ($app) {
 
 $app->get("/Manage/AC/Tonnage", function () use ($app) {
 
-        global $DB;
-        $qry = $DB->query("SELECT * FROM `" . TAB_AC_TONNAGE . "` ");
+    global $DB;
+    $qry = $DB->query("SELECT * FROM `" . TAB_AC_TONNAGE . "` ");
 
-        if ($qry->num_rows > 0) {
-            while ($info = $qry->fetch_assoc()) {
-                $result[] = $info;
-            }
-            $result["status"] = "ok";
-        } else {
-            $result = array("status" => "no", "result" => "No Data Found in the Database");
+    if ($qry->num_rows > 0) {
+        while ($info = $qry->fetch_assoc()) {
+            $result[] = $info;
         }
-        $app->response->body(json_encode($result));
+        $result["status"] = "ok";
+    } else {
+        $result = array("status" => "no", "result" => "No Data Found in the Database");
     }
+    $app->response->body(json_encode($result));
+}
 );
 
 
@@ -379,7 +476,7 @@ $app->get("/Manage/AC/Tonnage/:id", function ($id) use ($app) {
     $app->response->body(json_encode($result));
 });
 
-$app->put("/Manage/AC/Tonnage/:id", function ($id) use ($app) {
+$app->put("/Manage/Tonnage/:id", function ($id) use ($app) {
     $req = $app->request;
     if ($req->put("tonnage") && !empty($id)) {
         $name = $req->put("tonnage");
@@ -442,22 +539,22 @@ $app->post("/Manage/AC/Make", function () use ($app) {
 
 $app->get("/Manage/AC/Make", function () use ($app) {
 
-        global $DB;
-        $qry = $DB->query("SELECT `make_id`,`make` FROM `" . TAB_AC_MAKE . "` ");
+    global $DB;
+    $qry = $DB->query("SELECT `make_id`,`make` FROM `" . TAB_AC_MAKE . "` ");
 
-        if ($qry->num_rows > 0) {
-            while ($info = $qry->fetch_assoc()) {
-                $result[] = $info;
-            }
-            $result["status"] = "ok";
-        } else {
-
-            $result = array("status" => "no", "result" => "No Data Found in the Database");
-
+    if ($qry->num_rows > 0) {
+        while ($info = $qry->fetch_assoc()) {
+            $result[] = $info;
         }
+        $result["status"] = "ok";
+    } else {
 
-        $app->response->body(json_encode($result));
+        $result = array("status" => "no", "result" => "No Data Found in the Database");
+
     }
+
+    $app->response->body(json_encode($result));
+}
 );
 
 
@@ -479,8 +576,8 @@ $app->get("/Manage/AC/Make/:id", function ($id) use ($app) {
 
 $app->put("/Manage/AC/Make/:id", function ($id) use ($app) {
     $req = $app->request;
-    if ($req->put("name") && !empty($id)) {
-        $name = $req->put("name");
+    if ($req->put("make") && !empty($id)) {
+        $name = $req->put("make");
         global $DB;
         $DB->query("UPDATE `" . TAB_AC_MAKE . "` SET `make`='$name' WHERE `make_id`='$id' ");
         if ($DB->affected_rows > 0) {

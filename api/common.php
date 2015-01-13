@@ -1,6 +1,7 @@
 <?php
 session_start();
 ob_start();
+date_default_timezone_set("Asia/Kolkata");
 require_once("../include/config.php");
 
 require_once(SLIM_DIR . "Slim.php");
@@ -56,6 +57,10 @@ $app->hook("slim.before.router", function () use ($app) {
         require_once('Tickets.php');
     } else if (strpos($app->request()->getPathInfo(), "/Reports") === 0) {
         require_once('Reports.php');
+    } else if (strpos($app->request()->getPathInfo(), "/LinkedAccount") === 0) {
+        require_once('LinkedAccount.php');
+    } else if (strpos($app->request()->getPathInfo(), "/Compose") === 0) {
+        require_once('Compose.php');
     } else {
         require_once('index.php');  // default routes
     }

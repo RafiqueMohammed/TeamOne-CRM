@@ -9,7 +9,7 @@
         <!-- end: MAIN MENU TOGGLER BUTTON -->
         <!-- start: MAIN NAVIGATION MENU -->
         <ul class="main-navigation-menu">
-            <li >
+            <li>
                 <a href="index.php" onclick="return LoadPage('dashboard')"><i class="clip-home-3"></i>
                     <span class="title"> Dashboard </span><span class="selected"></span>
                 </a>
@@ -89,7 +89,26 @@
                 </a>
             </li>
 
-
+            <li>
+                <a href="javascript:void(0)"><i class="fa fa-plus"></i>
+                    <span class="title"> Compose </span><i class="icon-arrow"></i>
+                    <span class="selected"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="return LoadPage('ComposeSMS');" href="ComposeSMS">
+                            <i class="clip-mobile "></i>
+                            <span class="title"> New SMS </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="return LoadPage('ComposeEmail');" href="ComposeEmail">
+                            <i class="fa fa-envelope"></i>
+                            <span class="title"> New Email </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a href="Logout.php"><i class="clip-exit"></i>
                     <span class="title">Logout</span>

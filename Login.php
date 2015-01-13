@@ -3,9 +3,9 @@ session_start();
 ob_start();
 require_once("include/config.php");
 require_once("controller/class.staff.php");
-$staff=new controller\staff\Staff($DB);
-if($staff->isLoggedin()){
-    $staff->redirect("/",true);
+$staff = new controller\staff\Staff($DB);
+if ($staff->isLoggedin()) {
+    $staff->redirect("/", true);
 }
 /**
  * Created by Rafique
@@ -16,14 +16,16 @@ if($staff->isLoggedin()){
 
 <!DOCTYPE html>
 <!-- Template Name: Clip-One - Responsive Admin Template build with Twitter Bootstrap 3.x Version: 1.3 Author: ClipTheme -->
-<!--[if IE 8]><html class="ie8 no-js" lang="en"><![endif]-->
-<!--[if IE 9]><html class="ie9 no-js" lang="en"><![endif]-->
+<!--[if IE 8]>
+<html class="ie8 no-js" lang="en"><![endif]-->
+<!--[if IE 9]>
+<html class="ie9 no-js" lang="en"><![endif]-->
 <!--[if !IE]><!-->
 <html lang="en" class="no-js">
 <!--<![endif]-->
 <!-- start: HEAD -->
 <head>
-    <?php require_once INC_DIR."head.php"; ?>
+    <?php require_once INC_DIR . "head.php"; ?>
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY -->
@@ -34,9 +36,11 @@ if($staff->isLoggedin()){
     <!-- start: LOGIN BOX -->
     <div class="box-login">
         <h3>Sign in to your account</h3>
+
         <p>
             Please enter your name and password to log in.
         </p>
+
         <form class="form-login">
             <div class="errorHandler alert alert-danger no-display">
                 <i class="fa fa-remove-sign"></i> You have some form errors. Please check below.
@@ -49,7 +53,8 @@ if($staff->isLoggedin()){
                 </div>
                 <div class="form-group form-actions">
 							<span class="input-icon">
-								<input type="password" class="form-control password" name="password" placeholder="Password">
+								<input type="password" class="form-control password" name="password"
+                                       placeholder="Password">
 								<i class="fa fa-lock"></i>
 								 </span>
                 </div>
@@ -67,7 +72,7 @@ if($staff->isLoggedin()){
     <!-- start: COPYRIGHT -->
     <div class="copyright">
 
-            2015 &copy; Developed by Growthwell Consulting Pvt. Ltd..
+        2015 &copy; Developed by Growthwell Consulting Pvt. Ltd..
 
     </div>
     <!-- end: COPYRIGHT -->
@@ -97,7 +102,7 @@ if($staff->isLoggedin()){
 <script src="assets/js/login.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
         Main.init();
 
     });

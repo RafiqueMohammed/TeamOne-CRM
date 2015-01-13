@@ -21,9 +21,9 @@
 
                 <!-- start: USER DROPDOWN -->
                 <li class="dropdown current-user">
-                    <a >
+                    <a>
 
-                        Welcome, <span class="staff_username text-primary"><?php echo $staffInfo['FullName'];?></span>
+                        Welcome, <span class="staff_username text-primary"><?php echo $staffInfo['FullName']; ?></span>
 
                     </a>
 

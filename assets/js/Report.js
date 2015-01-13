@@ -1,6 +1,38 @@
 $(document).ready(function(){
+    
+    $(".from_date").datepicker({
+        autoclose:true
+    })
+    
+    $(".to_date").datepicker({
+        autoclose:true
+    })
+    
    $(".reports_for").on("change",function(){
        $(".reports_type").prop('selectedIndex',0);
+       var val = $(".reports_for").val();
+       if(val==0){
+            $(".reports_type").html("<option value='0'>Select</option>")
+       }else{
+            $(".reports_type").html("<option value='all'>All</option><option value='date'>Datewise</option>");
+       }
+       
+       if(val=="AMC" || val=="Complaint" || val=="Installation" || val=="OTS"){
+            console.log("service");
+            $(".generated_reports_content").show();
+            $(".generated_reports_technician").hide();
+            $(".generated_reports_customer").hide();
+       }else if(val=="New Customers"){
+            console.log("Customer");
+            $(".generated_reports_technician").hide();
+            $(".generated_reports_customer").show();
+            $(".generated_reports_content").hide();
+       }else{
+            console.log("technician");
+            $(".generated_reports_technician").show();
+            $(".generated_reports_customer").hide();
+            $(".generated_reports_content").hide();
+       }
    });
     $(".reports_type").on("change",function(){
       if($(this).val()=="date"){
@@ -104,8 +136,8 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                             <tr><td>Expiry</td><td>" + val.info.expiration + "</td></tr>\
                             </table></div></div>";
 
-                            row += "<tr class='row_count_" + sr + "'><td>" + val.info.amc_type + " <i onclick='view_info(\".amc_popup\","+sr+")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+amc_div+"</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                        <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                            row += "<tr class='row_count_" + sr + "'><td>" + val.info.amc_type + " <i onclick='view_info(\".amc_popup\","+sr+")' class='clip-popout cursor' style='font-size:1.3em'></i>"+amc_div+"</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                        <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
                         <td><button class='btn btn-primary'>View</button></td>";
                             sr++;
                         });
@@ -167,7 +199,7 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                             <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
                             <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
                             <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><td>ODU</td><td>Serial No: " + val.ac_info.odu_serial_no + "<br /> Model No :" + val.ac_info.odu_model_no + "</td></tr>\
                             <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
                     var amc_div = "<div class='no-display amc_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
@@ -180,8 +212,8 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                             <tr><td>Expiry</td><td>" + val.info.expiration + "</td></tr>\
                             </table></div></div>";
 
-                                row += "<tr class='row_count_" + sr + "'><td>" + val.info.amc_type + " <i onclick='view_info(\".amc_popup\","+sr+")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+amc_div+"</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                        <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                                row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.amc_type + " <i onclick='view_info(\".amc_popup\","+sr+")' class='clip-popout cursor' style='font-size:1.3em'></i>"+amc_div+"</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                        <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
                         <td><button class='btn btn-primary'>View</button></td>";
                                 sr++;
                             });
@@ -244,13 +276,13 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                     var complaint_div = "<div class='no-display complaint_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                     <h4 class='center'>AC Information</h4>\
                     <table class='table table-bordered table-striped'>\
-                            <tr><td>Problem Type</td><td>" + val.info.problem_type + "</td></tr>\
+                            <tr><td>Problem Type</td><td>" + val.info.ac_problem_type + "</td></tr>\
                             <tr><td>Problem Description</td><td>" + val.info.problem_desc + "</td></tr>\
                             <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
                             </table></div></div>";
 
-                    row += "<tr class='row_count_" + sr + "'><td>" + val.info.problem_type + "<i onclick='view_info(\".complaint_popup\","+sr+")' class='fa fa-eye cursor' style='font-size:1.3em'></i>"+complaint_div+"</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                    <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                    row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.ac_problem_type + "(Complaint) <i onclick='view_info(\".complaint_popup\","+sr+")' class='clip-popout cursor' style='font-size:1.3em'></i>"+complaint_div+"</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                    <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
                     <td><button class='btn btn-primary'>View</button></td>";
                                 sr++;
                             });
@@ -317,8 +349,8 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                     <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
                     </table></div></div>";
 
-            row += "<tr class='row_count_" + sr + "'><td>" + val.info.service_type + "</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+            row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.service_type + "</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
                 <td><button class='btn btn-primary'>View</button></td>";
                                 sr++;
                             });
@@ -344,12 +376,12 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                             var row = "";
                             var sr = 0;
                             $.each(response.data, function (key, val) {
-                                if (val.info.amc_type == "c") {
-                                    val.info.amc_type = "Comprehensive";
-                                } else if (val.info.amc_type == "s") {
-                                    val.info.amc_type = "Semi-Comprehensive";
+                                if (val.info.install_type == "s") {
+                                    val.info.install_type = "Standard";
+                                } else if (val.info.install_type == "n") {
+                                    val.info.install_type = "Non-Standard";
                                 } else {
-                                    val.info.amc_type = "Non-Comprehensive";
+                                    val.info.install_type = "Free";
                                 }
                                 var acc_type = (val.customer_info.account_type == 'r') ? 'Resenditial' : 'Commercial';
                                 if (val.customer_info.account_type == 'r') {
@@ -380,12 +412,21 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                             <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
                             <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
                             <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
-                            <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                            <tr><td>ODU</td><td>Serial No: " + val.ac_info.odu_serial_no + "<br /> Model No :" + val.ac_info.odu_model_no + "</td></tr>\
                             <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
+                            
+                            var ins_div = "<div class='no-display install_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>AC Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                            <tr><td>Installation Type</td><td>" + val.info.install_type + "</td></tr>\
+                            <tr><td>No of service</td><td>" + val.info.no_of_service + "</td></tr>\
+                            <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
+                            </table></div></div>";
 
-                                row += "<tr class='row_count_" + sr + "'><td>" + val.info.amc_type + "</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                <td>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='fa fa-eye cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
-                <td><button class='btn btn-primary'></button></td>";
+                                row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.install_type + " <i onclick='view_info(\".install_popup\","+sr+")' class='clip-popout cursor' style='font-size:1.3em'></i>"+ins_div+"</td>\
+                                <td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                <td><button class='btn btn-primary btn-sm'>View</button></td>";
                                 sr++;
                             });
 
@@ -397,6 +438,40 @@ $("#total_reports_header").removeClass().addClass("text-danger");
                     }
 
                 });
+            }else if(reports_for == "New Customers"){
+                var URL = 'api/Customers';
+                var row="";
+                $.get(URL,function(response){
+                    console.log(response.status);
+                    if(response.status=="ok"){
+                        $.each(response.data, function(key,val){
+                            (val.account_type=="r")?val.account_type="Residential":val.account_type="Commercial";
+                            row+="<tr><td class='center'>"+val.account_type+"</td><td class='center'>"+val.first_name+" "+val.last_name+"</td><td class='center'>"+val.created_on+"</td>\
+                            <td class='center'><button href='CustomerDetails?id='"+val.cust_id+"' onclick='return LoadPage(\"CustomerDetails?id="+val.cust_id+"\")' class='btn btn-primary btn-sm'>View</button></td></tr>";
+                        });
+                    }else if(response.status=="no"){
+                        row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
+                    }
+                    $(".generated_reports_customer tbody").html(row);
+                    unblockThisUI($(".generated_reports"));
+                });
+                
+            }else if(reports_for == "Technician"){
+                var URL = 'api/Technicians';
+                var row="";
+                $.get(URL,function(response){
+                    console.log(response.status);
+                    if(response.status=="ok"){
+                        $.each(response.data, function(key,val){
+                            row+="<tr><td class='center'>"+val.first_name+" "+val.last_name+"</td><td class='center'>"+val.mobile+"</td>\
+                            <td class='center'>"+val.branch_name+"</td><td class='center'>"+val.address+"</td></tr>";
+                        });
+                    }else if(response.status=="no"){
+                        row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
+                    }
+                    $(".generated_reports_technician tbody").html(row);
+                    unblockThisUI($(".generated_reports"));
+                });                
             }
         }
 

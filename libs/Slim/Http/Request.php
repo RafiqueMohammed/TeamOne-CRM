@@ -57,24 +57,21 @@ class Request
      * @var array
      */
     protected static $formDataMediaTypes = array('application/x-www-form-urlencoded');
-
-    /**
-     * Application Environment
-     * @var \Slim\Environment
-     */
-    protected $env;
-
     /**
      * HTTP Headers
      * @var \Slim\Http\Headers
      */
     public $headers;
-
     /**
      * HTTP Cookies
      * @var \Slim\Helper\Set
      */
     public $cookies;
+    /**
+     * Application Environment
+     * @var \Slim\Environment
+     */
+    protected $env;
 
     /**
      * Constructor
@@ -88,21 +85,21 @@ class Request
     }
 
     /**
-     * Get HTTP method
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->env['REQUEST_METHOD'];
-    }
-
-    /**
      * Is this a GET request?
      * @return bool
      */
     public function isGet()
     {
         return $this->getMethod() === self::METHOD_GET;
+    }
+
+    /**
+     * Get HTTP method
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->env['REQUEST_METHOD'];
     }
 
     /**
@@ -160,6 +157,15 @@ class Request
     }
 
     /**
+     * Is this an XHR request? (alias of Slim_Http_Request::isAjax)
+     * @return bool
+     */
+    public function isXhr()
+    {
+        return $this->isAjax();
+    }
+
+    /**
      * Is this an AJAX request?
      * @return bool
      */
@@ -175,23 +181,14 @@ class Request
     }
 
     /**
-     * Is this an XHR request? (alias of Slim_Http_Request::isAjax)
-     * @return bool
-     */
-    public function isXhr()
-    {
-        return $this->isAjax();
-    }
-
-    /**
      * Fetch GET and POST data
      *
      * This method returns a union of GET and POST data as a key-value array, or the value
      * of the array key if requested; if the array key does not exist, NULL is returned,
      * unless there is a default value specified.
      *
-     * @param  string           $key
-     * @param  mixed            $default
+     * @param  string $key
+     * @param  mixed $default
      * @return array|mixed|null
      */
     public function params($key = null, $default = null)
@@ -210,8 +207,8 @@ class Request
      * This method returns a key-value array of data sent in the HTTP request query string, or
      * the value of the array key if requested; if the array key does not exist, NULL is returned.
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed $default Default return value when key does not exist
      * @return array|mixed|null
      */
     public function get($key = null, $default = null)
@@ -242,8 +239,8 @@ class Request
      * This method returns a key-value array of data sent in the HTTP request body, or
      * the value of a hash key if requested; if the array key does not exist, NULL is returned.
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed $default Default return value when key does not exist
      * @return array|mixed|null
      * @throws \RuntimeException If environment input is not available
      */
@@ -278,9 +275,45 @@ class Request
     }
 
     /**
+     * Does the Request body contain parsed form data?
+     * @return bool
+     */
+    public function isFormData()
+    {
+        $method = isset($this->env['slim.method_override.original_method']) ? $this->env['slim.method_override.original_method'] : $this->getMethod();
+
+        return ($method === self::METHOD_POST && is_null($this->getContentType())) || in_array($this->getMediaType(), self::$formDataMediaTypes);
+    }
+
+    /**
+     * Get Content Type
+     * @return string|null
+     */
+    public function getContentType()
+    {
+        return $this->headers->get('CONTENT_TYPE');
+    }
+
+    /**
+     * Get Media Type (type/subtype within Content Type header)
+     * @return string|null
+     */
+    public function getMediaType()
+    {
+        $contentType = $this->getContentType();
+        if ($contentType) {
+            $contentTypeParts = preg_split('/\s*[;,]\s*/', $contentType);
+
+            return strtolower($contentTypeParts[0]);
+        }
+
+        return null;
+    }
+
+    /**
      * Fetch PUT data (alias for \Slim\Http\Request::post)
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed $default Default return value when key does not exist
      * @return array|mixed|null
      */
     public function put($key = null, $default = null)
@@ -290,8 +323,8 @@ class Request
 
     /**
      * Fetch PATCH data (alias for \Slim\Http\Request::post)
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed $default Default return value when key does not exist
      * @return array|mixed|null
      */
     public function patch($key = null, $default = null)
@@ -301,8 +334,8 @@ class Request
 
     /**
      * Fetch DELETE data (alias for \Slim\Http\Request::post)
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed $default Default return value when key does not exist
      * @return array|mixed|null
      */
     public function delete($key = null, $default = null)
@@ -316,7 +349,7 @@ class Request
      * This method returns a key-value array of Cookie data sent in the HTTP request, or
      * the value of a array key if requested; if the array key does not exist, NULL is returned.
      *
-     * @param  string            $key
+     * @param  string $key
      * @return array|string|null
      */
     public function cookies($key = null)
@@ -342,24 +375,13 @@ class Request
     }
 
     /**
-     * Does the Request body contain parsed form data?
-     * @return bool
-     */
-    public function isFormData()
-    {
-        $method = isset($this->env['slim.method_override.original_method']) ? $this->env['slim.method_override.original_method'] : $this->getMethod();
-
-        return ($method === self::METHOD_POST && is_null($this->getContentType())) || in_array($this->getMediaType(), self::$formDataMediaTypes);
-    }
-
-    /**
      * Get Headers
      *
      * This method returns a key-value array of headers sent in the HTTP request, or
      * the value of a hash key if requested; if the array key does not exist, NULL is returned.
      *
      * @param  string $key
-     * @param  mixed  $default The default value returned if the requested header is not available
+     * @param  mixed $default The default value returned if the requested header is not available
      * @return mixed
      */
     public function headers($key = null, $default = null)
@@ -400,25 +422,14 @@ class Request
     }
 
     /**
-     * Get Content Type
+     * Get Content Charset
      * @return string|null
      */
-    public function getContentType()
+    public function getContentCharset()
     {
-        return $this->headers->get('CONTENT_TYPE');
-    }
-
-    /**
-     * Get Media Type (type/subtype within Content Type header)
-     * @return string|null
-     */
-    public function getMediaType()
-    {
-        $contentType = $this->getContentType();
-        if ($contentType) {
-            $contentTypeParts = preg_split('/\s*[;,]\s*/', $contentType);
-
-            return strtolower($contentTypeParts[0]);
+        $mediaTypeParams = $this->getMediaTypeParams();
+        if (isset($mediaTypeParams['charset'])) {
+            return $mediaTypeParams['charset'];
         }
 
         return null;
@@ -445,26 +456,21 @@ class Request
     }
 
     /**
-     * Get Content Charset
-     * @return string|null
-     */
-    public function getContentCharset()
-    {
-        $mediaTypeParams = $this->getMediaTypeParams();
-        if (isset($mediaTypeParams['charset'])) {
-            return $mediaTypeParams['charset'];
-        }
-
-        return null;
-    }
-
-    /**
      * Get Content-Length
      * @return int
      */
     public function getContentLength()
     {
         return $this->headers->get('CONTENT_LENGTH', 0);
+    }
+
+    /**
+     * Get Host with Port
+     * @return string
+     */
+    public function getHostWithPort()
+    {
+        return sprintf('%s:%s', $this->getHost(), $this->getPort());
     }
 
     /**
@@ -487,15 +493,6 @@ class Request
     }
 
     /**
-     * Get Host with Port
-     * @return string
-     */
-    public function getHostWithPort()
-    {
-        return sprintf('%s:%s', $this->getHost(), $this->getPort());
-    }
-
-    /**
      * Get Port
      * @return int
      */
@@ -505,12 +502,12 @@ class Request
     }
 
     /**
-     * Get Scheme (https or http)
+     * LEGACY: Get Root URI (alias for Slim_Http_Request::getScriptName)
      * @return string
      */
-    public function getScheme()
+    public function getRootUri()
     {
-        return $this->env['slim.url_scheme'];
+        return $this->getScriptName();
     }
 
     /**
@@ -520,15 +517,6 @@ class Request
     public function getScriptName()
     {
         return $this->env['SCRIPT_NAME'];
-    }
-
-    /**
-     * LEGACY: Get Root URI (alias for Slim_Http_Request::getScriptName)
-     * @return string
-     */
-    public function getRootUri()
-    {
-        return $this->getScriptName();
     }
 
     /**
@@ -573,6 +561,15 @@ class Request
     }
 
     /**
+     * Get Scheme (https or http)
+     * @return string
+     */
+    public function getScheme()
+    {
+        return $this->env['slim.url_scheme'];
+    }
+
+    /**
      * Get IP
      * @return string
      */
@@ -589,21 +586,21 @@ class Request
     }
 
     /**
-     * Get Referrer
-     * @return string|null
-     */
-    public function getReferrer()
-    {
-        return $this->headers->get('HTTP_REFERER');
-    }
-
-    /**
      * Get Referer (for those who can't spell)
      * @return string|null
      */
     public function getReferer()
     {
         return $this->getReferrer();
+    }
+
+    /**
+     * Get Referrer
+     * @return string|null
+     */
+    public function getReferrer()
+    {
+        return $this->headers->get('HTTP_REFERER');
     }
 
     /**

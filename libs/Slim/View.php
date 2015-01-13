@@ -75,7 +75,7 @@ class View
 
     /**
      * Does view data have value with key?
-     * @param  string  $key
+     * @param  string $key
      * @return boolean
      */
     public function has($key)
@@ -124,7 +124,7 @@ class View
 
     /**
      * Replace view data
-     * @param  array  $data
+     * @param  array $data
      */
     public function replace(array $data)
     {
@@ -198,6 +198,15 @@ class View
      *******************************************************************************/
 
     /**
+     * Get templates base directory
+     * @return string
+     */
+    public function getTemplatesDirectory()
+    {
+        return $this->templatesDirectory;
+    }
+
+    /**
      * Set the base directory that contains view templates
      * @param   string $directory
      * @throws  \InvalidArgumentException If directory is not a directory
@@ -208,22 +217,16 @@ class View
     }
 
     /**
-     * Get templates base directory
-     * @return string
+     * Display template
+     *
+     * This method echoes the rendered template to the current output buffer
+     *
+     * @param  string $template Pathname of template file relative to templates directory
+     * @param  array $data Any additonal data to be passed to the template.
      */
-    public function getTemplatesDirectory()
+    public function display($template, $data = null)
     {
-        return $this->templatesDirectory;
-    }
-
-    /**
-     * Get fully qualified path to template file using templates base directory
-     * @param  string $file The template file pathname relative to templates base directory
-     * @return string
-     */
-    public function getTemplatePathname($file)
-    {
-        return $this->templatesDirectory . DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+        echo $this->fetch($template, $data);
     }
 
     /********************************************************************************
@@ -231,23 +234,10 @@ class View
      *******************************************************************************/
 
     /**
-     * Display template
-     *
-     * This method echoes the rendered template to the current output buffer
-     *
-     * @param  string   $template   Pathname of template file relative to templates directory
-     * @param  array    $data       Any additonal data to be passed to the template.
-     */
-    public function display($template, $data = null)
-    {
-        echo $this->fetch($template, $data);
-    }
-
-    /**
      * Return the contents of a rendered template file
      *
-     * @param    string $template   The template pathname, relative to the template base directory
-     * @param    array  $data       Any additonal data to be passed to the template.
+     * @param    string $template The template pathname, relative to the template base directory
+     * @param    array $data Any additonal data to be passed to the template.
      * @return string               The rendered template
      */
     public function fetch($template, $data = null)
@@ -260,8 +250,8 @@ class View
      *
      * NOTE: This method should be overridden by custom view subclasses
      *
-     * @param  string $template     The template pathname, relative to the template base directory
-     * @param  array  $data         Any additonal data to be passed to the template.
+     * @param  string $template The template pathname, relative to the template base directory
+     * @param  array $data Any additonal data to be passed to the template.
      * @return string               The rendered template
      * @throws \RuntimeException    If resolved template pathname is not a valid file
      */
@@ -272,11 +262,21 @@ class View
             throw new \RuntimeException("View cannot render `$template` because the template does not exist");
         }
 
-        $data = array_merge($this->data->all(), (array) $data);
+        $data = array_merge($this->data->all(), (array)$data);
         extract($data);
         ob_start();
         require $templatePathname;
 
         return ob_get_clean();
+    }
+
+    /**
+     * Get fully qualified path to template file using templates base directory
+     * @param  string $file The template file pathname relative to templates base directory
+     * @return string
+     */
+    public function getTemplatePathname($file)
+    {
+        return $this->templatesDirectory . DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
     }
 }

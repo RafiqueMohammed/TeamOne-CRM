@@ -27,9 +27,17 @@
         if ($qry->num_rows > 0) {
             $i = $num_rows_make;
             while ($data = $qry->fetch_array()) {
+                $hidden_make="<div class='make_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Make</h4>
+                                <input type='hidden' class='hidden_id' value='{$data['make_id']}'>
+                                <table id='make_table' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control update_make_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"make_table\",\"make_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $b_id = $data['make_id'];
-                $make .= "<li class='list-group-item make_list make_list_$i'>" . $data['make'] . "
-                <span style='cursor:pointer' onclick='delete_brand(\"make\",{$b_id},\".make_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $make .= "<li class='list-group-item make_list make_list_$i'><span class='make'>" . $data['make'] . "</span>
+                <span style='cursor:pointer' onclick='delete_brand(\"make\",{$b_id},\".make_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_make}</li>";
                 $i--;
             }
         } else {
@@ -43,9 +51,17 @@
         if ($qry->num_rows > 0) {
             $i = $num_rows_tonnage;
             while ($info = $qry->fetch_array()) {
+                $hidden_ton="<div class='ton_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Tonnage</h4>
+                                <input type='hidden' class='hidden_id' value='{$info['tonnage_id']}'>
+                                <table id='tonnage_table' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control update_tonnage_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"tonnage_table\",\"ton_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $t_id = $info['tonnage_id'];
-                $tonnage .= "<li class='list-group-item ton_list ton_list_$i'>" . $info['tonnage'] . "
-                 <span style='cursor:pointer' onclick='delete_brand(\"ton\",{$t_id},\".ton_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $tonnage .= "<li class='list-group-item ton_list ton_list_$i'><span class='tonnage'>" . $info['tonnage'] . "</span>
+                 <span style='cursor:pointer' onclick='delete_brand(\"ton\",{$t_id},\".ton_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_ton}</li>";
                 $i--;
             }
         } else {
@@ -59,9 +75,17 @@
         if ($qry->num_rows > 0) {
             $i = $num_rows_location;
             while ($info = $qry->fetch_array()) {
+                $hidden_loc="<div class='location_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Location</h4>
+                                <input type='hidden' class='hidden_id' value='{$info['ac_location_id']}'>
+                                <table id='location_table' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control update_location_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"location_table\",\"loc_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $l_id = $info['ac_location_id'];
-                $location .= "<li class='list-group-item loc_list loc_list_$i'>" . $info['location'] . "
-                 <span style='cursor:pointer' onclick='delete_brand(\"location\",{$l_id},\".loc_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $location .= "<li class='list-group-item loc_list loc_list_$i'><span class='location'>" . $info['location'] . "</span>
+                 <span style='cursor:pointer' onclick='delete_brand(\"location\",{$l_id},\".loc_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_loc}</li>";
                 $i--;
             }
         } else {
@@ -75,9 +99,17 @@
         if ($qry->num_rows > 0) {
             $i = $num_rows_reference;
             while ($info = $qry->fetch_array()) {
+                $hidden_refer="<div class='reference_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Referred by</h4>
+                                <input type='hidden' class='hidden_id' value='{$info['referred_id']}'>
+                                <table id='refer_table' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control update_refer_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"reference_table\",\"ref_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $r_id = $info['referred_id'];
-                $reference .= "<li class='list-group-item ref_list ref_list_$i'>" . $info['name'] . "
-                 <span style='cursor:pointer' onclick='delete_brand(\"reference\",{$r_id},\".ref_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $reference .= "<li class='list-group-item ref_list ref_list_$i'><span class='reference'>" . $info['name'] . "</span>
+                 <span style='cursor:pointer' onclick='delete_brand(\"reference\",{$r_id},\".ref_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_refer}</li>";
                 $i--;
             }
         } else {
@@ -91,9 +123,17 @@
         if ($qry->num_rows > 0) {
             $i = $num_rows_ac_type;
             while ($info1 = $qry->fetch_array()) {
+                $hidden_type="<div class='actype_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update AC Type</h4>
+                                <input type='hidden' class='hidden_id' value='{$info1['ac_type_id']}'>
+                                <table id='actype_table' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control update_ac_type_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"actype_table\",\"actype_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $ac_id = $info1['ac_type_id'];
-                $ac_type .= "<li class='list-group-item actype_list actype_list_$i '>" . $info1['ac_type'] . "
-                <span style='cursor:pointer' onclick='delete_brand(\"ac_type\",{$ac_id},\".actype_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $ac_type .= "<li class='list-group-item actype_list actype_list_$i '><span class='actype'>" . $info1['ac_type'] . "</span>
+                <span style='cursor:pointer' onclick='delete_brand(\"ac_type\",{$ac_id},\".actype_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_type}</li>";
                 $i--;
             }
         } else {
@@ -107,9 +147,17 @@
         if($qry->num_rows > 0){
             $i = $num_rows_problem_type;
             while($info2 = $qry->fetch_array()){
+                $hidden_ptype="<div class='ptype_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Problem Type</h4>
+                                <input type='hidden' class='hidden_id' value='{$info2['ac_problem_id']}'>
+                                <table id='problem_type' class='table table-bordered table-striped'>
+                                <tr><th>Make</th><td><input type='text' class='form-control req update_ptype_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"problem_table\",\"problem_type_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $p_id = $info2['ac_problem_id'];
-                $problem_type .= "<li class='list-group-item problem_type problem_type_list_$i '>" . $info2['ac_problem_type'] . "
-                <span style='cursor:pointer' onclick='delete_brand(\"problem_type\",{$p_id},\".problem_type_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $problem_type .= "<li class='list-group-item problem_type problem_type_list_$i '><span class='ptype'>" . $info2['ac_problem_type'] . "</span>
+                <span style='cursor:pointer' onclick='delete_brand(\"problem_type\",{$p_id},\".problem_type_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_ptype}</li>";
                 $i--;
             }
         } else {
@@ -123,9 +171,17 @@
         if($qry->num_rows > 0){
             $i = $num_rows_branch;
             while($info2 = $qry->fetch_array()){
+                $hidden_branch="<div class='branch_popup no-display'>
+                                <div style='background:#fff;padding:10px;border-radius:5px'>
+                                <h4 class='center'>Update Branch</h4>
+                                <input type='hidden' class='hidden_id' value='{$info2['branch_id']}'>
+                                <table id='branch_table' class='table table-bordered table-striped'>
+                                <tr><th>Branch</th><td><input type='text' class='form-control req update_branch_val'></td>
+                                <td><input type='button' class='btn btn-primary' onclick='update(\"branch_table\",\"branch_list_$i\")' value='Update'></td></tr>
+                                </table><div id='result'></div></div></div>";
                 $b_id = $info2['branch_id'];
-                $branch .= "<li class='list-group-item branch branch_list_$i '>" . $info2['branch_name'] . "
-                <span style='cursor:pointer' onclick='delete_brand(\"branch\",{$p_id},\".branch_list_$i\")' class='badge badge-danger'>X</span></li>";
+                $branch .= "<li class='list-group-item branch branch_list_$i '><span class='branch'>" . $info2['branch_name'] . "</span>
+                <span style='cursor:pointer' onclick='delete_brand(\"branch\",{$p_id},\".branch_list_$i\")' class='badge badge-teal'><i class='fa fa-pencil'></i></span>{$hidden_branch}</li>";
                 $i--;
             }
         } else {

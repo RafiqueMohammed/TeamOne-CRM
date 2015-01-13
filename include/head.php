@@ -1,4 +1,4 @@
-<title>TeamOne - Air Conditioning Services</title>
+<title>TeamOne - CRM</title>
 <!-- start: META -->
 <meta charset="utf-8"/>
 <!--[if IE]>
@@ -34,7 +34,7 @@
 
 
 <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="shortcut icon" href="favicon.png"/>
 <!--[if gte IE 9]><!-->
 <script src="assets/js/jquery.min.v2.0.3.js"></script>
 <!--<![endif]-->
