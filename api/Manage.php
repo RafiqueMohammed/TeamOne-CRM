@@ -44,6 +44,65 @@ $app->get("/Manage", function () use ($app) {
     }
     $app->response->body(json_encode($result));
 });
+
+$app->get("/Manage/AC/:id/:cid", function ($id,$cid) use ($app) {
+    global $DB;
+    $result = array("status" => "ok");
+    $b_qry = $DB->query("SELECT * FROM `" . TAB_AC_MAKE . "` ");
+    $t_qry = $DB->query("SELECT * FROM `" . TAB_AC_TONNAGE . "` ");
+    $l_qry = $DB->query("SELECT * FROM `" . TAB_AC_LOCATION . "` ");
+    $a_qry = $DB->query("SELECT * FROM `" . TAB_AC_TYPE . "` ");
+    $ac_qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER_AC ."` as cust_ac INNER JOIN `" . TAB_AC_TYPE . "` as ac_type, `" . TAB_AC_MAKE .
+            "` as make,`" . TAB_AC_TONNAGE . "` as ton,`" . TAB_AC_LOCATION ."` as loc WHERE ac_type.`ac_type_id`=cust_ac.`ac_type` AND cust_ac.`make`=make.`make_id` 
+            AND loc.ac_location_id=cust_ac.ac_location AND ton.tonnage_id=cust_ac.capacity AND cust_ac.`cust_id`='{$cid}' AND cust_ac.`ac_id`='{$id}'");
+    if($ac_qry->num_rows > 0){
+        $result['status']="ok";
+        $ac_info = $ac_qry->fetch_array();
+        $result['ac_info'] = $ac_info;
+        if ($b_qry->num_rows > 0) {
+            while ($info = $b_qry->fetch_assoc()) {
+                $result['brand'][] = $info;
+            }
+            $result['brand']["empty"] = false;
+        } else {
+            $result['brand']["empty"] = true;
+        }
+        
+        if ($t_qry->num_rows > 0) {
+            while ($info = $t_qry->fetch_assoc()) {
+                $result['tonnage'][] = $info;
+            }
+            $result['tonnage']["empty"] = false;
+        } else {
+            $result['tonnage']["empty"] = true;
+        }
+        
+        if ($l_qry->num_rows > 0) {
+            while ($info = $l_qry->fetch_assoc()) {
+                $result['location'][] = $info;
+            }
+            $result['location']["empty"] = false;
+        } else {
+            $result['location']["empty"] = true;
+        }
+        
+        if ($a_qry->num_rows > 0) {
+            while ($info = $a_qry->fetch_assoc()) {
+                $result['ac_type'][] = $info;
+            }
+            $result['ac_type']["empty"] = false;
+        } else {
+            $result['ac_type']["empty"] = true;
+        }
+        
+    }else{
+        
+    }
+    
+    
+    $app->response->body(json_encode($result));
+});
+
 /** Start Add Branch **/
 
 $app->post("/Manage/Branch", function () use ($app) {

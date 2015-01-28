@@ -61,18 +61,22 @@ $(document).ready(function () {
 
 
                     var ac_drop_opt = "";
-
                     ac_data.ac_info = data.ac_data; //Total Customer's AC details for later use
 
                     if (data.ac_data.status == "ok") {
                         delete data.ac_data.status;
+                        var ac_remarks = "";
                         $.each(data.ac_data, function (key, type) {
-
-                            ac_drop_opt += "<tr class='num_ac_rows num_ac_rows_" + ac_data_count + "'><td class='center'>" + type.ac_type + "</td>\
-                            <td class='center'>" + type.make + "</td><td class='center'>" + type.tonnage + "</td>" +
-                            "<td><b>Model No. : </b>" + type.odu_model_no + " <br/ > <b>Serial No. : </b>" + type.odu_serial_no + "</td><td><b>Model No. : </b>" + type.idu_model_no + " <br/ > <b>Serial No. : </b>" + type.idu_serial_no + "</td>\
-                                <td class='center'>" + type.location + "</td>" + "<td class='center'><button class='btn btn-purple' onclick='display_remarks(\"" + type.remarks + "\")'><i class='fa  fa-comment '></i></button></td>\
-                                <td><button onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")' class='btn btn-danger'><i class='fa fa-trash-o'></i></button></td></tr>";
+                            ac_remarks = "<div class='ac_row_remark_popup' style='display:none'><div style='background:#fff;padding:20px;border-radius:5px'>\
+                            <table class='table table-bordered table-striped'><tr><th class='center'><h4 class='center'>Remarks</h4></th></tr>\
+                            <tr><td class='center'><span class='acrow_remarks'>"+type.remarks+"</span></td></tr></table></div></div>";
+                            
+                            ac_drop_opt += "<tr class='num_ac_rows num_ac_rows_" + ac_data_count + "'><td class='center'><span class='acrow_actype'>" + type.ac_type + "</span></td>\
+                            <td class='center'><span class='acrow_make'>" + type.make + "</span></td><td class='center'><span class='acrow_ton'>" + type.tonnage + "</span></td>" +
+                            "<td><b>Model No. : </b><span class='o_mod'>" + type.odu_model_no + "</span> <br/ > <b>Serial No. : </b><span class='o_ser'>" + type.odu_serial_no + "</span></td>\
+                            <td><b>Model No. : </b><span class='i_mod'>" + type.idu_model_no + "</span> <br/ > <b>Serial No. : </b><span class='i_ser'>" + type.idu_serial_no + "</span></td>\
+                            <td class='center'><span class='acrow_loc'>" + type.location + "</span></td>" + "<td class='center'><button class='btn btn-purple' onclick='display_remarks(\"ac_row_remark_popup\",\"num_ac_rows_"+ac_data_count+"\")'><i class='fa  fa-comment '></i></button>"+ac_remarks+"</td>\
+                            <td><button onclick='edit_ac("+type.ac_id+",\"num_ac_rows_"+ac_data_count+"\")' class='btn btn-warning'><i class='fa fa-edit'></i></button><button onclick='delete_customer_ac(" + type.ac_id + "," + ac_data_count + ")' class='btn btn-danger'><i class='fa fa-trash-o'></i></button></td></tr>";
 
                             ac_data_count++; //Total number of AC for later use
 
@@ -111,7 +115,7 @@ $(document).ready(function () {
                         $(".display_org_type").html("Commercial");
                         $("#CustomerDetailsTab").removeClass("tab-blue").addClass("tab-bricky");
                     }
-                    $(".edit_org_name").attr("value",data.organisation);
+                    $(".edit_org_name").text(data.organisation);
                     $(".display_org_name").html(data.organisation);
 
                     $.getJSON("api/Manage/Complaints/ProblemType", function (type) {
@@ -469,6 +473,9 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status == "ok") {
                         output.html("<div class='alert alert-success center'>Successfully Added</div>");
+                        setTimeout(function () {
+                            jQuery(document).trigger('close.facebox');
+                        }, 1000);
                     } else if (response.status == "no") {
                         output.html("<div class='alert alert-danger center'>" + response.result + "</div>");
                     } else {
@@ -533,7 +540,7 @@ $(document).ready(function () {
                 </tr><tr><td> <span class='idu_no'>-N/A-</span> </td>\
                 <td> <span class='odu_no'>-N/A-</span></td>\
                 </tr></table></td>\
-            <td > <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Non-Comprehensive</option></select>\
+            <td > <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Labour only</option></select>\
             </td>\
             <td><input type='text' class='form-control amc_datepicker mandotory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'></td>\
             <td class='center'><input type='number' class='form-control amc_dry mandotory' placeholder='Dry' size='1'> <br>\
@@ -554,7 +561,7 @@ $(document).ready(function () {
                 </tr><tr><td> <span class='idu_no'>-N/A-</span> </td>\
                 <td> <span class='odu_no'>-N/A-</span></td>\
                 </tr></table></td>\
-            <td > <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Non-Comprehensive</option></select>\
+            <td > <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Labour only</option></select>\
             </td>\
             <td><input type='text' class='form-control amc_datepicker mandotory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'></td>\
             <td class='center'><input type='number' class='form-control amc_dry mandotory' placeholder='Dry' size='1'> <br>\
@@ -583,7 +590,7 @@ $(document).ready(function () {
                 </tr><tr><td> <span class='idu_no'>-N/A-</span> </td>\
                 <td> <span class='odu_no'>-N/A-</span></td>\
                 </tr></table></td>\
-            <td> <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Non-Comprehensive</option></select>\
+            <td> <select class='form-control mandotory amc_service_type'><option value='-1'> -- Select Type -- </option><option value='s'>Semi-Comprehensive</option><option value='c'>Comprehensive</option><option value='n'>Labour only</option></select>\
             </td>\
             <td><input type='text' class='form-control amc_datepicker mandotory' data-date-format='dd-mm-yyyy' data-date-viewmode='years'></td>\
             <td class='center '><input type='number' class='form-control amc_dry mandotory' placeholder='Dry' size='1'> <br>\
@@ -879,7 +886,7 @@ $(document).ready(function () {
                     if (val.amc_type == "s") {
                         val.amc_type = "Semi-comprehensive"
                     } else if (val.amc_type == "n") {
-                        val.amc_type = "Non-comprehensive"
+                        val.amc_type = "Labour only"
                     } else if (val.amc_type == "c") {
                         val.amc_type = "Comprehensive"
                     }
@@ -1117,9 +1124,9 @@ $(document).ready(function () {
                         $.each(customer_info.amc[key].service_info, function (k, v) {
 
                             if (val.amc_type == "s") {
-                                val.amc_type = "Standard"
+                                val.amc_type = "Semi-Comprehensive"
                             } else if (val.amc_type == "n") {
-                                val.amc_type = "Non-standard"
+                                val.amc_type = "Labour only"
                             } else if (val.amc_type == "c") {
                                 val.amc_type = "Comprehensive";
                             }
@@ -1293,17 +1300,7 @@ function add_new_ac() {
                 $(".cust_details_location").html(htm4);
                 unblockThisUI(".panel-body")
 
-                $.facebox({ div: "#Customer_details_add_ac"});
-                
-                $("#facebox .add_cust_ac_ac_type").on("change", function(){
-                    var val = $(this).val();
-                    if(val.split("|")[0]==5){
-
-                        $("#facebox .add_ac_table tr:first").after("<tr class='empty'><th>Sub AC Type</th><td><select class='form-control imp add_cust_ac_sub_ac_type' name='product_type'>" + type_tmp_opt + "</select></td></tr>");
-                    }else{
-                        $("#facebox .add_ac_table").find(".empty").remove();
-                    }
-                });
+                $.facebox({ div: "#Customer_details_add_ac"});                
 
                 $("#facebox #face_add_ac").on("click", function () {
                     var mThis = $(this);
@@ -1388,12 +1385,15 @@ function add_row_in_customer_details(qry, id) {
     }
     var tot_tr = $(".num_ac_rows").length;
     var total = tot_tr + 1;
-
+    var ac_remarks = "<div class='ac_row_remark_popup' style='display:none'><div style='background:#fff;padding:20px;border-radius:5px'>\
+                            <table class='table table-bordered table-striped'><tr><th class='center'><h4 class='center'>Remarks</h4></th></tr>\
+                            <tr><td class='center'><span class='acrow_remarks'>"+qry.remarks+"</span></td></tr></table></div></div>";
     var new_row = "<tr class='num_ac_rows num_ac_rows_" + total + "'><td class='center'>" + qry.ac_type + "</td>\
     <td class='center'>" + qry.brand + "</td><td class='center'>" + qry.ton + "</td>\
     <td><b>Serial No.</b>" + qry.odu_sr_no + "<br/><b>Model No.</b>" + qry.odu_model_no + "</td>\
     <td>Serial No." + qry.odu_sr_no + "<br/>Model No." + qry.odu_model_no + "</td>\
-    <td class='center'>" + qry.location + "</td><td class='center'><button class='btn btn-purple' onclick='display_remarks(\""+qry.remarks+"\")'><i class='fa fa-comment'></i></button></td><td><button class='btn btn-danger' onclick='delete_customer_ac(" + id + "," + total + ")'><i class='fa fa-trash-o'></i></button></td></tr>";
+    <td class='center'>" + qry.location + "</td><td class='center'><button class='btn btn-purple' onclick='display_remarks(\"ac_row_remark_popup\",\"num_ac_rows_"+total+"\")'><i class='fa fa-comment'></i></button>"+ac_remarks+"</td>\
+    <td><button onclick='edit_ac("+type.ac_id+",\"num_ac_rows_"+total+"\")' class='btn btn-warning'><i class='fa fa-edit'></i></button><button class='btn btn-danger' onclick='delete_customer_ac(" + id + "," + total + ")'><i class='fa fa-trash-o'></i></button></td></tr>";
     $(".customer_product_view").prepend(new_row);
 }
 
@@ -1589,13 +1589,9 @@ function update_ac_variable(){
     });    
 }
 
-function display_remarks(val){
-        if(val==""){
-            val="<b class='text-danger'>No Remark available</b>"
-        }else{
-            val=val;
-        }
-     $.facebox("<div style='background-color:white;border-radius:5px;padding: 5px;'><div class='modal-header'><table class='table table-bordered table-striped'><tr><th class='center'>Remarks</th></tr><tr><td style='text-align:justify'>"+val+"</td></tr></table></div></div>");
+function display_remarks(elem,val){
+    var htm = $("."+val).find("."+elem).html();
+    $.facebox(htm);
 }
 
 function ViewAMC(type,id,wet,dry){
@@ -2215,4 +2211,144 @@ function createTextbox(wet, dry) {
 
 function view_ac_info(elem) {
     $.facebox($(elem).html());
+}
+
+function edit_ac(id,elem){
+    blockThisUI(".panel-body");
+    $("#product_result").removeClass().addClass("alert alert-info center").show();
+    $.getJSON("api/Manage/AC/"+id+"/"+customer_id,function(response){
+        if(response.status=="ok"){
+            var acinfo = response.ac_info;
+            var brand = response.brand;
+            var ton = response.tonnage;
+            var loc = response.location;
+            var actype = response.ac_type;
+            
+            var make_drpdwn="";
+            var ton_drpdwn="";
+            var loc_drpdwn="";
+            var actype_drpdwn="";
+            if(brand.empty==false){
+                delete brand.empty;
+                $.each(brand,function(key,val){
+                    if(acinfo.make==val.make){
+                        make_drpdwn+="<option selected='selected' value='"+val.make_id+"'>"+val.make+"</option>";
+                    }else{
+                        make_drpdwn+="<option value='"+val.make_id+"|"+val.make+"'>"+val.make+"</option>";
+                    }  
+                });
+            }else{
+                make_drpdwn="<option value='-1'>Make not found</option>";
+            }
+            
+            if(ton.empty==false){
+                delete ton.empty;
+                $.each(ton,function(key,val){
+                    if(acinfo.capacity==val.tonnage_id){
+                        ton_drpdwn+="<option selected='selected' value='"+val.tonnage_id+"|"+val.tonnage+"'>"+val.tonnage+"</option>";
+                    }else{
+                        ton_drpdwn+="<option value='"+val.tonnage_id+"|"+val.tonnage+"'>"+val.tonnage+"</option>";
+                    }
+                });
+            }else{
+                ton_drpdwn="<option value='-1'>Tonnage not found</option>";
+            }
+            
+            if(loc.empty==false){
+                delete loc.empty;
+                $.each(loc,function(key,val){                        
+                    if(acinfo.location==val.location){
+                        loc_drpdwn+="<option selected='selected' value='"+val.ac_location_id+"|"+val.location+"'>"+val.location+"</option>";
+                    }else{
+                        loc_drpdwn+="<option value='"+val.ac_location_id+"|"+val.location+"'>"+val.location+"</option>";    
+                    }
+                });
+            }else{
+                loc_drpdwn="<option value='-1'>Location not found</option>";
+            }
+            
+            if(actype.empty==false){
+                delete actype.empty;
+                $.each(actype,function(key,val){
+                    if(acinfo.ac_type==val.ac_type){
+                        actype_drpdwn+="<option selected='selected' value='"+val.ac_type_id+"|"+val.ac_type+"'>"+val.ac_type+"</option>";
+                    }else{
+                        actype_drpdwn+="<option value='"+val.ac_type_id+"|"+val.ac_type+"'>"+val.ac_type+"</option>";
+                    }
+                });
+            }else{
+                actype_drpdwn="<option value='-1'>AC Type not found</option>";
+            }
+            
+            var htm = "<div style='padding:20px;border-radius:5px;background:#fff'>\
+                        <h4>Edit Customer AC</h4>\
+                        <table class='table table-bordered table-striped'>\
+                        <tr><th>AC Type</th><td><select id='edit_actype' class='form-control edit_actype'></select></td></tr>\
+                        <tr><th>Make</th><td><select id='edit_make' class='form-control edit_make'></select></td></tr>\
+                        <tr><th>Tonnage / HP</th><td><select id='edit_tonnage' class='form-control edit_tonnage'></select></td></tr>\
+                        <tr><th>Location</th><td><select id='edit_location' class='form-control edit_location'></select></td></tr>\
+                        <tr><th>IDU serial number</th><td><input type='text' id='e_i_ser_n'  class='form-control e_i_ser_n' /></td></tr>\
+                        <tr><th>IDU model number</th><td><input type='text'  id='e_i_mod_n' class='form-control e_i_mod_n' /></td></tr>\
+                        <tr><th>ODU serial number</th><td><input type='text' id='e_o_ser_n' class='form-control e_o_ser_n' /></td></tr>\
+                        <tr><th>ODU model number</th><td><input type='text' id='e_o_mod_n' class='form-control e_o_mod_n' /></td></tr>\
+                        <tr><th>Remarks</th><td><textarea id='edit_remarks' class='form-control edit_remarks'></textarea></td></tr>\
+                        <tr><th><input type='button' class='btn btn-primary edit_ac_update_btn' onclick='edit_ac_info("+id+",\""+elem+"\")' value='Update'/></th><td><div id='result'></div></td></tr>\
+                        </table></div></div>";
+                        
+            $.facebox(htm);
+            $("#facebox #edit_actype").html(actype_drpdwn);
+            $("#facebox #edit_make").html(make_drpdwn);
+            $("#facebox #edit_tonnage").html(ton_drpdwn);
+            $("#facebox #edit_location").html(loc_drpdwn);
+            $("#facebox #e_i_ser_n").val(acinfo.idu_serial_no);
+            $("#facebox #e_i_mod_n").val(acinfo.idu_model_no);
+            $("#facebox #e_o_ser_n").val(acinfo.odu_serial_no);
+            $("#facebox #e_o_mod_n").val(acinfo.odu_model_no);
+            $("#facebox #edit_remarks").val(acinfo.remarks);
+        }else if(response.status=="no"){
+            $.facebox("Error in loading AC information. Please delete the AC and ADD it again");
+        }
+        $("#product_result").hide();
+        unblockThisUI(".panel-body");
+    });
+    
+}
+
+function edit_ac_info(id,elem){
+    var ac_type = $("#facebox .edit_actype").val().split("|")[0];
+    var make = $("#facebox .edit_make").val().split("|")[0];
+    var ton = $("#facebox .edit_tonnage").val().split("|")[0];
+    var loc = $("#facebox .edit_location").val().split("|")[0];
+    var i_serial = $("#facebox .e_i_ser_n").val();
+    var i_model = $("#facebox .e_i_mod_n").val();
+    var o_serial = $("#facebox .e_o_ser_n").val();
+    var o_model = $("#facebox .e_o_mod_n").val();
+    var remarks = $("#facebox .edit_remarks").val();
+    $("#facebox #result").html("Please wait").removeClass().addClass("alert alert-info center").show();
+    $("#facebox .edit_ac_update_btn").val("Please wait...");
+    $.ajax({
+        type:'put',
+        url:'api/Customer/'+customer_id+'/AC/'+id,
+        data:{ac_type:ac_type,make:make,ton:ton,loc:loc,i_serial:i_serial,i_model:i_model,o_serial:o_serial,o_model:o_model,remarks:remarks},
+        dataType:'json',
+        success: function(response){
+            console.log(response.status);
+            if(response.status=="ok"){
+                $("#facebox #result").html(response.result).removeClass().addClass("alert alert-success center").show();
+                $("."+elem).find(".acrow_actype").html($("#facebox .edit_actype").val().split("|")[1]);
+                $("."+elem).find(".acrow_make").html($("#facebox .edit_make").val().split("|")[1]);
+                $("."+elem).find(".acrow_ton").html($("#facebox .edit_tonnage").val().split("|")[1]);
+                $("."+elem).find(".o_mod").html(o_model);
+                $("."+elem).find(".o_ser").html(o_serial);
+                $("."+elem).find(".i_mod").html(i_model);
+                $("."+elem).find(".i_ser").html(i_serial);
+                $("."+elem).find(".acrow_loc").html($("#facebox .edit_location").val().split("|")[1]);
+                $("."+elem).find(".acrow_remarks").html(remarks);
+            }else if(response.status=="no"){
+                $("#facebox #result").html(response.result).removeClass().addClass("alert alert-danger center").show();
+            }
+            $("#facebox .edit_ac_update_btn").val("Update");
+        }
+    });
+    
 }

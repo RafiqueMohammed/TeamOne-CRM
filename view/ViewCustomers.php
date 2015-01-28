@@ -38,6 +38,7 @@
 
 
     <div class="col-md-12">
+    <div id="customer_result"></div>
         <?php
 
         $c = curl_init();
@@ -61,11 +62,11 @@
                 } else {
                     $data['account_type'] = "<i class='fa fa-trello' style='color:red'></i>&nbsp;&nbsp;&nbsp;Commercial";
                 }
-                $body .= "<tr><td class='center'>" . $data['account_type'] . "</td><td>" . $data['organisation'] . "</td>
+                $body .= "<tr class='cust_row_".$data['cust_id']."'><td class='center'>" . $data['account_type'] . "</td><td>" . $data['organisation'] . "</td>
                 <td>" . $data['first_name'] . " " . $data['last_name'] . "</td><td>" . $data['mobile'] . "</td><td>" . $data['location'] . "</td><td>" . $data['created_on'] . "</td>
                 <td class='center'><button class='btn-primary btn-sm btn tooltips'  data-placement='top' data-original-title='More Info' 
                 onclick='return LoadPage(\"CustomerDetails?id=" . $data['cust_id'] . "&ref=ViewCustomers\");' href='CustomerDetails?id=" . $data['cust_id'] . "&ref=ViewCustomers'>
-                <i class='clip-info-2'></i>&nbsp;&nbsp;View</button></td></tr>";
+                <i class='clip-info-2'></i></button> <button class='btn-danger btn-sm btn tooltips'  data-placement='top' data-original-title='Delete' onclick='remove_customer(".$data['cust_id'].")'><i class='fa fa-trash-o'></i></button></td></tr>";
             }
             ?>
 
@@ -149,3 +150,4 @@
         $('.dataTables_length select').select2();
     });
 </script>
+<script src="assets/js/ViewCustomer.js" type="text/javascript"></script>

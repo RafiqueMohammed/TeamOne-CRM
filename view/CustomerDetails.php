@@ -414,19 +414,13 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                 <!-- AC INFORMATION CONTENT STARTS HERE ------->
 
                 <div id="panel_products" class="tab-pane">
-                    <div class='center' id="ac_info_res"></div>
-                    <div class="pull-right">
-                        <button class="btn btn-primary btn-sm" onclick="add_new_ac();"><i
-                                class="clip-plus-circle-2"></i> Add New
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="row ">
-
+                    <div class="pull-right"><button class="btn btn-primary btn-sm" onclick="add_new_ac();"><i class="clip-plus-circle-2"></i> Add New</button></div>
+                    <div class="row">
                         <div id="viewCustomerAC" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered  table-condensed">
+                                <div id="product_result" style="display: none;">Please Wait...</div>
+                                <div class="center" class="table-responsive">
+                                    <table class="table table-striped table-bordered table-condensed table-hover">
                                         <thead>
                                         <tr>
                                             <th class="center col-md-1">AC Type</th>
@@ -435,8 +429,8 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                                             <th class="center col-md-3">ODU</th>
                                             <th class="center col-md-3">IDU</th>
                                             <th class="center col-md-2">Location</th>
-                                            <th class="center col-md-1">Remarks</th>
-                                            <th class="center"><i class="clip-wrench-2 "></i></th>
+                                            <th class="center">Remarks</th>
+                                            <th class="center col-md-1"><i class="clip-wrench-2 "></i></th>
                                         </tr>
                                         </thead>
                                         <tbody class="customer_product_view">
@@ -456,7 +450,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
                     <div class="row ">
 
-                        <div id="viewCustomerAC" class="panel-collapse collapse in">
+                        <div id="viewCustomerInstall" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="center" id="result_install"></div>
                                 <table class="table table-striped table-bordered table-hover">
@@ -486,7 +480,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
                     <div class="row ">
 
-                        <div id="viewCustomerAC" class="panel-collapse collapse in">
+                        <div id="viewCustomerComplaints" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="center" id="result_complaints"></div>
                                 <table class="table table-striped table-bordered table-hover">
@@ -514,7 +508,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
                     <div class="row ">
 
-                        <div id="viewCustomerAC" class="panel-collapse collapse in">
+                        <div id="viewCustomerAMC" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="center" id="result_amc"></div>
                                 <table class="table table-striped table-bordered table-hover">
@@ -543,7 +537,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                 <div id="panel_ots" class="tab-pane">
                     <div class="row ">
 
-                        <div id="viewCustomerAC" class="panel-collapse collapse in">
+                        <div id="viewCustomerOTS" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="center" id="result_ots"></div>
                                 <table class="table table-striped table-bordered table-hover">
@@ -1018,7 +1012,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
                     ?>
                     <div id="panel_status" class="tab-pane">
                         <div class="row ">
-                            <div id="viewCustomerAC" class="panel-collapse collapse in">
+                            <div id="viewCustomerStatus" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table
@@ -1053,7 +1047,7 @@ $customer_id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : -1;
 
                     <div id="panel_status" class="tab-pane">
                         <div class="row ">
-                            <div id="viewCustomerAC" class="panel-collapse collapse in">
+                            <div id="viewCustomerTicket" class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table

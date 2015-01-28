@@ -75,9 +75,7 @@ $app->get("/Customers", function () use ($app) {
     global $DB;
     header('Content-Type: application/json');
     $qry = $DB->query("SELECT * FROM `" . TAB_CUSTOMER . "`");
-    if ($qry->
-        num_rows > 0
-    ) {
+    if ($qry->num_rows > 0) {
 
         while ($data = $qry->fetch_assoc()) {
             //$data["created_on"]=date("d-m-Y",strtotime($data['created_on']));
@@ -206,12 +204,25 @@ $app->put("/Customer/:id", function ($id) use ($app) {
 }
 );
 
-$app->delete("/Customer/:id", function ($id) use ($app) {
-    $result = array("status" => "ok", "result" => "You deleted info for $id");
-    $app->
-    response->body(json_encode($result));
-}
-);
+$app->delete("/Customer/:id", function ($id) use ($app){
+    global $DB;
+    if($id=="" || $id!=true){
+        ThrowMissing();
+    }else{
+        $qry = $DB->query("SELECT * FROM `".TAB_CUSTOMER."` WHERE `cust_id`='{$id}'") or ThrowError($DB->error);
+        if($qry->num_rows > 0){
+            $DB->query("DELETE FROM `".TAB_CUSTOMER."` WHERE `cust_id`='{$id}'") or ThrowError($DB->error);
+            if($DB->affected_rows > 0){
+                $result = array("status" => "ok", "result" => "You deleted info for $id");
+            }else{
+                $result = array("status" => "ok", "result" => "Unable to delete customer");
+            }
+        }else{
+            $result = array("status" => "no", "result" => "Customer Allready deleted. Please refersh th page");
+        } 
+    }   
+    $app->response->body(json_encode($result));
+});
 
 
 /** MANAGE CUSTOMER AC */
@@ -294,15 +305,33 @@ $app->get("/Customer/:id/AC/:ac_id", function ($id, $ac_id) use ($app) {
     $app->response->body(json_encode($result));
 }
 );
-/*
+
 $app->put("/Customer/:id/AC/:ac_id", function ($id, $ac_id) use ($app) {
     global $DB;
-    $result = array();
-    $result = array("status" => "ok", "result" =>
-        "You updated AC $id info for $ac_id");
+    $ac_type = $DB->real_escape_string($app->request->put("ac_type",false));
+    $make = $DB->real_escape_string($app->request->put("make",false));
+    $location = $DB->real_escape_string($app->request->put("loc",false));
+    $tonnage = $DB->real_escape_string($app->request->put("ton",false));
+    $idu_serial_no = $DB->real_escape_string($app->request->put("i_serial",false));;
+    $idu_model_no = $DB->real_escape_string($app->request->put("i_model",false));
+    $odu_serial_no = $DB->real_escape_string($app->request->put("o_serial",false));
+    $odu_model_no = $DB->real_escape_string($app->request->put("o_model",false));
+    $remarks = $DB->real_escape_string($app->request->put("remarks",false));
+    
+    if($ac_type!=false && $make!=false && $location!=false && $tonnage!=false){
+        $DB->query("UPDATE `".TAB_CUSTOMER_AC."` SET `ac_type`={$ac_type}, `make`='{$make}', `ac_location`='{$location}', `capacity`='{$tonnage}', 
+        `idu_serial_no`='{$idu_serial_no}', `idu_model_no`='{$idu_model_no}', `odu_serial_no`='{$odu_serial_no}', `odu_model_no`='{$odu_model_no}', 
+        `remarks`='{$remarks}' WHERE `ac_id`='{$ac_id}' AND `cust_id`='{$id}'") or ThrowError($DB->error);
+        if($DB->affected_rows > 0){
+            $result=array("status"=>"ok","result"=>"Updated Successfully");
+        }else{
+            $result=array("status"=>"no","result"=>"No changes made");
+        }
+    }else{
+        ThrowMissing();
+    }
     $app->response->body(json_encode($result));
-}
-);*/
+});
 
 $app->delete("/Customer/:id/AC/:ac_id", function ($id, $ac_id) use ($app) {
     global $DB;

@@ -14,11 +14,9 @@ $(document).ready(function(){
         var val = $(".reports_for").val();
         if(val==0){
             $(".reports_type").html("<option value='0'>Select</option>")
-        }else if(val=="Customer"){
+        }else if(val=="Customer" || val=="Technician"){
             $(".reports_type").html("<option value='0'>Select</option><option value='date'>Datewise</option>");
-        } else if(val=="Technician"){
-            $(".reports_type").html("<option value='0'>Select</option><option value='all'>ALL</option>");
-        } else{
+        }else{
             $(".reports_type").html("<option value='all'>All</option><option value='date'>Datewise</option>");
         }
         
@@ -27,7 +25,7 @@ $(document).ready(function(){
             $(".generated_reports_content").show();
             $(".generated_reports_technician").hide();
             $(".generated_reports_customer").hide();
-        }else if(val=="Customer"){
+        }else if(val=="New Customers"){
             console.log("Customer");
             $(".generated_reports_technician").hide();
             $(".generated_reports_customer").show();
@@ -53,18 +51,19 @@ $(document).ready(function(){
    });
 
     $(".btn_generate_reports").on("click",function() {
-        
-        var reports_for = $(".reports_for").val();
-        var type = $(".reports_type").val();
 
         if (type != 0) {
+
             if (type == "date") {
                 $(".report_icon").removeClass("fa-list-ul").addClass("fa-calendar");
             } else {
                 $(".report_icon").removeClass("fa-calendar").addClass("fa-list-ul");
             }
+
         }
-        
+        var reports_for = $(".reports_for").val();
+        var type = $(".reports_type").val();
+
         if(reports_for!=0&&type!=0){
 
         $("#total_reports_header").removeClass().addClass("text-danger");
@@ -73,39 +72,24 @@ $(document).ready(function(){
         if (type == "date") {
             var from_date = $(".from_date").val();
             var to_date = $(".to_date").val();
+            console.log(from_date + " " + to_date);
+        }
+        if(from_date==""){
+            $(".from_date").parent().removeClass("has-success").addClass("has-error");
             
-            var c=0;
-        
-            var total_f = $(".from_date").length;
-            var total_t = $(".to_date").length;
-            
-            for(var i = 0; i < total_f ; i++ ){
-                if($(".from_date").eq(i).val()==""){
-                    $(".from_date").eq(i).parent().removeClass("has-success").addClass("has-error");
-
-                    c++
-                }else{
-                    $(".from_date").eq(i).parent().removeClass("has-error");
-                }
-            }
-            
-            for(var i = 0; i < total_t ; i++ ){
-                if($(".to_date").eq(i).val()==""){
-                    $(".to_date").eq(i).parent().removeClass("has-success").addClass("has-error");
-                    c++
-                    
-                }else{
-                    $(".to_date").eq(i).parent().removeClass("has-error");
-                }
-            }
-            if(c>0){
+            if(to_date==""){
+                $(".to_date").parent().removeClass("has-success").addClass("has-error");
                 return false;
             }
+            return false;
+        }else{
+            $(".from_date").parent().removeClass("has-error")
+            $(".to_date").parent().removeClass("has-error")
         }
+        blockThisUI($(".generated_reports"));
 
-            if (reports_for == "AMC") {
-                if(type == "all"){
-                console.log(reports_for+" "+type);
+        if(reports_for == "AMC") {
+            if(type=="all"){
                 blockThisUI($(".generated_reports"));
                 $.ajax({
                     type:'get',
@@ -134,7 +118,7 @@ $(document).ready(function(){
                             var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                             <h4 class='center'>Customer Information</h4>\
                             <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -181,12 +165,11 @@ $(document).ready(function(){
                     $("#ViewReportsDataTable tbody").html(row);
                     unblockThisUI($(".generated_reports"));
                 }
-                }); 
-                }else if(type == "date"){
-                console.log(reports_for+" "+type);
+            });              
+            }else{
                 blockThisUI($(".generated_reports"));
                 $.ajax({
-                    type:'post',
+                    type:post,
                     url:'api/Reports/AMC',
                     data:{from_date : $(".from_date").val(),to_date : $(".to_date").val()},
                     dataType: 'json',
@@ -213,7 +196,7 @@ $(document).ready(function(){
                             var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                             <h4 class='center'>Customer Information</h4>\
                             <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -260,11 +243,10 @@ $(document).ready(function(){
                     $("#ViewReportsDataTable tbody").html(row);
                     unblockThisUI($(".generated_reports"));
                 }
-                });
-                }
-            } else if (reports_for == "Complaint") {
-                if(type=="all"){
-                console.log(reports_for+" "+type);
+            });
+            }
+        }else if(reports_for == "Complaint") {
+            if(type=="all"){
                 $.ajax({
                     type:'get',
                     url:'api/Reports/Complaints',
@@ -286,7 +268,7 @@ $(document).ready(function(){
                            var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                             <h4 class='center'>Customer Information</h4>\
                             <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -332,7 +314,6 @@ $(document).ready(function(){
                     }
                 });               
             }else{
-                console.log(reports_for+" "+type);
                 $.ajax({
                     type:'post',
                     url:'api/Reports/Complaints',
@@ -355,7 +336,7 @@ $(document).ready(function(){
                            var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                             <h4 class='center'>Customer Information</h4>\
                             <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -401,149 +382,146 @@ $(document).ready(function(){
                     }
                 });                 
             }
-            } else if (reports_for == "OTS") {
-                if(type == "all"){
-                console.log(reports_for+" "+type);
-                        $.ajax({
-                        type:'get',
-                        url: 'api/Reports/OTS',
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.status == "ok") {
-                                $("#total_reports_header").removeClass().addClass("text-success");
-                                $('.total_data').html(response.data.length);
-                                var row = "";
-                                var sr = 0;
-                                $.each(response.data, function (key, val) {
-    
-                                    var acc_type = (val.customer_info.account_type == 'r') ? 'Resenditial' : 'Commercial';
-                                    if (val.customer_info.account_type == 'r') {
-                                        val.customer_info.organisation = "Home";
-                                    }
-                        var email = (val.customer_info.email == '') ? 'NA' : val.customer_info.email;
-                        
-                        var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>Customer Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
-                        <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
-                        <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
-                        <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
-                        <tr><td>Email</td><td>" + email + "</td></tr>\
-                        <tr><td>City</td><td>" + val.customer_info.city + "</td></tr>\
-                        <tr><td>Address</td><td>" + val.customer_info.address + "</td></tr>\
-                        <tr><td>Landmark</td><td>" + val.customer_info.landmark + "</td></tr>\
-                        <tr><td>Location</td><td>" + val.customer_info.customer_location + "</td></tr>\
-                        <tr><td>Pincode</td><td>" + val.customer_info.pincode + "</td></tr>\
-                        </table>\
-                        </div></div>";
-    
-                        var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>AC Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><td>AC Type</td><td>" + val.ac_info.ac_type + "</td></tr>\
-                        <tr><td>Make</td><td>" + val.ac_info.make + "</td></tr>\
-                        <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
-                        <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
-                        <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
-                        <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                        <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
-    
-                        var ots_div = "<div class='no-display complaint_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>AC Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><td>Problem Type</td><td>" + val.info.problem_type + "</td></tr>\
-                        <tr><td>Problem Description</td><td>" + val.info.problem_desc + "</td></tr>\
-                        <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
-                        </table></div></div>";
-    
-                        row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.service_type + "</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                            <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
-                            <td><button class='btn btn-primary'>View</button></td>";
-                                    sr++;
-                                });
-    
-                            } else if (response.status == "no") {
-                                row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
-                            }
-                            $("#ViewReportsDataTable tbody").html(row);
-                            unblockThisUI($(".generated_reports"));
+        }else if (reports_for == "OTS") {
+            if(type=="all"){
+                $.ajax({
+                    type:'get',
+                    url: 'api/Reports/OTS',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status == "ok") {
+                            $("#total_reports_header").removeClass().addClass("text-success");
+                            $('.total_data').html(response.data.length);
+                            var row = "";
+                            var sr = 0;
+                            $.each(response.data, function (key, val) {
+
+                                var acc_type = (val.customer_info.account_type == 'r') ? 'Resenditial' : 'Commercial';
+                                if (val.customer_info.account_type == 'r') {
+                                    val.customer_info.organisation = "Home";
+                                }
+                    var email = (val.customer_info.email == '') ? 'NA' : val.customer_info.email;
+                    
+                    var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>Customer Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
+                    <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
+                    <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
+                    <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
+                    <tr><td>Email</td><td>" + email + "</td></tr>\
+                    <tr><td>City</td><td>" + val.customer_info.city + "</td></tr>\
+                    <tr><td>Address</td><td>" + val.customer_info.address + "</td></tr>\
+                    <tr><td>Landmark</td><td>" + val.customer_info.landmark + "</td></tr>\
+                    <tr><td>Location</td><td>" + val.customer_info.customer_location + "</td></tr>\
+                    <tr><td>Pincode</td><td>" + val.customer_info.pincode + "</td></tr>\
+                    </table>\
+                    </div></div>";
+
+                    var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>AC Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>AC Type</td><td>" + val.ac_info.ac_type + "</td></tr>\
+                    <tr><td>Make</td><td>" + val.ac_info.make + "</td></tr>\
+                    <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
+                    <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
+                    <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
+                    <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                    <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
+
+                    var ots_div = "<div class='no-display complaint_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>AC Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>Problem Type</td><td>" + val.info.problem_type + "</td></tr>\
+                    <tr><td>Problem Description</td><td>" + val.info.problem_desc + "</td></tr>\
+                    <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
+                    </table></div></div>";
+
+                    row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.service_type + "</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                        <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                        <td><button class='btn btn-primary'>View</button></td>";
+                                sr++;
+                            });
+
+                        } else if (response.status == "no") {
+                            row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
                         }
-                    }); 
-                }else{
-                    console.log(reports_for+" "+type);
-                    $.ajax({
-                        type:'post',
-                        url: 'api/Reports/OTS',
-                        data:{from_date : $(".from_date").val(),to_date : $(".to_date").val()},
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.status == "ok") {
-                                $("#total_reports_header").removeClass().addClass("text-success");
-                                $('.total_data').html(response.data.length);
-                                var row = "";
-                                var sr = 0;
-                                $.each(response.data, function (key, val) {
-    
-                                    var acc_type = (val.customer_info.account_type == 'r') ? 'Resenditial' : 'Commercial';
-                                    if (val.customer_info.account_type == 'r') {
-                                        val.customer_info.organisation = "Home";
-                                    }
-                        var email = (val.customer_info.email == '') ? 'NA' : val.customer_info.email;
-                        
-                        var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>Customer Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
-                        <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
-                        <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
-                        <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
-                        <tr><td>Email</td><td>" + email + "</td></tr>\
-                        <tr><td>City</td><td>" + val.customer_info.city + "</td></tr>\
-                        <tr><td>Address</td><td>" + val.customer_info.address + "</td></tr>\
-                        <tr><td>Landmark</td><td>" + val.customer_info.landmark + "</td></tr>\
-                        <tr><td>Location</td><td>" + val.customer_info.customer_location + "</td></tr>\
-                        <tr><td>Pincode</td><td>" + val.customer_info.pincode + "</td></tr>\
-                        </table>\
-                        </div></div>";
-    
-                        var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>AC Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><td>AC Type</td><td>" + val.ac_info.ac_type + "</td></tr>\
-                        <tr><td>Make</td><td>" + val.ac_info.make + "</td></tr>\
-                        <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
-                        <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
-                        <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
-                        <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
-                        <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
-    
-                        var ots_div = "<div class='no-display complaint_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
-                        <h4 class='center'>AC Information</h4>\
-                        <table class='table table-bordered table-striped'>\
-                        <tr><td>Problem Type</td><td>" + val.info.problem_type + "</td></tr>\
-                        <tr><td>Problem Description</td><td>" + val.info.problem_desc + "</td></tr>\
-                        <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
-                        </table></div></div>";
-    
-                        row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.service_type + "</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
-                            <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
-                            <td><button class='btn btn-primary'>View</button></td>";
-                                    sr++;
-                                });
-    
-                            } else if (response.status == "no") {
-                                row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
-                            }
-                            $("#ViewReportsDataTable tbody").html(row);
-                            unblockThisUI($(".generated_reports"));
+                        $("#ViewReportsDataTable tbody").html(row);
+                        unblockThisUI($(".generated_reports"));
+                    }
+                });
+            }else{
+                $.ajax({
+                    type:'post',
+                    url: 'api/Reports/OTS',
+                    data:{from_date : $(".from_date").val(),to_date : $(".to_date").val()},
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status == "ok") {
+                            $("#total_reports_header").removeClass().addClass("text-success");
+                            $('.total_data').html(response.data.length);
+                            var row = "";
+                            var sr = 0;
+                            $.each(response.data, function (key, val) {
+
+                                var acc_type = (val.customer_info.account_type == 'r') ? 'Resenditial' : 'Commercial';
+                                if (val.customer_info.account_type == 'r') {
+                                    val.customer_info.organisation = "Home";
+                                }
+                    var email = (val.customer_info.email == '') ? 'NA' : val.customer_info.email;
+                    
+                    var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>Customer Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
+                    <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
+                    <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
+                    <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
+                    <tr><td>Email</td><td>" + email + "</td></tr>\
+                    <tr><td>City</td><td>" + val.customer_info.city + "</td></tr>\
+                    <tr><td>Address</td><td>" + val.customer_info.address + "</td></tr>\
+                    <tr><td>Landmark</td><td>" + val.customer_info.landmark + "</td></tr>\
+                    <tr><td>Location</td><td>" + val.customer_info.customer_location + "</td></tr>\
+                    <tr><td>Pincode</td><td>" + val.customer_info.pincode + "</td></tr>\
+                    </table>\
+                    </div></div>";
+
+                    var ac_div = "<div class='no-display ac_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>AC Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>AC Type</td><td>" + val.ac_info.ac_type + "</td></tr>\
+                    <tr><td>Make</td><td>" + val.ac_info.make + "</td></tr>\
+                    <tr><td>Location</td><td>" + val.ac_info.location + "</td></tr>\
+                    <tr><td>Tonnage</td><td>" + val.ac_info.tonnage + "</td></tr>\
+                    <tr><td>IDU</td><td>Serial No: " + val.ac_info.idu_serial_no + "<br /> Model No :" + val.ac_info.idu_model_no + "</td></tr>\
+                    <tr><td>ODU</td><td>Serial No: " + val.odu_serial_no + "<br /> Model No :" + val.odu_model_no + "</td></tr>\
+                    <tr><td colspan='2'>" + val.ac_info.remarks + "</td></tr></table></div></div>";
+
+                    var ots_div = "<div class='no-display complaint_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
+                    <h4 class='center'>AC Information</h4>\
+                    <table class='table table-bordered table-striped'>\
+                    <tr><td>Problem Type</td><td>" + val.info.problem_type + "</td></tr>\
+                    <tr><td>Problem Description</td><td>" + val.info.problem_desc + "</td></tr>\
+                    <tr><td>Preferred Date</td><td>" + val.info.preferred_date + "</td></tr>\
+                    </table></div></div>";
+
+                    row += "<tr class='row_count_" + sr + "'><td class='center'>" + val.info.service_type + "</td><td class='center'>" + val.customer_info.first_name + " " + val.customer_info.last_name + " <i onclick='view_cust_info(\".cust_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i> " + cust_div + "</td>\
+                        <td class='center'>" + val.ac_info.make + " (" + val.ac_info.ac_type + ") <i onclick='view_ac_info(\".ac_popup\"," + sr + ")' class='clip-popout cursor' style='font-size:1.3em'></i>" + ac_div + "</td>\
+                        <td><button class='btn btn-primary'>View</button></td>";
+                                sr++;
+                            });
+
+                        } else if (response.status == "no") {
+                            row="<tr><td colspan='4' class='alert alert-danger center'> No data found</td></tr>";
                         }
-                    });
-                }
-            } else if (reports_for == "Installation") {
-                if(type == "all"){
-                    console.log(reports_for+" "+type);
-                    $.ajax({
+                        $("#ViewReportsDataTable tbody").html(row);
+                        unblockThisUI($(".generated_reports"));
+                    }
+                });
+            }
+        }else if (reports_for == "Installation") {
+            if(type=="all"){
+                $.ajax({
                     type:'get',
                     url:'api/Reports/Installation',
                     dataType: 'json',
@@ -569,7 +547,7 @@ $(document).ready(function(){
                                 var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                         <h4 class='center'>Customer Information</h4>\
                         <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -616,9 +594,8 @@ $(document).ready(function(){
                     }
 
                 });
-                }else{
-                    console.log(reports_for+" "+type);
-                    $.ajax({
+            }else{
+                $.ajax({
                     type:'post',
                     url: 'api/Reports/Installation',
                     data:{from_date : $(".from_date").val(),to_date : $(".to_date").val()},
@@ -645,7 +622,7 @@ $(document).ready(function(){
                                 var cust_div = "<div class='no-display cust_popup'><div style='background:#fff;padding: 20px;border-radius:5px;'>\
                         <h4 class='center'>Customer Information</h4>\
                         <table class='table table-bordered table-striped'>\
-                            <tr><th>Account type</th><td>" + acc_type + "</td></tr>\
+                            <tr><td>Account type</td><td>" + acc_type + "</td></tr>\
                             <tr><td>Organisation</td><td>" + val.customer_info.organisation + "</td></tr>\
                             <tr><td>Name</td><td>" + val.customer_info.first_name + " " + val.customer_info.last_name + "</td></tr>\
                             <tr><td>Mobile</td><td>" + val.customer_info.mobile + "</td></tr>\
@@ -692,11 +669,11 @@ $(document).ready(function(){
                     }
 
                 });
-                }
-            }else if(reports_for == "Customer"){
-                var URL = 'api/Reports/Customers';
+            }
+        } else if(reports_for == "New Customers"){
+                var URL = 'api/Customers';
                 var row="";
-                $.post(URL,{from_date : $(".from_date").val(),to_date : $(".to_date").val()},function(response){
+                $.get(URL,function(response){
                     console.log(response.status);
                     if(response.status=="ok"){
                         $.each(response.data, function(key,val){
@@ -710,8 +687,9 @@ $(document).ready(function(){
                     $(".generated_reports_customer tbody").html(row);
                     unblockThisUI($(".generated_reports"));
                 });
-            }else if(reports_for == "Technician"){
-                var URL = 'api/Reports/Technicians';
+                
+        } else if(reports_for == "Technician"){
+                var URL = 'api/Technicians';
                 var row="";
                 $.get(URL,function(response){
                     console.log(response.status);
@@ -726,10 +704,7 @@ $(document).ready(function(){
                     $(".generated_reports_technician tbody").html(row);
                     unblockThisUI($(".generated_reports"));
                 });                
-            }
-
-
-        }else{
+        } else{
             alert("Required field is not selected");
         }
     });

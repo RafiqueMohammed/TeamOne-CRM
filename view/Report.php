@@ -29,12 +29,12 @@
     <div class=" col-md-3"><label>Reports for </label>
         <select class="form-control reports_for">
             <option value="0">- Select -</option>
-            <option>AMC</option>
-            <option>Complaint</option>
-            <option>OTS</option>
-            <option>Installation</option>
-            <option>Technician</option>
-            <option>New Customers</option>
+            <option value="AMC">AMC</option>
+            <option value="Complaint">Complaint</option>
+            <option value="OTS">OTS</option>
+            <option value="Installation">Installation</option>
+            <option value="Technician">Technician</option>
+            <option value="Customer">New Customers</option>
         </select>
     </div>
     <div class=" col-md-3"><label>Report Type </label>
@@ -98,7 +98,7 @@
     </table>
 </div>
 
-<div class='generated_reports_technician no-display'>
+<div class='generated_reports_technician col-md-12 no-display'>
     <table class="table table-condensed table-striped table-bordered table-hover table-full-width"
            id="ViewReportsDataTable3">
         <thead>
